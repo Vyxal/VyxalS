@@ -1,10 +1,11 @@
 .bloop/
 .bsp/
+.idea/
 .metals/
 .vscode/
-project/
-!project/plugins.sbt
 root/
 target/
+project/project
 
+project/build.properties
 metals.sbt
