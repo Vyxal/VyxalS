@@ -1,7 +1,7 @@
 package vyxal
 
-object Main {
+object JSMain {
   def main(args: Array[String]): Unit = {
-    println("Hello world!")
+    println("Hello world from JS!")
   }
 }
