@@ -81,3 +81,25 @@ class VList(
     generated.size
   }
 }
+
+object VList {
+
+  /** Zip multiple VLists together with a function.
+    */
+  def zipMulti(lists: Seq[VList])(f: Seq[VAny] => VAny): VList = {
+    val its = lists.map(_.iterator)
+
+    VList(
+      Seq.empty,
+      new scala.collection.Iterator[VAny] {
+        def hasNext: Boolean = its.exists(_.hasNext)
+        def next: VAny = f(its.collect { case it if it.hasNext => it.next })
+      }
+    )
+  }
+
+  /**
+   * This lets us pattern match on `VList`s, silly as the implementation may be.
+   */
+  def unapplySeq(vlist: VList): VList = vlist
+}

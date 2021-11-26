@@ -4,10 +4,6 @@ package vyxal
 type Monad = VAny => Context ?=> VAny
 type Dyad = (VAny, VAny) => Context ?=> VAny
 type Triad = (VAny, VAny, VAny) => Context ?=> VAny
-//These are the same as Monad, Dyad, and Triad, except they don't work on lists
-type SimpleMonad = VAtom => Context ?=> VAny
-type SimpleDyad = (VAtom, VAtom) => Context ?=> VAny
-type SimpleTriad = (VAtom, VAtom, VAtom) => Context ?=> VAny
 
 extension (f: Monad)
   /** Turn the monad into a normal function of type `VAny => VAny`
@@ -24,22 +20,47 @@ extension (f: Triad)
   def norm(using ctx: Context): (VAny, VAny, VAny) => VAny =
     f(_, _, _)(using ctx)
 
-extension (f: SimpleMonad)
-  def vectorised: Monad = {
-    lazy val res: Monad = {
-      case VAtom(lhs) => f(lhs)
-      case lst: VList => lst.vmap(res)
-    }
-    res
+/** Vectorise an unvectorised monad
+  */
+def vect1(f: VAtom => Context ?=> VAny) = {
+  lazy val res: Monad = {
+    case lhs: VAtom => f(lhs)
+    case lst: VList => lst.vmap(res)
   }
-extension (f: SimpleDyad)
-  def vectorised: Dyad = {
-    lazy val res: Dyad = {
-      case (VAtom(lhs), VAtom(rhs)) =>f(lhs, rhs)
-      case (VAtom(lhs), rhs: VList) =>rhs.vmap(res(lhs, _))
-      case (lhs: VList, VAtom(rhs)) =>lhs.vmap(res(_, rhs))
-      case (lhs: VList, rhs: VList) =>lhs.zipWith(rhs)(res(_, _))
-    }
-    res
+  res
+}
+
+/** Vectorise an unvectorised dyad
+  */
+def vect2(f: (VAtom, VAtom) => Context ?=> VAny): Dyad = {
+  lazy val res: Dyad = {
+    case (lhs: VAtom, rhs: VAtom) => f(lhs, rhs)
+    case (lhs: VAtom, rhs: VList) => rhs.vmap(res(lhs, _))
+    case (lhs: VList, rhs: VAtom) => lhs.vmap(res(_, rhs))
+    case (lhs: VList, rhs: VList) => lhs.zipWith(rhs)(res(_, _))
   }
-extension (f: SimpleTriad) def vectorised: Triad = ???
+  res
+}
+
+/** Vectorise a triad
+  */
+def vect3(f: (VAtom, VAtom, VAtom) => Context ?=> VAny): Triad = {
+  lazy val res: Triad = {
+    case (lhs: VAtom, rhs: VAtom, third: VAtom) => f(lhs, rhs, third)
+    case (lhs: VAtom, rhs: VList, third: VAtom) => rhs.vmap(res(lhs, _, third))
+    case (lhs: VList, rhs: VAtom, third: VAtom) => lhs.vmap(res(_, rhs, third))
+    case (lhs: VList, rhs: VList, third: VAtom) =>
+      lhs.zipWith(rhs)(res(_, _, third))
+    case (lhs: VAtom, rhs: VAtom, third: VList) => third.vmap(res(lhs, rhs, _))
+    case (lhs: VAtom, rhs: VList, third: VList) =>
+      rhs.zipWith(third)(res(lhs, _, _))
+    case (lhs: VList, rhs: VAtom, third: VList) =>
+      lhs.zipWith(third)(res(_, rhs, _))
+    case (lhs: VList, rhs: VList, third: VList) =>
+      //TODO this isn't safe
+      VList.zipMulti(Seq(lhs, rhs, third)) { case VList(l, r, t) =>
+        f(l.asInstanceOf[VAtom], r.asInstanceOf[VAtom], t.asInstanceOf[VAtom])
+      }
+  }
+  res
+}
