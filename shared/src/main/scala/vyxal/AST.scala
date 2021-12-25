@@ -12,8 +12,12 @@ case class Element(symbol: String) extends AST
   */
 case class Commands(cmds: List[AST]) extends AST
 
+/** Represents variable access (←varName)
+  */
 case class VarGet(name: String) extends AST
 
+/** Represents variable assignment (→varName)
+  */
 case class VarSet(name: String) extends AST
 
 case class If(truthy: List[AST], falsey: List[AST]) extends AST

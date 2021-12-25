@@ -12,19 +12,17 @@ object JVMMain {
     println(
       VNum(1, 2) match {
         case x: VAtom => s"Success!: $x"
-        case _ => "oh noes"
+        case _        => "oh noes"
       }
     )
 
     // I know there's a lot of nested Seq's here, but that can be sugared later
     // and this won't even be used that often
-    
+
     val stack = Stack(Seq(VList(Seq(1, 2, 3))))
 
-    Interpreter.execute(Element("∑"), stack)(using
-      Context()
-    )
+    Interpreter.execute(Element("∑"), stack)(using Context())
 
-    println(stack) //should be 6
+    println(stack) // should be 6
   }
 }

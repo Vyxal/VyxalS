@@ -98,8 +98,8 @@ object VList {
     )
   }
 
-  /**
-   * This lets us pattern match on `VList`s, silly as the implementation may be.
-   */
+  /** This lets us pattern match on `VList`s, silly as the implementation may
+    * be.
+    */
   def unapplySeq(vlist: VList): VList = vlist
 }

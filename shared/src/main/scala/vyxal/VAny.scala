@@ -17,19 +17,22 @@ case class FnRefFun(fn: FnRef)
 //   case _ => None
 // }
 
-given Typeable[VFun] = x => Option.when(x.isInstanceOf[Function1[?, ?]])(x.asInstanceOf[x.type & VFun])
+given Typeable[VFun] = x =>
+  Option.when(x.isInstanceOf[Function1[?, ?]])(x.asInstanceOf[x.type & VFun])
 
-given Typeable[VAtom] = (x: Any) => x match {
-  case vl: (x.type & VVal) => Some(vl)
-  case va: (x.type & VFun) => Some(va)
-  case _ => None
-}
+given Typeable[VAtom] = (x: Any) =>
+  x match {
+    case vl: (x.type & VVal) => Some(vl)
+    case va: (x.type & VFun) => Some(va)
+    case _                   => None
+  }
 
-given Typeable[VAny] = (x: Any) => x match {
-  case vl: (x.type & VList) => Some(vl)
-  case va: (x.type & VAtom) => Some(va)
-  case _ => None
-}
+given Typeable[VAny] = (x: Any) =>
+  x match {
+    case vl: (x.type & VList) => Some(vl)
+    case va: (x.type & VAtom) => Some(va)
+    case _                    => None
+  }
 
 class Stack(initial: Seq[VAny] = Seq.empty) {
 

@@ -70,7 +70,7 @@ def vect3(f: SimpleTriad): Triad = {
     case (lhs: VList, rhs: VAtom, third: VList) =>
       lhs.zipWith(third)(res(_, rhs, _))
     case (lhs: VList, rhs: VList, third: VList) =>
-      //TODO this isn't safe
+      // TODO this isn't safe
       VList.zipMulti(Seq(lhs, rhs, third)) { case VList(l, r, t) =>
         f(l.asInstanceOf[VAtom], r.asInstanceOf[VAtom], t.asInstanceOf[VAtom])
       }
