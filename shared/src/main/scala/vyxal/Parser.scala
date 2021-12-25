@@ -5,9 +5,23 @@ import collection.mutable.ListBuffer
 class Parser(private val prog: Iterator[Char]) {
   private var row, col = 0
   private var lastChar = '\u0000'
+  private val buf = ListBuffer.empty[Char]
+
+  /** Do we have any more characters to consume?
+    */
+  private def nonEmpty = buf.nonEmpty || prog.nonEmpty
+  private def isEmpty = !nonEmpty
+
+  private def peek = {
+    if (buf.isEmpty) {
+      val char = prog.next
+      buf += char
+    }
+    buf.head
+  }
 
   private def next() = {
-    val char = prog.next
+    val char = if (buf.isEmpty) prog.next else buf.remove(0)
     this.lastChar = char
     if (char == '\n') {
       this.row += 1
@@ -18,9 +32,8 @@ class Parser(private val prog: Iterator[Char]) {
     char
   }
 
-  /**
-   * Whether or not this character closes a structure
-   */
+  /** Whether or not this character closes a structure
+    */
   private def isStructureDelimiter(char: Char) =
     char == ';' || char == ']' || char == ')' || char == '}' || char == '|'
 
@@ -29,13 +42,14 @@ class Parser(private val prog: Iterator[Char]) {
     * was reached, or the program's end has been reached.
     */
   private def parseAST(): AST | Null = {
-    if (!prog.hasNext) return null
+    println(s"Parsing AST, buf=$buf")
+    if (isEmpty) return null
 
     val char = next()
     if (isStructureDelimiter(char) || char.isWhitespace) return null
     char match {
       case '#' =>
-        while (prog.hasNext && next() != '\n') {}
+        while (nonEmpty && next() != '\n') {}
         parseAST()
       case 'λ' | 'ƛ' | '\'' | 'µ' =>
         val body = parseElems()
@@ -49,8 +63,31 @@ class Parser(private val prog: Iterator[Char]) {
       case '[' => parseIf()
       case '(' => parseFor()
       case '{' => parseWhile()
+      case '.' =>
+        NumLiteral(if (isEmpty) VNum(1, 2) else afterDecimal())
+      case d if d.isDigit =>
+        var num = BigInt(d - '0')
+        while (nonEmpty && this.peek.isDigit) {
+          num = num * 10 + (next() - '0')
+        }
+        NumLiteral(
+          if (nonEmpty && this.peek == '.') VNum(num, 1) + afterDecimal()
+          else VNum(num, 1)
+        )
       case c => Element("" + c)
     }
+  }
+
+  /** Get the part of a number after the decimal as a `VNum`
+    */
+  private def afterDecimal(): VNum = {
+    var num = BigInt(0)
+    var den = BigInt(1)
+    while (nonEmpty && this.peek.isDigit) {
+      num = num * 10 + (next() - '0')
+      den *= 10
+    }
+    VNum(num, den)
   }
 
   private def parseIf() = {
@@ -103,7 +140,7 @@ class Parser(private val prog: Iterator[Char]) {
     */
   private def parseElems(): List[AST] = {
     val elems = ListBuffer.empty[AST]
-    while (prog.hasNext) {
+    while (nonEmpty) {
       val ast = parseAST()
       if (ast != null) elems += ast
       else if (isStructureDelimiter(this.lastChar)) return elems.toList

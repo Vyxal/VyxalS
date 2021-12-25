@@ -15,10 +15,12 @@ class ParserTest extends AnyFlatSpec {
             List(Element("b"), Element("a"), Element("r"))),
           If(
             List(Element("a"), Element("+")),
-            List(Element("a"), NumLiteral("324"))),
+            List(Element("a"), NumLiteral(VNum(324, 1)))),
           While(
-          None,
-          List(Element("3")))),
+            None,
+            List(NumLiteral(VNum(3, 1)))
+          )
+        )
       )
     )
   }

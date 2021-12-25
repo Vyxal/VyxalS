@@ -4,7 +4,7 @@ package vyxal
   */
 sealed trait AST
 
-case class NumLiteral(num: String) extends AST
+case class NumLiteral(num: VNum) extends AST
 
 case class Element(symbol: String) extends AST
 
