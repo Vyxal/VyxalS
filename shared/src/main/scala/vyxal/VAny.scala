@@ -6,7 +6,10 @@ import scala.reflect.Typeable
 type VAny = VAtom | VList
 type VAtom = VVal | VFun
 type VVal = VNum | String
-type VFun = Stack => Context ?=> Unit
+
+sealed trait VFun
+case class LamFun(fn: Lambda)
+case class FnRefFun(fn: FnRef)
 
 // given Typeable[VVal] = (x: Any) => x match {
 //   case vl: (x.type & VNum) => Some(vl)

@@ -4,11 +4,24 @@ package vyxal
 type Monad = VAny => Context ?=> VAny
 type Dyad = (VAny, VAny) => Context ?=> VAny
 type Triad = (VAny, VAny, VAny) => Context ?=> VAny
+//These are the same as Monad, Dyad, and Triad, except they don't work on lists
+type SimpleMonad = VAtom => Context ?=> VAny
+type SimpleDyad = (VAtom, VAtom) => Context ?=> VAny
+type SimpleTriad = (VAtom, VAtom, VAtom) => Context ?=> VAny
 
 extension (f: Monad)
   /** Turn the monad into a normal function of type `VAny => VAny`
     */
   def norm(using ctx: Context): VAny => VAny = f(_)(using ctx)
+
+  def vectorised = {
+    lazy val res: Monad = {
+      case lhs: VAtom => f(lhs)
+      case lst: VList => lst.vmap(res)
+    }
+    res
+  }
+
 extension (f: Dyad)
   /** Turn the dyad into a normal function of type `(VAny, VAny) => VAny`
     */
@@ -22,7 +35,7 @@ extension (f: Triad)
 
 /** Vectorise an unvectorised monad
   */
-def vect1(f: VAtom => Context ?=> VAny) = {
+def vect1(f: SimpleMonad) = {
   lazy val res: Monad = {
     case lhs: VAtom => f(lhs)
     case lst: VList => lst.vmap(res)
@@ -32,7 +45,7 @@ def vect1(f: VAtom => Context ?=> VAny) = {
 
 /** Vectorise an unvectorised dyad
   */
-def vect2(f: (VAtom, VAtom) => Context ?=> VAny): Dyad = {
+def vect2(f: SimpleDyad): Dyad = {
   lazy val res: Dyad = {
     case (lhs: VAtom, rhs: VAtom) => f(lhs, rhs)
     case (lhs: VAtom, rhs: VList) => rhs.vmap(res(lhs, _))
@@ -44,7 +57,7 @@ def vect2(f: (VAtom, VAtom) => Context ?=> VAny): Dyad = {
 
 /** Vectorise a triad
   */
-def vect3(f: (VAtom, VAtom, VAtom) => Context ?=> VAny): Triad = {
+def vect3(f: SimpleTriad): Triad = {
   lazy val res: Triad = {
     case (lhs: VAtom, rhs: VAtom, third: VAtom) => f(lhs, rhs, third)
     case (lhs: VAtom, rhs: VList, third: VAtom) => rhs.vmap(res(lhs, _, third))

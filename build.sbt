@@ -29,7 +29,7 @@ lazy val vyxal = crossProject(JSPlatform, JVMPlatform).in(file("."))
   .settings(
     name := "vyxal",
     version := "0.1-SNAPSHOT",
-    libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.10" % Test
   ).
   jvmSettings(
     // Add JVM-specific settings here
