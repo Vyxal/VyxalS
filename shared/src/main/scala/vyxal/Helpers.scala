@@ -7,10 +7,10 @@ object Helpers {
 
   extension (any: VAny) {
     def toBool: Boolean = any match {
-      case num: VNum   => num != 0
+      case num: VNum => num != 0
       case str: String => str.nonEmpty
-      case lst: VList  => lst.nonEmpty
-      case fun: VFun   => true
+      case lst: VList => lst.nonEmpty
+      case fun: VFun => true
     }
   }
 }

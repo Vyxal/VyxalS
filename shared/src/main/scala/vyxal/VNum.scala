@@ -23,12 +23,14 @@ case class VNum private (val numer: BigInt, val denom: BigInt) {
 
   def toInt: Int = (numer / denom).toInt
 
+  override def canEqual(other: Any) = other.isInstanceOf[VNum]
+
   override def equals(other: Any) =
     other match {
       case VNum(num, den) => this.numer == num && this.denom == den
-      case i: Int         => this.denom == 1 && this.numer == i
-      case b: BigInt      => this.denom == 1 && this.numer == b
-      case _              => false
+      case i: Int => this.denom == 1 && this.numer == i
+      case b: BigInt => this.denom == 1 && this.numer == b
+      case _ => false
     }
 
   override def toString =

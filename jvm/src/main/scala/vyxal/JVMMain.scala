@@ -12,7 +12,7 @@ object JVMMain {
     println(
       VNum(1, 2) match {
         case x: VAtom => s"Success!: $x"
-        case _        => "oh noes"
+        case _ => "oh noes"
       }
     )
 

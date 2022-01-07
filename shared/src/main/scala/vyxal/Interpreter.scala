@@ -7,7 +7,7 @@ object Interpreter {
 
   def execute(ast: AST, stack: Stack)(using ctx: Context): Unit = {
     ast match {
-      case Element(name)  => Builtins.element(name)(stack)
+      case Element(name) => Builtins.element(name)(stack)
       case Commands(cmds) => ???
     }
   }

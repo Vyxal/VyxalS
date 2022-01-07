@@ -54,10 +54,10 @@ class Parser(private val prog: Iterator[Char]) {
       case 'λ' | 'ƛ' | '\'' | 'µ' =>
         val body = parseElems()
         val kind = char match {
-          case 'λ'  => LambdaKind.Normal
-          case 'ƛ'  => LambdaKind.Map
+          case 'λ' => LambdaKind.Normal
+          case 'ƛ' => LambdaKind.Map
           case '\'' => LambdaKind.Filter
-          case 'µ'  => LambdaKind.Sort
+          case 'µ' => LambdaKind.Sort
         }
         Lambda(body, kind)
       case '[' => parseIf()

@@ -40,9 +40,9 @@ object Builtins {
     addTriad(name)(vect3(impl))
 
   val add = addDyad("+")(vect2 {
-    case (n1: VNum, n2: VNum)     => n1 + n2
-    case (s: String, n: VNum)     => s + n
-    case (n: VNum, s: String)     => n.toString + s
+    case (n1: VNum, n2: VNum) => n1 + n2
+    case (s: String, n: VNum) => s + n
+    case (n: VNum, s: String) => n.toString + s
     case (s1: String, s2: String) => s1 + s2
     case _ => throw IllegalArgumentException("Functions can't be added")
   })
@@ -54,17 +54,17 @@ object Builtins {
   val lor = addDyad("∨")(_.toBool || _.toBool)
 
   val subtract = addDyad("-")(vect2 {
-    case (n1: VNum, n2: VNum)     => n1 - n2
-    case (s: String, n: VNum)     => s + "-" * n.toInt
-    case (n: VNum, s: String)     => "-" * n.toInt + s
+    case (n1: VNum, n2: VNum) => n1 - n2
+    case (s: String, n: VNum) => s + "-" * n.toInt
+    case (n: VNum, s: String) => "-" * n.toInt + s
     case (s1: String, s2: String) => s1.replace(s2, "")
     case _ => throw IllegalArgumentException("Functions can't be subtracted")
   })
 
   val sum = addMonad("∑")(vect1 {
-    case n: VNum   => ???
+    case n: VNum => ???
     case s: String => s
-    case l: VList  => l.foldl(0)((a, b) => add.norm.apply(a, b))
+    case l: VList => l.foldl(0)((a, b) => add.norm.apply(a, b))
     case f =>
       throw IllegalArgumentException(
         "What's the sum of a function even supposed to be?"
