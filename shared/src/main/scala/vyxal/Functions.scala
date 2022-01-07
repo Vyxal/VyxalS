@@ -9,6 +9,9 @@ type SimpleMonad = VAtom => Context ?=> VAny
 type SimpleDyad = (VAtom, VAtom) => Context ?=> VAny
 type SimpleTriad = (VAtom, VAtom, VAtom) => Context ?=> VAny
 
+/** A function that works directly on the stack */
+type DirectFn = Context => Unit
+
 extension (f: Monad)
   /** Turn the monad into a normal function of type `VAny => VAny`
     */

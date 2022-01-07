@@ -31,7 +31,21 @@ class VList(
   def foldl(start: VAny)(op: (VAny, VAny) => VAny): VAny =
     this.fold(start)(op)
 
-  def vmap(f: SimpleMonad): VList = ???
+  def output()(using Context): Unit = {
+    print("⟨")
+    var first = true
+    for (elem <- this) {
+      if (first) {
+        first = false
+      } else {
+        print(" | ")
+      }
+      Helpers.vyPrint(elem)
+    }
+    print("⟩")
+  }
+
+  def vmap(f: SimpleMonad)(using Context): VList = ???
 
   /** Zip two VLists together with a function. If one is longer than the other,
     * keep the longer one's elements as-is.
@@ -83,7 +97,6 @@ class VList(
 }
 
 object VList {
-
   /** Zip multiple VLists together with a function.
     */
   def zipMulti(lists: Seq[VList])(f: Seq[VAny] => VAny): VList = {
@@ -97,6 +110,8 @@ object VList {
       }
     )
   }
+
+  def of(elems: VAny*) = VList(elems)
 
   /** This lets us pattern match on `VList`s, silly as the implementation may
     * be.

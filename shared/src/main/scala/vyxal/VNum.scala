@@ -21,6 +21,8 @@ case class VNum private (val numer: BigInt, val denom: BigInt) {
     case VNum(num, den) => VNum(numer * den, denom * num)
   }
 
+  def /(div: Int): VNum = VNum(numer, denom * div)
+
   def toInt: Int = (numer / denom).toInt
 
   override def canEqual(other: Any) = other.isInstanceOf[VNum]
