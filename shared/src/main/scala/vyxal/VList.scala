@@ -31,8 +31,8 @@ class VList(
   def foldl(start: VAny)(op: (VAny, VAny) => VAny): VAny =
     this.fold(start)(op)
 
-  def output()(using Context): Unit = {
-    print("⟨")
+  def output()(using ctx: Context): Unit = {
+    ctx.print("⟨")
     var first = true
     for (elem <- this) {
       if (first) {
@@ -42,7 +42,7 @@ class VList(
       }
       Helpers.vyPrint(elem)
     }
-    print("⟩")
+    ctx.print("⟩")
   }
 
   def vmap(f: SimpleMonad)(using Context): VList = ???

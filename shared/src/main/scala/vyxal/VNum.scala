@@ -46,6 +46,7 @@ object VNum {
     val gcd = numer.gcd(denom)
     new VNum(numer / gcd, denom / gcd)
   }
+  def apply(numer: Int): VNum = VNum(BigInt(numer), BigInt(1))
 }
 
 given CanEqual[VNum, Int] = CanEqual.derived

@@ -42,7 +42,6 @@ class Parser(private val prog: Iterator[Char]) {
     * was reached, or the program's end has been reached.
     */
   private def parseAST(): AST | Null = {
-    println(s"Parsing AST, buf=$buf")
     if (isEmpty) return null
 
     val char = next()
@@ -64,13 +63,13 @@ class Parser(private val prog: Iterator[Char]) {
       case '(' => parseFor()
       case '{' => parseWhile()
       case '.' =>
-        NumLiteral(if (isEmpty) VNum(1, 2) else afterDecimal())
+        Literal(if (isEmpty) VNum(1, 2) else afterDecimal())
       case d if d.isDigit =>
         var num = BigInt(d - '0')
         while (nonEmpty && this.peek.isDigit) {
           num = num * 10 + (next() - '0')
         }
-        NumLiteral(
+        Literal(
           if (nonEmpty && this.peek == '.') VNum(num, 1) + afterDecimal()
           else VNum(num, 1)
         )

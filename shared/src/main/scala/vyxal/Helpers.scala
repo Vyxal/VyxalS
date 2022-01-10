@@ -3,10 +3,9 @@ package vyxal
 object Helpers {
 
   def vyPrint(elem: VAny)(using ctx: Context): Unit = {
-    ctx.printed = true
     elem match {
       case lst: VList => lst.output()
-      case top => print(top.toString)
+      case top => ctx.print(top.toString)
     }
   }
 

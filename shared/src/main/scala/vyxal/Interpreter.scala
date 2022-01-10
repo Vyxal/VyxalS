@@ -13,7 +13,11 @@ object Interpreter {
   def execute(ast: AST)(using ctx: Context): Unit = {
     val stack = ctx.stack
     ast match {
-      case Element(name) => Builtins.element(name)(ctx)
+      case Literal(value) => stack.push(value)
+      case Element(name) => Builtins.element(name)()
+      case MonadicModifier(name, elem1) => Builtins.monadicModifiers(name)(elem1)
+      case DyadicModifier(name, elem1, elem2) => Builtins.dyadicModifiers(name)(elem1, elem2)
+      case TriadicModifier(name, elem1, elem2, elem3) => Builtins.triadicModifiers(name)(elem1, elem2, elem3)
       case Commands(cmds) => cmds.foreach(execute)
       case VarGet(varName) =>
         stack.push(ctx.vars(varName))

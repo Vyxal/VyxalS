@@ -12,14 +12,23 @@ object Builtins {
     */
   private val _elements = mut.Map[String, DirectFn]()
 
+  val monadicModifiers = Map[String, AST => DirectFn]()
+
+  val dyadicModifiers = Map[String, (AST, AST) => DirectFn]()
+
+  val triadicModifiers = Map[String, (AST, AST, AST) => DirectFn]()
+
   /** Get an element by its name
     */
   def element(name: String): DirectFn = _elements(name)
 
+  def addNilad(name: String)(impl: () => Context ?=> Unit) = {
+    _elements += name -> impl
+    impl
+  }
+
   def addMonad(name: String)(impl: Monad): Monad = {
-    _elements += name -> { ctx =>
-      ctx.stack.push(impl(ctx.stack.pop())(using ctx))
-    }
+    _elements += name -> { () => ctx ?=> ctx.stack.push(impl(ctx.stack.pop())) }
     impl
   }
 
@@ -27,8 +36,8 @@ object Builtins {
     addMonad(name)(vect1(impl))
 
   def addDyad(name: String)(impl: Dyad): Dyad = {
-    _elements += name -> { ctx =>
-      ctx.stack.push(impl(ctx.stack.pop(), ctx.stack.pop())(using ctx))
+    _elements += name -> { () => ctx ?=>
+      ctx.stack.push(impl(ctx.stack.pop(), ctx.stack.pop()))
     }
     impl
   }
@@ -36,9 +45,9 @@ object Builtins {
   def addDyadVect(name: String)(impl: SimpleDyad) = addDyad(name)(vect2(impl))
 
   def addTriad(name: String)(impl: Triad): Triad = {
-    _elements += name -> { ctx =>
+    _elements += name -> { () => ctx ?=>
       ctx.stack.push(
-        impl(ctx.stack.pop(), ctx.stack.pop(), ctx.stack.pop())(using ctx)
+        impl(ctx.stack.pop(), ctx.stack.pop(), ctx.stack.pop())
       )
     }
     impl
@@ -51,7 +60,7 @@ object Builtins {
   def addDirect(name: String)(impl: DirectFn): Unit =
     _elements += name -> impl
 
-  addDirect(",") { ctx => Helpers.vyPrint(ctx.stack.pop())(using ctx) }
+  addDirect(",") { () => ctx ?=> Helpers.vyPrint(ctx.stack.pop()) }
 
   val add = addDyad("+")(vect2 {
     case (n1: VNum, n2: VNum) => n1 + n2
