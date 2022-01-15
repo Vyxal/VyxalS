@@ -97,6 +97,7 @@ class VList(
 }
 
 object VList {
+
   /** Zip multiple VLists together with a function.
     */
   def zipMulti(lists: Seq[VList])(f: Seq[VAny] => VAny): VList = {
