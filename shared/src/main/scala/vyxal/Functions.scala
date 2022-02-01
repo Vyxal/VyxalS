@@ -10,7 +10,9 @@ type SimpleDyad = (VAtom, VAtom) => Context ?=> VAny
 type SimpleTriad = (VAtom, VAtom, VAtom) => Context ?=> VAny
 
 /** A function that works directly on the stack */
-type DirectFn = () => Context ?=> Unit
+case class DirectFn(fn: () => Context ?=> Unit, arity: Int) {
+  def apply()(using Context) = fn()
+}
 
 extension (f: Monad)
   /** Turn the monad into a normal function of type `VAny => VAny`

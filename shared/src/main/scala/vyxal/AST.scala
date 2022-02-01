@@ -26,9 +26,12 @@ case class For(loopVar: Option[String], body: List[AST]) extends AST
 
 case class While(cond: Option[List[AST]], body: List[AST]) extends AST
 
-case class FnDef(params: Option[List[String]], body: List[AST]) extends AST
-
-case class FnCall(name: String) extends AST
+case class FnDef(
+    name: String,
+    arity: Int,
+    params: Option[List[String]],
+    body: List[AST]
+) extends AST
 
 case class MonadicModifier(name: String, elem1: AST) extends AST
 
@@ -40,5 +43,9 @@ case class TriadicModifier(name: String, elem1: AST, elem2: AST, elem3: AST)
 case class Lambda(body: List[AST], kind: LambdaKind) extends AST
 
 enum LambdaKind {
-  case Normal, Map, Filter, Sort, OneByte, TwoByte
+  case Normal, OneByte, TwoByte, ThreeByte
 }
+
+/** A lambda after which an element runs (map, filter, and sort lambdas)
+  */
+case class LambdaWithOp(lam: Lambda, after: AST) extends AST

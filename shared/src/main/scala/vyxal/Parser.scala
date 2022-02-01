@@ -2,6 +2,9 @@ package vyxal
 
 import collection.mutable.ListBuffer
 
+class SyntaxError(msg: String, row: Int, col: Int)
+    extends RuntimeException(s"Syntax error: $msg at $row:$col")
+
 class Parser(private val prog: Iterator[Char]) {
   private var row, col = 0
   private var lastChar = '\u0000'
@@ -32,9 +35,17 @@ class Parser(private val prog: Iterator[Char]) {
     char
   }
 
+  /** Skip over whitespace
+    */
+  private def trim() = {
+    while (this.nonEmpty && this.peek.isWhitespace) {
+      next()
+    }
+  }
+
   /** Whether or not this character closes a structure
     */
-  private def isStructureDelimiter(char: Char) =
+  private def isStructureCloser(char: Char) =
     char == ';' || char == ']' || char == ')' || char == '}' || char == '|'
 
   /** Parse a single AST. Returns null if it could not parse a tree. This
@@ -45,20 +56,24 @@ class Parser(private val prog: Iterator[Char]) {
     if (isEmpty) return null
 
     val char = next()
-    if (isStructureDelimiter(char) || char.isWhitespace) return null
+    if (isStructureCloser(char) || char.isWhitespace) return null
     char match {
       case '#' =>
         while (nonEmpty && next() != '\n') {}
         parseAST()
       case 'λ' | 'ƛ' | '\'' | 'µ' =>
         val body = parseElems()
-        val kind = char match {
-          case 'λ' => LambdaKind.Normal
-          case 'ƛ' => LambdaKind.Map
-          case '\'' => LambdaKind.Filter
-          case 'µ' => LambdaKind.Sort
+        val lam = Lambda(body, LambdaKind.Normal)
+        if (char == 'λ') {
+          lam
+        } else {
+          val elem = char match {
+            case 'ƛ' => "M"
+            case '\'' => "F"
+            case 'µ' => "ṡ"
+          }
+          LambdaWithOp(lam, Element(elem))
         }
-        Lambda(body, kind)
       case '[' => parseIf()
       case '(' => parseFor()
       case '{' => parseWhile()
@@ -73,8 +88,44 @@ class Parser(private val prog: Iterator[Char]) {
           if (nonEmpty && this.peek == '.') VNum(num, 1) + afterDecimal()
           else VNum(num, 1)
         )
-      case c => Element("" + c)
+      case c =>
+        val sym = s"$c"
+        if (Builtins.monadicModifiers.contains(sym)) {
+          Builtins.monadicModifiers(sym)(
+            parseASTNotNull(
+              s"Expected arg for monadic modifier $sym"
+            )
+          )
+        } else if (Builtins.dyadicModifiers.contains(sym)) {
+          Builtins.dyadicModifiers(sym)(
+            parseASTNotNull(
+              s"Expected 1st arg for dyadic modifier $sym"
+            ),
+            parseASTNotNull(
+              s"Expected 2nd arg for dyadic modifier $sym"
+            )
+          )
+        } else if (Builtins.triadicModifiers.contains(sym)) {
+          Builtins.triadicModifiers(sym)(
+            parseASTNotNull(
+              s"Expected 1st arg for triadic modifier $sym"
+            ),
+            parseASTNotNull(
+              s"Expected 2nd arg for triadic modifier $sym"
+            ),
+            parseASTNotNull(
+              s"Expected 3nd arg for triadic modifier $sym"
+            )
+          )
+        } else {
+          Element(sym)
+        }
     }
+  }
+
+  private def parseASTNotNull(msg: String = "Expected another element"): AST = {
+    val ast = parseAST()
+    if (ast != null) ast else throw SyntaxError(msg, this.row, this.col)
   }
 
   /** Get the part of a number after the decimal as a `VNum`
@@ -103,7 +154,6 @@ class Parser(private val prog: Iterator[Char]) {
 
   private def parseFor() = {
     val varNameOrBody = parseElems()
-    println("lastchar=" + this.lastChar + ", varname=" + varNameOrBody)
     this.lastChar match {
       case '|' =>
         // It's got a variable name
@@ -139,10 +189,12 @@ class Parser(private val prog: Iterator[Char]) {
     */
   private def parseElems(): List[AST] = {
     val elems = ListBuffer.empty[AST]
-    while (nonEmpty) {
+    this.trim()
+    while (this.nonEmpty) {
       val ast = parseAST()
       if (ast != null) elems += ast
-      else if (isStructureDelimiter(this.lastChar)) return elems.toList
+      else if (isStructureCloser(this.lastChar)) return elems.toList
+      this.trim()
     }
     elems.toList
   }
@@ -158,5 +210,3 @@ object Parser {
 
   def parse(str: String): AST = Parser.parse(str.iterator)
 }
-
-class SyntaxError(message: String, pos: (Int, Int)) extends Exception(message)

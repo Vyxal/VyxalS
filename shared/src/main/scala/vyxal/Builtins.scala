@@ -6,11 +6,17 @@ import Helpers.given
 import scala.collection.{mutable => mut}
 
 object Builtins {
-  val monadicModifiers: Map[String, AST => DirectFn] = Map()
+  val monadicModifiers: Map[String, AST => AST] = Map(
+    "⁽" -> (a => Lambda(List(a), LambdaKind.OneByte))
+  )
 
-  val dyadicModifiers: Map[String, (AST, AST) => DirectFn] = Map()
+  val dyadicModifiers: Map[String, (AST, AST) => AST] = Map(
+    "‡" -> ((a, b) => Lambda(List(a, b), LambdaKind.TwoByte))
+  )
 
-  val triadicModifiers: Map[String, (AST, AST, AST) => DirectFn] = Map()
+  val triadicModifiers: Map[String, (AST, AST, AST) => AST] = Map(
+    "≬" -> ((a, b, c) => Lambda(List(a, b, c), LambdaKind.ThreeByte))
+  )
 
   /** Get an element by its name
     */
@@ -23,15 +29,18 @@ object Builtins {
       */
     val elements = mut.Map[String, DirectFn]()
 
-    def addNilad(name: String)(impl: () => Context ?=> Unit) = {
-      elements += name -> impl
+    def addNilad(name: String)(impl: () => Context ?=> VAny) = {
+      elements += name -> DirectFn(() => ctx ?=> ctx.stack.push(impl()), 1)
       impl
     }
 
     def addMonad(name: String)(impl: Monad): Monad = {
-      elements += name -> { () => ctx ?=>
-        ctx.stack.push(impl(ctx.stack.pop()))
-      }
+      elements += name -> DirectFn(
+        { () => ctx ?=>
+          ctx.stack.push(impl(ctx.stack.pop()))
+        },
+        1
+      )
       impl
     }
 
@@ -39,31 +48,37 @@ object Builtins {
       addMonad(name)(vect1(impl))
 
     def addDyad(name: String)(impl: Dyad): Dyad = {
-      elements += name -> { () => ctx ?=>
-        ctx.stack.push(impl(ctx.stack.pop(), ctx.stack.pop()))
-      }
+      elements += name -> DirectFn(
+        { () => ctx ?=>
+          ctx.stack.push(impl(ctx.stack.pop(), ctx.stack.pop()))
+        },
+        2
+      )
       impl
     }
 
     def addDyadVect(name: String)(impl: SimpleDyad) = addDyad(name)(vect2(impl))
 
     def addTriad(name: String)(impl: Triad): Triad = {
-      elements += name -> { () => ctx ?=>
-        ctx.stack.push(
-          impl(ctx.stack.pop(), ctx.stack.pop(), ctx.stack.pop())
-        )
-      }
+      elements += name -> DirectFn(
+        { () => ctx ?=>
+          ctx.stack.push(
+            impl(ctx.stack.pop(), ctx.stack.pop(), ctx.stack.pop())
+          )
+        },
+        3
+      )
       impl
     }
 
     def addTriadVect(name: String)(impl: SimpleTriad) =
       addTriad(name)(vect3(impl))
 
-    /** Add an element that works directly on the stack */
-    def addDirect(name: String)(impl: DirectFn): Unit =
-      elements += name -> impl
+    /** Add an element that works directly on the entire stack */
+    def addDirect(name: String)(impl: Context ?=> Unit): Unit =
+      elements += name -> DirectFn(() => impl, -1)
 
-    addDirect(",") { () => ctx ?=> Helpers.vyPrint(ctx.stack.pop()) }
+    addDirect(",") { ctx ?=> Helpers.vyPrint(ctx.stack.pop()) }
 
     val add = addDyad("+")(vect2 {
       case (n1: VNum, n2: VNum) => n1 + n2

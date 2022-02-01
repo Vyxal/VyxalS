@@ -24,9 +24,14 @@ object Interpreter {
         case TriadicModifier(name, elem1, elem2, elem3) =>
           Builtins.triadicModifiers(name)(elem1, elem2, elem3)
         case Commands(cmds) => cmds.foreach(execute)
+        case LambdaWithOp(lam, after) =>
+          execute(lam)
+          execute(after)
         case VarGet(varName) =>
           stack.push(ctx.vars(varName))
         case VarSet(varName) => ctx.vars += (varName -> stack.pop())
+        case fn@FnDef(name, arity, params, body) =>
+          ctx.vars += (name -> VFun.FnRef(fn, arity))
         case If(truthy, falsey) =>
           execute(
             if (stack.pop().toBool) truthy
