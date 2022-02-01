@@ -26,6 +26,7 @@ class Context(
 }
 
 object Context {
+
   /** Helper to grab stack from implicit Context */
   def stack(using ctx: Context) = ctx.stack
 }
