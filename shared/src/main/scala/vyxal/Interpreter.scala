@@ -30,7 +30,7 @@ object Interpreter {
         case VarGet(varName) =>
           stack.push(ctx.vars(varName))
         case VarSet(varName) => ctx.vars += (varName -> stack.pop())
-        case fn@FnDef(name, arity, params, body) =>
+        case fn @ FnDef(name, arity, params, body) =>
           ctx.vars += (name -> VFun.FnRef(fn, arity))
         case If(truthy, falsey) =>
           execute(
