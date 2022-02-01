@@ -6,12 +6,6 @@ import Helpers.given
 import scala.collection.{mutable => mut}
 
 object Builtins {
-
-  /** Maps element names to their implementations. This is built up as
-    * implementations are defined.
-    */
-  private val _elements = mut.Map[String, DirectFn]()
-
   val monadicModifiers = Map[String, AST => DirectFn]()
 
   val dyadicModifiers = Map[String, (AST, AST) => DirectFn]()
@@ -20,86 +14,96 @@ object Builtins {
 
   /** Get an element by its name
     */
-  def element(name: String): DirectFn = _elements(name)
+  def getElement(name: String): DirectFn = Impls._elements(name)
 
-  def addNilad(name: String)(impl: () => Context ?=> Unit) = {
-    _elements += name -> impl
-    impl
-  }
+  private object Impls {
 
-  def addMonad(name: String)(impl: Monad): Monad = {
-    _elements += name -> { () => ctx ?=> ctx.stack.push(impl(ctx.stack.pop())) }
-    impl
-  }
+    /** Maps element names to their implementations. This is built up as
+      * implementations are defined.
+      */
+    val _elements = mut.Map[String, DirectFn]()
 
-  def addMonadVect(name: String)(impl: SimpleMonad) =
-    addMonad(name)(vect1(impl))
-
-  def addDyad(name: String)(impl: Dyad): Dyad = {
-    _elements += name -> { () => ctx ?=>
-      ctx.stack.push(impl(ctx.stack.pop(), ctx.stack.pop()))
+    def addNilad(name: String)(impl: () => Context ?=> Unit) = {
+      _elements += name -> impl
+      impl
     }
-    impl
-  }
 
-  def addDyadVect(name: String)(impl: SimpleDyad) = addDyad(name)(vect2(impl))
-
-  def addTriad(name: String)(impl: Triad): Triad = {
-    _elements += name -> { () => ctx ?=>
-      ctx.stack.push(
-        impl(ctx.stack.pop(), ctx.stack.pop(), ctx.stack.pop())
-      )
+    def addMonad(name: String)(impl: Monad): Monad = {
+      _elements += name -> { () => ctx ?=>
+        ctx.stack.push(impl(ctx.stack.pop()))
+      }
+      impl
     }
-    impl
-  }
 
-  def addTriadVect(name: String)(impl: SimpleTriad) =
-    addTriad(name)(vect3(impl))
+    def addMonadVect(name: String)(impl: SimpleMonad) =
+      addMonad(name)(vect1(impl))
 
-  /** Add an element that works directly on the stack */
-  def addDirect(name: String)(impl: DirectFn): Unit =
-    _elements += name -> impl
+    def addDyad(name: String)(impl: Dyad): Dyad = {
+      _elements += name -> { () => ctx ?=>
+        ctx.stack.push(impl(ctx.stack.pop(), ctx.stack.pop()))
+      }
+      impl
+    }
 
-  addDirect(",") { () => ctx ?=> Helpers.vyPrint(ctx.stack.pop()) }
+    def addDyadVect(name: String)(impl: SimpleDyad) = addDyad(name)(vect2(impl))
 
-  val add = addDyad("+")(vect2 {
-    case (n1: VNum, n2: VNum) => n1 + n2
-    case (s: String, n: VNum) => s + n
-    case (n: VNum, s: String) => n.toString + s
-    case (s1: String, s2: String) => s1 + s2
-    case _ => throw IllegalArgumentException("Functions can't be added")
-  })
+    def addTriad(name: String)(impl: Triad): Triad = {
+      _elements += name -> { () => ctx ?=>
+        ctx.stack.push(
+          impl(ctx.stack.pop(), ctx.stack.pop(), ctx.stack.pop())
+        )
+      }
+      impl
+    }
 
-  val halve = addMonad("½")(vect1 {
-    case n: VNum => n / 2
-    case s: String =>
-      val half = (s.size + 1) / 2
-      VList.of(s.substring(0, half), s.substring(half + 1))
-    case f =>
-      throw IllegalArgumentException("Sorry, you can't halve functions")
-  })
+    def addTriadVect(name: String)(impl: SimpleTriad) =
+      addTriad(name)(vect3(impl))
 
-  val land = addDyad("∧")(_.toBool && _.toBool)
+    /** Add an element that works directly on the stack */
+    def addDirect(name: String)(impl: DirectFn): Unit =
+      _elements += name -> impl
 
-  val lnot = addMonad("¬")(!_.toBool)
+    addDirect(",") { () => ctx ?=> Helpers.vyPrint(ctx.stack.pop()) }
 
-  val lor = addDyad("∨")(_.toBool || _.toBool)
+    val add = addDyad("+")(vect2 {
+      case (n1: VNum, n2: VNum) => n1 + n2
+      case (s: String, n: VNum) => s + n
+      case (n: VNum, s: String) => n.toString + s
+      case (s1: String, s2: String) => s1 + s2
+      case _ => throw VyOverloadError("Functions can't be added")
+    })
 
-  val subtract = addDyad("-")(vect2 {
-    case (n1: VNum, n2: VNum) => n1 - n2
-    case (s: String, n: VNum) => s + "-" * n.toInt
-    case (n: VNum, s: String) => "-" * n.toInt + s
-    case (s1: String, s2: String) => s1.replace(s2, "")
-    case _ => throw IllegalArgumentException("Functions can't be subtracted")
-  })
+    val halve = addMonad("½")(vect1 {
+      case n: VNum => n / 2
+      case s: String =>
+        val half = (s.size + 1) / 2
+        VList.of(s.substring(0, half), s.substring(half + 1))
+      case f =>
+        throw VyOverloadError("Sorry, you can't halve functions")
+    })
 
-  val sum = addMonad("∑") {
-    case n: VNum => ???
-    case s: String => s
-    case l: VList => l.foldl(0)((a, b) => add.norm.apply(a, b))
-    case f =>
-      throw IllegalArgumentException(
-        "What's the sum of a function even supposed to be?"
-      )
+    val land = addDyad("∧")(_.toBool && _.toBool)
+
+    val lnot = addMonad("¬")(!_.toBool)
+
+    val lor = addDyad("∨")(_.toBool || _.toBool)
+
+    val subtract = addDyad("-")(vect2 {
+      case (n1: VNum, n2: VNum) => n1 - n2
+      case (s: String, n: VNum) => s + "-" * n.toInt
+      case (n: VNum, s: String) => "-" * n.toInt + s
+      case (s1: String, s2: String) => s1.replace(s2, "")
+      case _ => throw VyOverloadError("Functions can't be subtracted")
+    })
+
+    val sum = addMonad("∑") {
+      case n: VNum => ???
+      case s: String => s
+      case l: VList => l.foldl(0)((a, b) => add.norm.apply(a, b))
+      case f =>
+        throw VyOverloadError(
+          "What's the sum of a function even supposed to be?"
+        )
+    }
   }
 }

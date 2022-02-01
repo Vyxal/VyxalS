@@ -7,18 +7,17 @@ type VAny = VAtom | VList
 type VAtom = VVal | VFun
 type VVal = VNum | String
 
-sealed trait VFun
-case class LamFun(fn: Lambda)
-case class FnRefFun(fn: FnRef)
+enum VFun {
+  case Lam(lam: Lambda)
+  case FnRef(fnDef: FnDef)
+  case ElemRef(elemName: String)
+}
 
 // given Typeable[VVal] = (x: Any) => x match {
 //   case vl: (x.type & VNum) => Some(vl)
 //   case va: (x.type & String) => Some(va)
 //   case _ => None
 // }
-
-given Typeable[VFun] = x =>
-  Option.when(x.isInstanceOf[Function1[?, ?]])(x.asInstanceOf[x.type & VFun])
 
 given Typeable[VAtom] = (x: Any) =>
   x match {
