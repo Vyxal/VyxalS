@@ -6,30 +6,30 @@ import Helpers.given
 import scala.collection.{mutable => mut}
 
 object Builtins {
-  val monadicModifiers = Map[String, AST => DirectFn]()
+  val monadicModifiers: Map[String, AST => DirectFn] = Map()
 
-  val dyadicModifiers = Map[String, (AST, AST) => DirectFn]()
+  val dyadicModifiers: Map[String, (AST, AST) => DirectFn] = Map()
 
-  val triadicModifiers = Map[String, (AST, AST, AST) => DirectFn]()
+  val triadicModifiers: Map[String, (AST, AST, AST) => DirectFn] = Map()
 
   /** Get an element by its name
     */
-  def getElement(name: String): DirectFn = Impls._elements(name)
+  def getElement(name: String): DirectFn = Impls.elements(name)
 
   private object Impls {
 
     /** Maps element names to their implementations. This is built up as
       * implementations are defined.
       */
-    val _elements = mut.Map[String, DirectFn]()
+    val elements = mut.Map[String, DirectFn]()
 
     def addNilad(name: String)(impl: () => Context ?=> Unit) = {
-      _elements += name -> impl
+      elements += name -> impl
       impl
     }
 
     def addMonad(name: String)(impl: Monad): Monad = {
-      _elements += name -> { () => ctx ?=>
+      elements += name -> { () => ctx ?=>
         ctx.stack.push(impl(ctx.stack.pop()))
       }
       impl
@@ -39,7 +39,7 @@ object Builtins {
       addMonad(name)(vect1(impl))
 
     def addDyad(name: String)(impl: Dyad): Dyad = {
-      _elements += name -> { () => ctx ?=>
+      elements += name -> { () => ctx ?=>
         ctx.stack.push(impl(ctx.stack.pop(), ctx.stack.pop()))
       }
       impl
@@ -48,7 +48,7 @@ object Builtins {
     def addDyadVect(name: String)(impl: SimpleDyad) = addDyad(name)(vect2(impl))
 
     def addTriad(name: String)(impl: Triad): Triad = {
-      _elements += name -> { () => ctx ?=>
+      elements += name -> { () => ctx ?=>
         ctx.stack.push(
           impl(ctx.stack.pop(), ctx.stack.pop(), ctx.stack.pop())
         )
@@ -61,7 +61,7 @@ object Builtins {
 
     /** Add an element that works directly on the stack */
     def addDirect(name: String)(impl: DirectFn): Unit =
-      _elements += name -> impl
+      elements += name -> impl
 
     addDirect(",") { () => ctx ?=> Helpers.vyPrint(ctx.stack.pop()) }
 
