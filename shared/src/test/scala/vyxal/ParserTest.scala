@@ -10,12 +10,11 @@ class ParserTest extends AnyFlatSpec {
     assert(
       parsed == Commands(
         List(
-          For(
-            Some("foo"),
-            List(Element("b"), Element("a"), Element("r"))),
+          For(Some("foo"), List(Element("b"), Element("a"), Element("r"))),
           If(
             List(Element("a"), Element("+")),
-            List(Element("a"), Literal(VNum(324, 1)))),
+            List(Element("a"), Literal(VNum(324, 1)))
+          ),
           While(
             None,
             List(Literal(VNum(3, 1)))
