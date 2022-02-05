@@ -7,5 +7,4 @@ root/
 target/
 project/project
 
-project/build.properties
 metals.sbt
