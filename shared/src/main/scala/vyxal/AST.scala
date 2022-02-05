@@ -23,15 +23,18 @@ case class VarSet(name: String) extends AST
 case class If(truthy: AST, falsey: AST) extends AST
 
 /** A for loop
- * @param loopVar The name of the variable to loop over
- * @param body The body of the loop
- */
+  * @param loopVar
+  *   The name of the variable to loop over
+  * @param body
+  *   The body of the loop
+  */
 case class For(loopVar: Option[String], body: AST) extends AST
 
-/**
- * @param cond The code to run to test each time
- * @param body The code to run if the condition is true
- */
+/** @param cond
+  *   The code to run to test each time
+  * @param body
+  *   The code to run if the condition is true
+  */
 case class While(cond: Option[AST], body: AST) extends AST
 
 case class FnDef(
