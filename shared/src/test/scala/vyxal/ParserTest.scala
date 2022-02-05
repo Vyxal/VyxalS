@@ -6,27 +6,27 @@ class ParserTest extends AnyFlatSpec {
   def test(code: String, expected: AST) = {
     code should "parse correctly" in {
       val parsed = Parser.parse(code)
-      assertResult(parsed)(expected)
+      assertResult(expected)(parsed)
     }
   }
   test(
     "(foo | bar) [a+ | a324] { 3",
-    Commands(
-        For(Some("foo"), List(Element("b"), Element("a"), Element("r"))),
+    Cmds(
+        For(Some("foo"), Cmds(Element("b"), Element("a"), Element("r"))),
         If(
-          List(Element("a"), Element("+")),
-          List(Element("a"), Literal(VNum(324, 1)))
+          Cmds(Element("a"), Element("+")),
+          Cmds(Element("a"), Literal(VNum(324, 1)))
         ),
         While(
           None,
-          List(Literal(VNum(3, 1)))
+          Literal(VNum(3, 1))
         )
       )
   )
 
   test(
     "⁽+",
-    Commands(Lambda(List(Element("+")), LambdaKind.OneByte))
+    Lambda(Element("+"), LambdaKind.OneByte)
   )
 
 }

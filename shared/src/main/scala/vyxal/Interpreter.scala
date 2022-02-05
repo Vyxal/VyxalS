@@ -22,7 +22,7 @@ object Interpreter {
           Builtins.dyadicModifiers(name)(elem1, elem2)
         case TriadicModifier(name, elem1, elem2, elem3) =>
           Builtins.triadicModifiers(name)(elem1, elem2, elem3)
-        case Commands(cmds*) => cmds.foreach(execute)
+        case Cmds(cmds*) => cmds.foreach(execute)
         case LambdaWithOp(lam, after) =>
           execute(lam)
           execute(after)

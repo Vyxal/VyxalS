@@ -2,12 +2,14 @@
 // enablePlugins(ScalaJSPlugin)
 
 //The version of Scala we use
-val scalaversion = "3.1.0"
+val scalaversion = "3.1.1"
 
 ThisBuild / scalaVersion := scalaversion
 
 //Automatically reload SBT when build.sbt changes
 Global / onChangedBuildSource := ReloadOnSourceChanges
+
+Test / testOptions += Tests.Argument("-oN")
 
 //Use ("com.foo" % "bar.baz" % version).cross(CrossVersion.for3Use2_13)
 //if needed

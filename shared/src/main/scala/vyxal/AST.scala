@@ -2,53 +2,100 @@ package vyxal
 
 /** An AST representing Vyxal code
   */
-sealed trait AST
+sealed trait AST {
 
-case class Literal(value: VAny) extends AST
+  /** Back into Vyxal code */
+  def toVyxal: String
+}
 
-case class Element(symbol: String) extends AST
+case class Literal(value: VAny) extends AST {
+  override def toVyxal = value.toString
+}
+
+case class Element(symbol: String) extends AST {
+  override def toVyxal = symbol
+}
 
 /** Groups multiple elements together
   */
-case class Commands(cmds: AST*) extends AST
+case class Cmds(cmds: AST*) extends AST {
+  override def toVyxal = cmds.map(_.toVyxal).mkString(" ")
+}
+
+object Cmds {
+  def empty = Cmds()
+}
 
 /** Represents variable access (←varName)
   */
-case class VarGet(name: String) extends AST
+case class VarGet(name: String) extends AST {
+  override def toVyxal = s"←$name"
+}
 
 /** Represents variable assignment (→varName)
   */
-case class VarSet(name: String) extends AST
+case class VarSet(name: String) extends AST {
+  override def toVyxal = s"→$name"
+}
 
-case class If(truthy: AST, falsey: AST) extends AST
+case class If(truthy: AST, falsey: AST) extends AST {
+  override def toVyxal = s"[${truthy.toVyxal}|${falsey.toVyxal}]"
+}
 
 /** A for loop
- * @param loopVar The name of the variable to loop over
- * @param body The body of the loop
- */
-case class For(loopVar: Option[String], body: AST) extends AST
+  * @param loopVar
+  *   The name of the variable to loop over
+  * @param body
+  *   The body of the loop
+  */
+case class For(loopVar: Option[String], body: AST) extends AST {
+  override def toVyxal = "(" + loopVar.fold("")(_ + "|") + body.toVyxal + ")"
+}
 
-/**
- * @param cond The code to run to test each time
- * @param body The code to run if the condition is true
- */
-case class While(cond: Option[AST], body: AST) extends AST
+/** @param cond
+  *   The code to run to test each time
+  * @param body
+  *   The code to run if the condition is true
+  */
+case class While(cond: Option[AST], body: AST) extends AST {
+  override def toVyxal =
+    "{" + cond.fold("")(_.toVyxal + "|") + body.toVyxal + "}"
+}
 
 case class FnDef(
     name: String,
     arity: Int,
     params: Option[List[String]],
-    body: List[AST]
-) extends AST
+    body: AST
+) extends AST {
+  override def toVyxal = {
+    val paramsStr = params.fold(s"$arity")(_.mkString(" "))
+    s"@$name:$paramsStr|${body.toVyxal};"
+  }
+}
 
-case class MonadicModifier(name: String, elem1: AST) extends AST
+case class MonadicModifier(name: String, elem1: AST) extends AST {
+  override def toVyxal = name + elem1.toVyxal
+}
 
-case class DyadicModifier(name: String, elem1: AST, elem2: AST) extends AST
+case class DyadicModifier(name: String, elem1: AST, elem2: AST) extends AST {
+  override def toVyxal = name + elem1.toVyxal + elem2.toVyxal
+}
 
 case class TriadicModifier(name: String, elem1: AST, elem2: AST, elem3: AST)
-    extends AST
+    extends AST {
+  override def toVyxal = name + elem1.toVyxal + elem2.toVyxal + elem3.toVyxal
+}
 
-case class Lambda(body: AST, kind: LambdaKind) extends AST
+case class Lambda(body: AST, kind: LambdaKind) extends AST {
+  override def toVyxal =
+    kind match {
+      case LambdaKind.Normal => "λ" + body.toVyxal + ";"
+      case LambdaKind.OneByte => "⁽" + body.toVyxal
+      case LambdaKind.TwoByte => "‡" + body.toVyxal
+      case LambdaKind.ThreeByte => "≬" + body.toVyxal
+    }
+}
 
 enum LambdaKind {
   case Normal, OneByte, TwoByte, ThreeByte
@@ -56,4 +103,6 @@ enum LambdaKind {
 
 /** A lambda after which an element runs (map, filter, and sort lambdas)
   */
-case class LambdaWithOp(lam: Lambda, after: AST) extends AST
+case class LambdaWithOp(lam: Lambda, after: AST) extends AST {
+  override def toVyxal = lam.toVyxal + after.toVyxal
+}
