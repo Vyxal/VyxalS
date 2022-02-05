@@ -12,10 +12,10 @@ object JVMMain {
     // I know there's a lot of nested Seq's here, but that can be sugared later
     // and this won't even be used that often
 
-    given ctx: Context = Context(Stack(Seq(VList(Seq(1, 2, 3)))))
+    given ctx: Context = Context(Seq(VList.of(1, 2, 3)))
 
     Interpreter.execute(Element("∑"))
 
-    println(ctx.stack) // should be 6
+    println(ctx.peek) // should be 6
   }
 }

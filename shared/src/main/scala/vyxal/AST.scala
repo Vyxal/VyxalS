@@ -8,9 +8,9 @@ case class Literal(value: VAny) extends AST
 
 case class Element(symbol: String) extends AST
 
-/** Basically a line of Vyxal code
+/** Groups multiple elements together
   */
-case class Commands(cmds: List[AST]) extends AST
+case class Commands(cmds: AST*) extends AST
 
 /** Represents variable access (←varName)
   */
@@ -20,11 +20,19 @@ case class VarGet(name: String) extends AST
   */
 case class VarSet(name: String) extends AST
 
-case class If(truthy: List[AST], falsey: List[AST]) extends AST
+case class If(truthy: AST, falsey: AST) extends AST
 
-case class For(loopVar: Option[String], body: List[AST]) extends AST
+/** A for loop
+ * @param loopVar The name of the variable to loop over
+ * @param body The body of the loop
+ */
+case class For(loopVar: Option[String], body: AST) extends AST
 
-case class While(cond: Option[List[AST]], body: List[AST]) extends AST
+/**
+ * @param cond The code to run to test each time
+ * @param body The code to run if the condition is true
+ */
+case class While(cond: Option[AST], body: AST) extends AST
 
 case class FnDef(
     name: String,
@@ -40,7 +48,7 @@ case class DyadicModifier(name: String, elem1: AST, elem2: AST) extends AST
 case class TriadicModifier(name: String, elem1: AST, elem2: AST, elem3: AST)
     extends AST
 
-case class Lambda(body: List[AST], kind: LambdaKind) extends AST
+case class Lambda(body: AST, kind: LambdaKind) extends AST
 
 enum LambdaKind {
   case Normal, OneByte, TwoByte, ThreeByte

@@ -13,12 +13,6 @@ enum VFun(arity: Int) {
   case ElemRef(elemName: String, arity: Int) extends VFun(arity)
 }
 
-// given Typeable[VVal] = (x: Any) => x match {
-//   case vl: (x.type & VNum) => Some(vl)
-//   case va: (x.type & String) => Some(va)
-//   case _ => None
-// }
-
 given Typeable[VAtom] = (x: Any) =>
   x match {
     case vl: (x.type & VVal) => Some(vl)
@@ -32,16 +26,3 @@ given Typeable[VAny] = (x: Any) =>
     case va: (x.type & VAtom) => Some(va)
     case _ => None
   }
-
-class Stack(initial: Seq[VAny] = Seq.empty) {
-
-  /** Where the elements are actually stored
-    */
-  private val buf = initial.to(ArrayBuffer)
-
-  def peek: VAny = buf(buf.length - 1)
-  def pop(): VAny = buf.remove(buf.length - 1)
-  def push(item: VAny): Unit = buf += item
-
-  override def toString = buf.mkString("Stack(", ", ", ")")
-}

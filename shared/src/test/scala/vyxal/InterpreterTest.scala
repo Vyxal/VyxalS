@@ -9,7 +9,7 @@ class InterpreterTest extends AnyFlatSpec {
       """)
     given ctx: Context = Context()
     Interpreter.execute(parsed)
-    val top = ctx.stack.pop()
+    val top = ctx.pop()
     assert(top == VNum(5))
   }
 }

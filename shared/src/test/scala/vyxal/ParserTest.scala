@@ -12,7 +12,6 @@ class ParserTest extends AnyFlatSpec {
   test(
     "(foo | bar) [a+ | a324] { 3",
     Commands(
-      List(
         For(Some("foo"), List(Element("b"), Element("a"), Element("r"))),
         If(
           List(Element("a"), Element("+")),
@@ -23,12 +22,11 @@ class ParserTest extends AnyFlatSpec {
           List(Literal(VNum(3, 1)))
         )
       )
-    )
   )
 
   test(
     "⁽+",
-    Commands(List(Lambda(List(Element("+")), LambdaKind.OneByte)))
+    Commands(Lambda(List(Element("+")), LambdaKind.OneByte))
   )
 
 }

@@ -30,14 +30,14 @@ object Builtins {
     val elements = mut.Map[String, DirectFn]()
 
     def addNilad(name: String)(impl: () => Context ?=> VAny) = {
-      elements += name -> DirectFn(() => ctx ?=> ctx.stack.push(impl()), 1)
+      elements += name -> DirectFn(() => ctx ?=> ctx.push(impl()), 1)
       impl
     }
 
     def addMonad(name: String)(impl: Monad): Monad = {
       elements += name -> DirectFn(
         { () => ctx ?=>
-          ctx.stack.push(impl(ctx.stack.pop()))
+          ctx.push(impl(ctx.pop()))
         },
         1
       )
@@ -50,7 +50,7 @@ object Builtins {
     def addDyad(name: String)(impl: Dyad): Dyad = {
       elements += name -> DirectFn(
         { () => ctx ?=>
-          ctx.stack.push(impl(ctx.stack.pop(), ctx.stack.pop()))
+          ctx.push(impl(ctx.pop(), ctx.pop()))
         },
         2
       )
@@ -62,8 +62,8 @@ object Builtins {
     def addTriad(name: String)(impl: Triad): Triad = {
       elements += name -> DirectFn(
         { () => ctx ?=>
-          ctx.stack.push(
-            impl(ctx.stack.pop(), ctx.stack.pop(), ctx.stack.pop())
+          ctx.push(
+            impl(ctx.pop(), ctx.pop(), ctx.pop())
           )
         },
         3
@@ -78,7 +78,7 @@ object Builtins {
     def addDirect(name: String)(impl: Context ?=> Unit): Unit =
       elements += name -> DirectFn(() => impl, -1)
 
-    addDirect(",") { ctx ?=> Helpers.vyPrint(ctx.stack.pop()) }
+    addDirect(",") { ctx ?=> Helpers.vyPrint(ctx.pop()) }
 
     val add = addDyad("+")(vect2 {
       case (n1: VNum, n2: VNum) => n1 + n2

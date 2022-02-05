@@ -11,11 +11,10 @@ object Interpreter {
   }
 
   def execute(ast: AST)(using ctx: Context): Unit = {
-    val stack = ctx.stack
     try {
       ast match {
-        case Literal(value) => stack.push(value)
-        case l: Lambda => stack.push(VFun.Lam(l))
+        case Literal(value) => ctx.push(value)
+        case l: Lambda => ctx.push(VFun.Lam(l))
         case Element(name) => Builtins.getElement(name)()
         case MonadicModifier(name, elem1) =>
           Builtins.monadicModifiers(name)(elem1)
@@ -23,18 +22,18 @@ object Interpreter {
           Builtins.dyadicModifiers(name)(elem1, elem2)
         case TriadicModifier(name, elem1, elem2, elem3) =>
           Builtins.triadicModifiers(name)(elem1, elem2, elem3)
-        case Commands(cmds) => cmds.foreach(execute)
+        case Commands(cmds*) => cmds.foreach(execute)
         case LambdaWithOp(lam, after) =>
           execute(lam)
           execute(after)
         case VarGet(varName) =>
-          stack.push(ctx.vars(varName))
-        case VarSet(varName) => ctx.vars += (varName -> stack.pop())
-        case fn@FnDef(name, arity, params, body) =>
+          ctx.push(ctx.vars(varName))
+        case VarSet(varName) => ctx.vars += (varName -> ctx.pop())
+        case fn @ FnDef(name, arity, params, body) =>
           ctx.vars += (name -> VFun.FnRef(fn, arity))
         case If(truthy, falsey) =>
           execute(
-            if (stack.pop().toBool) truthy
+            if (ctx.pop().toBool) truthy
             else falsey
           )
         case While(cond, body) =>
@@ -42,11 +41,14 @@ object Interpreter {
             case Some(condAst) =>
               while {
                 execute(condAst)
-                stack.pop().toBool
+                ctx.pop().toBool
               } do execute(body)
             case None =>
               while (true) execute(body)
           }
+        case For(loopVar, body) =>
+          val elems = ctx.pop()
+          ???
       }
     } catch {
       case re: RuntimeException =>
