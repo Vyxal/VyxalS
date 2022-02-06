@@ -100,7 +100,7 @@ object VList {
 
   /** Zip multiple VLists together with a function.
     */
-  def zipMulti(lists: Seq[VList])(f: Seq[VAny] => VAny): VList = {
+  def zipMulti(lists: VList*)(f: Seq[VAny] => VAny): VList = {
     val its = lists.map(_.iterator)
 
     VList(

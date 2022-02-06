@@ -80,6 +80,7 @@ class Parser(private val prog: Iterator[Char]) {
           }
           LambdaWithOp(lam, Element(elem))
         }
+      case '†' => ExecFn()
       case '[' =>
         parseCtrlStruct(']') { (truthy, falsey) =>
           If(truthy, falsey.getOrElse(Cmds.empty))
@@ -121,8 +122,7 @@ class Parser(private val prog: Iterator[Char]) {
             VNum(num, 1)
           }
         )
-      case c =>
-        parseModifierOrElem(s"$c")
+      case c => parseModifierOrElem(s"$c")
     }
     // Record the position of this AST
     astPositions(ast) = Pos(this.row, this.col)

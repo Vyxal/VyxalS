@@ -44,6 +44,11 @@ object Interpreter {
         case For(loopVar, body) =>
           val elems = ctx.pop()
           ???
+        case ExecFn() =>
+          ctx.peek match {
+            case f: VFun => ???
+            case _ => Builtins.getElement("†")()
+          }
       }
     } catch {
       case re: RuntimeException =>
