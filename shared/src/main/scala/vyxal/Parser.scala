@@ -137,7 +137,7 @@ class Parser(private val prog: Iterator[Char]) {
   }
 
   private def parseIf(): AST =
-    parseCtrlStruct(']'){ (truthy, falsey) =>
+    parseCtrlStruct(']') { (truthy, falsey) =>
       If(truthy, falsey.getOrElse(Cmds.empty))
     }
 
