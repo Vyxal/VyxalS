@@ -6,18 +6,6 @@ import Helpers.given
 import scala.collection.{mutable => mut}
 
 object Builtins {
-  val monadicModifiers: Map[String, AST => AST] = Map(
-    "⁽" -> (a => Lambda(a, LambdaKind.OneByte))
-  )
-
-  val dyadicModifiers: Map[String, (AST, AST) => AST] = Map(
-    "‡" -> ((a, b) => Lambda(Cmds(a, b), LambdaKind.TwoByte))
-  )
-
-  val triadicModifiers: Map[String, (AST, AST, AST) => AST] = Map(
-    "≬" -> ((a, b, c) => Lambda(Cmds(a, b, c), LambdaKind.ThreeByte))
-  )
-
   /** Get an element by its name
     */
   def getElement(name: String): DirectFn = Impls.elements(name)

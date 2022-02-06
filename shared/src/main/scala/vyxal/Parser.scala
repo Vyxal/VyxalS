@@ -7,9 +7,9 @@ class SyntaxError(msg: String, row: Int, col: Int)
 
 /** A position in a file */
 case class Pos(row: Int, col: Int)
+
 class Parser(private val prog: Iterator[Char]) {
   private var row, col = 0
-  private var lastChar = '\u0000'
   private val buf = mut.ListBuffer.empty[Char]
 
   /** Record AST positions for debugging later */
@@ -30,7 +30,6 @@ class Parser(private val prog: Iterator[Char]) {
 
   private def next() = {
     val char = if (buf.isEmpty) prog.next else buf.remove(0)
-    this.lastChar = char
     if (char == '\n') {
       this.row += 1
       this.col = 0
@@ -174,17 +173,17 @@ class Parser(private val prog: Iterator[Char]) {
   }
 
   private def parseModifierOrElem(sym: String): AST = {
-    if (Builtins.monadicModifiers.contains(sym)) {
-      Builtins.monadicModifiers(sym)(
+    if (Modifiers.monadicModifiers.contains(sym)) {
+      Modifiers.monadicModifiers(sym)(
         parseASTOrEmpty()
       )
-    } else if (Builtins.dyadicModifiers.contains(sym)) {
-      Builtins.dyadicModifiers(sym)(
+    } else if (Modifiers.dyadicModifiers.contains(sym)) {
+      Modifiers.dyadicModifiers(sym)(
         parseASTOrEmpty(),
         parseASTOrEmpty()
       )
-    } else if (Builtins.triadicModifiers.contains(sym)) {
-      Builtins.triadicModifiers(sym)(
+    } else if (Modifiers.triadicModifiers.contains(sym)) {
+      Modifiers.triadicModifiers(sym)(
         parseASTOrEmpty(),
         parseASTOrEmpty(),
         parseASTOrEmpty()

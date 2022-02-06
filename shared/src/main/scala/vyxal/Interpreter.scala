@@ -16,13 +16,8 @@ object Interpreter {
         case Literal(value) => ctx.push(value)
         case l: Lambda => ctx.push(VFun.Lam(l))
         case Element(name) => Builtins.getElement(name)()
-        case MonadicModifier(name, elem1) =>
-          Builtins.monadicModifiers(name)(elem1)
-        case DyadicModifier(name, elem1, elem2) =>
-          Builtins.dyadicModifiers(name)(elem1, elem2)
-        case TriadicModifier(name, elem1, elem2, elem3) =>
-          Builtins.triadicModifiers(name)(elem1, elem2, elem3)
         case Cmds(cmds*) => cmds.foreach(execute)
+        case Modified(onExec, _, _) => onExec()
         case LambdaWithOp(lam, after) =>
           execute(lam)
           execute(after)

@@ -74,17 +74,12 @@ case class FnDef(
   }
 }
 
-case class MonadicModifier(name: String, elem1: AST) extends AST {
-  override def toVyxal = name + elem1.toVyxal
-}
-
-case class DyadicModifier(name: String, elem1: AST, elem2: AST) extends AST {
-  override def toVyxal = name + elem1.toVyxal + elem2.toVyxal
-}
-
-case class TriadicModifier(name: String, elem1: AST, elem2: AST, elem3: AST)
-    extends AST {
-  override def toVyxal = name + elem1.toVyxal + elem2.toVyxal + elem3.toVyxal
+case class Modified(
+    onExec: () => Context ?=> Unit,
+    modName: String,
+    elems: Seq[AST]
+) extends AST {
+  override def toVyxal = modName + elems.map(_.toVyxal).mkString("")
 }
 
 case class Lambda(body: AST, kind: LambdaKind) extends AST {
