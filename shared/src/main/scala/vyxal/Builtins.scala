@@ -6,6 +6,7 @@ import Helpers.given
 import scala.collection.{mutable => mut}
 
 object Builtins {
+
   /** Get an element by its name
     */
   def getElement(name: String): DirectFn = Impls.elements(name)
