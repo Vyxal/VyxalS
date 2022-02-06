@@ -1,14 +1,19 @@
 package vyxal
 
-import collection.mutable.ListBuffer
+import collection.{mutable => mut}
 
 class SyntaxError(msg: String, row: Int, col: Int)
     extends RuntimeException(s"Syntax error: $msg at $row:$col")
 
+/** A position in a file */
+case class Pos(row: Int, col: Int)
 class Parser(private val prog: Iterator[Char]) {
   private var row, col = 0
   private var lastChar = '\u0000'
-  private val buf = ListBuffer.empty[Char]
+  private val buf = mut.ListBuffer.empty[Char]
+
+  /** Record AST positions for debugging later */
+  private val astPositions = mut.Map.empty[AST, Pos]
 
   /** Do we have any more characters to consume?
     */
@@ -62,7 +67,7 @@ class Parser(private val prog: Iterator[Char]) {
     assert(!char.isWhitespace)
     assert(char != '#')
 
-    char match {
+    val ast = char match {
       case 'λ' | 'ƛ' | '\'' | 'µ' =>
         val body = parseElemGroup()
         val lam = Lambda(body, LambdaKind.Normal)
@@ -76,29 +81,61 @@ class Parser(private val prog: Iterator[Char]) {
           }
           LambdaWithOp(lam, Element(elem))
         }
-      case '[' => parseIf()
-      case '(' => parseFor()
-      case '{' => parseWhile()
+      case '[' =>
+        parseCtrlStruct(']') { (truthy, falsey) =>
+          If(truthy, falsey.getOrElse(Cmds.empty))
+        }
+      case '{' =>
+        parseCtrlStruct(')') {
+          case (cond, Some(body)) => While(Some(cond), body)
+          case (body, None) => While(None, body)
+        }
+      case '(' =>
+        parseCtrlStruct(')') {
+          case (varName, Some(body)) =>
+            val nameStr = varName match {
+              case Element(name) => name
+              case Cmds(cmds*) =>
+                cmds.collect { case Element(name) => name }.mkString("")
+              case _ => ""
+            }
+            val alphaName = nameStr.filter(c =>
+              'a' <= c && c <= 'z' || 'A' <= c && c <= 'Z' || c == '_'
+            )
+            For(Some(alphaName), body)
+          case (body, None) =>
+            For(None, body)
+        }
+
       case '.' =>
-        Literal(if (isEmpty) VNum(1, 2) else afterDecimal())
+        Literal(if (this.isEmpty) VNum(1, 2) else afterDecimal(0))
       case d if d.isDigit =>
         var num = BigInt(d - '0')
         while (nonEmpty && this.peek.isDigit) {
-          num = num * 10 + (next() - '0')
+          num = num * 10 + (this.next() - '0')
         }
         Literal(
-          if (nonEmpty && this.peek == '.') VNum(num, 1) + afterDecimal()
-          else VNum(num, 1)
+          if (nonEmpty && this.peek == '.') {
+            this.next()
+            afterDecimal(num)
+          } else {
+            VNum(num, 1)
+          }
         )
       case c =>
         parseModifierOrElem(s"$c")
     }
+    // Record the position of this AST
+    astPositions(ast) = Pos(this.row, this.col)
+    ast
   }
 
   /** Get the part of a number after the decimal as a `VNum`
+    * @param beforeDecimal
+    *   The stuff before the decimal. Gets added to the stuff after the decimal
     */
-  private def afterDecimal(): VNum = {
-    var num = BigInt(0)
+  private def afterDecimal(beforeDecimal: BigInt): VNum = {
+    var num = beforeDecimal
     var den = BigInt(1)
     while (nonEmpty && this.peek.isDigit) {
       num = num * 10 + (next() - '0')
@@ -136,34 +173,6 @@ class Parser(private val prog: Iterator[Char]) {
     }
   }
 
-  private def parseIf(): AST =
-    parseCtrlStruct(']'){ (truthy, falsey) =>
-      If(truthy, falsey.getOrElse(Cmds.empty))
-    }
-
-  private def parseFor(): AST =
-    parseCtrlStruct(')') {
-      case (varName, Some(body)) =>
-        val nameStr = varName match {
-          case Element(name) => name
-          case Cmds(cmds*) =>
-            cmds.collect { case Element(name) => name }.mkString("")
-          case _ => ""
-        }
-        val alphaName = nameStr.filter(c =>
-          'a' <= c && c <= 'z' || 'A' <= c && c <= 'Z' || c == '_'
-        )
-        For(Some(alphaName), body)
-      case (body, None) =>
-        For(None, body)
-    }
-
-  private def parseWhile(): AST =
-    parseCtrlStruct(')') {
-      case (cond, Some(body)) => While(Some(cond), body)
-      case (body, None) => While(None, body)
-    }
-
   private def parseModifierOrElem(sym: String): AST = {
     if (Builtins.monadicModifiers.contains(sym)) {
       Builtins.monadicModifiers(sym)(
@@ -195,7 +204,7 @@ class Parser(private val prog: Iterator[Char]) {
     * elements as well as the last character parsed.
     */
   private def parseElems(): List[AST] = {
-    val elems = ListBuffer.empty[AST]
+    val elems = mut.ListBuffer.empty[AST]
     this.trim()
     while (this.nonEmpty && !isStructureCloser(this.peek)) {
       elems += parseAST()
@@ -206,14 +215,19 @@ class Parser(private val prog: Iterator[Char]) {
 
   /** Parse multiple elements as if they're one AST
     */
-  def parseElemGroup(): AST = parseElems() match {
+  private def parseElemGroup(): AST = parseElems() match {
     case List(elem) => elem
     case elems => Cmds(elems*)
   }
 }
 
 object Parser {
-  def parse(prog: Iterator[Char]): AST = Parser(prog).parseElemGroup()
+  def parse(prog: Iterator[Char]): VyFile = {
+    val parser = Parser(prog)
+    val ast = parser.parseElemGroup()
+    assert(parser.isEmpty)
+    VyFile(ast, parser.astPositions.toMap)
+  }
 
-  def parse(str: String): AST = Parser.parse(str.iterator)
+  def parse(str: String): VyFile = Parser.parse(str.iterator)
 }

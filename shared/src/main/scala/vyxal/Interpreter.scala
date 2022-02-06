@@ -4,7 +4,7 @@ import vyxal.Helpers.toBool
 
 object Interpreter {
   def interpret(code: String, inputs: List[VAny]): Context = {
-    val ast = Parser.parse(code)
+    val VyFile(ast, _) = Parser.parse(code)
     given ctx: Context = Context()
     execute(ast)
     ctx
@@ -55,6 +55,4 @@ object Interpreter {
         throw RuntimeException(s"Errored while executing element $ast", re)
     }
   }
-
-  def execute(asts: List[AST])(using Context): Unit = asts.foreach(execute)
 }

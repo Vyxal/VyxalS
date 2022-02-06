@@ -5,7 +5,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 class ParserTest extends AnyFlatSpec {
   def test(code: String, expected: AST) = {
     code should "parse correctly" in {
-      val parsed = Parser.parse(code)
+      val parsed = Parser.parse(code).contents
       assertResult(expected)(parsed)
     }
   }
