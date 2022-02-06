@@ -12,16 +12,16 @@ class ParserTest extends AnyFlatSpec {
   test(
     "(foo | bar) [a+ | a324] { 3",
     Cmds(
-        For(Some("foo"), Cmds(Element("b"), Element("a"), Element("r"))),
-        If(
-          Cmds(Element("a"), Element("+")),
-          Cmds(Element("a"), Literal(VNum(324, 1)))
-        ),
-        While(
-          None,
-          Literal(VNum(3, 1))
-        )
+      For(Some("foo"), Cmds(Element("b"), Element("a"), Element("r"))),
+      If(
+        Cmds(Element("a"), Element("+")),
+        Cmds(Element("a"), Literal(VNum(324, 1)))
+      ),
+      While(
+        None,
+        Literal(VNum(3, 1))
       )
+    )
   )
 
   test(
