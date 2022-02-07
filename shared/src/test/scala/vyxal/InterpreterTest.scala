@@ -4,9 +4,11 @@ import org.scalatest.flatspec.AnyFlatSpec
 
 class InterpreterTest extends AnyFlatSpec {
   "random stuff" should "execute properly" in {
-    val parsed = Parser.parse(raw"""
+    val parsed = Parser
+      .parse(raw"""
       3 2 +
-      """).contents
+      """)
+      .contents
     given ctx: Context = Context()
     Interpreter.execute(parsed)
     val top = ctx.pop()
@@ -14,10 +16,12 @@ class InterpreterTest extends AnyFlatSpec {
   }
 
   "triple function" should "execute properly" in {
-    val parsed = Parser.parse(raw"""
+    val parsed = Parser
+      .parse(raw"""
       @triple|3 *;
       4 ←triple†
-      """).contents
+      """)
+      .contents
     println(parsed)
     given ctx: Context = Context()
     Interpreter.execute(parsed)
