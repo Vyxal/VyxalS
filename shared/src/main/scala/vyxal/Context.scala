@@ -19,8 +19,15 @@ class Context(
   private var printed = false
 
   def peek: VAny = stack(stack.size - 1)
+  
   def pop(): VAny = stack.remove(stack.size - 1)
+
   def push(item: VAny): Unit = stack += item
+  
+  /** The last n items on the stack, in reverse order
+    * e.g. Popping 3 of [1,2,3,4] results in [4,3,2]
+    */
+  def pop(n: Int): List[VAny] = List.fill(n)(stack.remove(stack.size - 1))
 
   def print(obj: Any) = {
     this.printed = true
@@ -34,6 +41,8 @@ class Context(
       vars: Map[String, VAny] = this.vars.toMap,
       inputs: List[List[VAny]] = this.inputs
   ) = new Context(stack, mut.Map(vars.toSeq*), inputs, this.printFn)
+
+  override def toString = s"Context(stack=${stack.mkString("[", ", ", "]")})"
 }
 
 object Context {

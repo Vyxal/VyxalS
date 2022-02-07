@@ -91,6 +91,13 @@ object Builtins {
 
     val lor = addDyad("∨")(_.toBool || _.toBool)
 
+    val mul = addDyad("*")(vect2 {
+      case (n1: VNum, n2: VNum) => n1 * n2
+      case (n: VNum, s: String) => s * n.toInt
+      case (s: String, n: VNum) => s * n.toInt
+      case _ => ???
+    })
+
     val subtract = addDyad("-")(vect2 {
       case (n1: VNum, n2: VNum) => n1 - n2
       case (s: String, n: VNum) => s + "-" * n.toInt

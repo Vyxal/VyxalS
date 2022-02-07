@@ -13,19 +13,19 @@ object Interpreter {
   def execute(ast: AST)(using ctx: Context): Unit = {
     try {
       ast match {
-        case Literal(value) => ctx.push(value)
+        case Literal(value) => println("literal:" + value); ctx.push(value); println(ctx)
         case l: Lambda => ctx.push(VFun.Lam(l))
         case Element(name) => Builtins.getElement(name)()
         case Cmds(cmds*) => cmds.foreach(execute)
-        case Modified(onExec, _, _) => onExec()
+        case Modified(onExec, _, _, arity) => onExec()
         case LambdaWithOp(lam, after) =>
           execute(lam)
           execute(after)
         case VarGet(varName) =>
           ctx.push(ctx.vars(varName))
         case VarSet(varName) => ctx.vars += (varName -> ctx.pop())
-        case fn @ FnDef(name, arity, params, body) =>
-          ctx.vars += (name -> VFun.FnRef(fn, arity))
+        case fn: FnDef =>
+          ctx.vars += (fn.name -> VFun.FnRef(fn))
         case If(truthy, falsey) =>
           execute(
             if (ctx.pop().toBool) truthy
@@ -45,14 +45,33 @@ object Interpreter {
           val elems = ctx.pop()
           ???
         case ExecFn() =>
-          ctx.peek match {
-            case f: VFun => ???
+          ctx.pop() match {
+            case vf: VFun => vf match {
+              case VFun.FnRef(fn) =>
+                fn.arityOrParams match {
+                  case List(arity: Int) =>
+                    execute(fn.body)
+                  case _ =>
+                    for (param <- fn.arityOrParams) {
+                      param match {
+                        case s: String => execute(VarSet(s))
+                        case n: Int => ctx.push(VNum(n))
+                      }
+                    }
+                    execute(fn.body)
+                }
+              case _ => ???
+            }
             case _ => Builtins.getElement("†")()
           }
       }
     } catch {
+      case e: Exception =>
+        throw Exception(s"Errored while executing element $ast, ctx=$ctx", e)
       case re: RuntimeException =>
-        throw RuntimeException(s"Errored while executing element $ast", re)
+        throw RuntimeException(s"Errored while executing element $ast, ctx=$ctx", re)
+      case e: Error =>
+        throw Error(s"Errored while executing element $ast, ctx=$ctx", e)
     }
   }
 }

@@ -56,6 +56,9 @@ class Parser(private val prog: Iterator[Char]) {
   private def isStructureCloser(char: Char) =
     char == ';' || char == ']' || char == ')' || char == '}' || char == '|'
 
+  private def isAlpha(char: Char) =
+    'a' <= char && char <= 'z' || 'A' <= char && char <= 'Z'
+
   /** Parse a single AST. Expects the program to have been trimmed beforehand
     */
   private def parseAST(): AST = {
@@ -99,14 +102,15 @@ class Parser(private val prog: Iterator[Char]) {
                 cmds.collect { case Element(name) => name }.mkString("")
               case _ => ""
             }
-            val alphaName = nameStr.filter(c =>
-              'a' <= c && c <= 'z' || 'A' <= c && c <= 'Z' || c == '_'
-            )
+            val alphaName = nameStr.filter(c => isAlpha(c) || c == '_')
             For(Some(alphaName), body)
           case (body, None) =>
             For(None, body)
         }
-
+      case '←' => VarGet(parseIdent())
+      case '→' => VarSet(parseIdent())
+      case '@' =>
+        parseFn()
       case '.' =>
         Literal(if (this.isEmpty) VNum(1, 2) else afterDecimal(0))
       case d if d.isDigit =>
@@ -143,6 +147,12 @@ class Parser(private val prog: Iterator[Char]) {
     VNum(num, den)
   }
 
+  private def parseIdent(): String = {
+    val id = StringBuilder()
+    while (this.nonEmpty && isAlpha(this.peek)) id += this.next()
+    id.toString
+  }
+
   /** Parse if, for, while. Assumes the first character of the structure is
     * already consumed
     * @param close
@@ -169,6 +179,45 @@ class Parser(private val prog: Iterator[Char]) {
     } else {
       // Some other structure closed here, so autoclose the current one
       f(first, None)
+    }
+  }
+
+  private def parseFn(): AST = {
+    this.trim()
+    val name = StringBuilder()
+    while (this.nonEmpty && this.peek != ':' && this.peek != '|') {
+      name += this.next()
+    }
+    if (this.isEmpty) {
+      FnDef(name.toString, List.empty, Cmds.empty)
+    } else {
+      val arityOrParams = if (this.next() == '|') {
+        List.empty
+      } else {
+        var params = mut.ListBuffer[Int | String]()
+        while (this.nonEmpty && this.peek != '|') {
+          val param = StringBuilder()
+          var allDigits = true
+          while (this.nonEmpty && this.peek != ':') {
+            val c = this.next()
+            param += c
+            if (c.isDigit) {
+              allDigits = false
+            }
+          }
+          if (this.nonEmpty) this.next()
+          if (allDigits) {
+            params += param.toString.toInt
+          } else {
+            params += param.toString
+          }
+        }
+        if (this.nonEmpty) this.next()
+        params.toList
+      }
+      val body = parseElemGroup()
+      if (this.nonEmpty && this.peek == ';') this.next()
+      FnDef(name.toString, arityOrParams, body)
     }
   }
 
@@ -224,7 +273,7 @@ object Parser {
   def parse(prog: Iterator[Char]): VyFile = {
     val parser = Parser(prog)
     val ast = parser.parseElemGroup()
-    assert(parser.isEmpty)
+    assert(parser.isEmpty, s"Only parsed ${ast}, but not empty")
     VyFile(ast, parser.astPositions.toMap)
   }
 

@@ -69,20 +69,25 @@ case class While(cond: Option[AST], body: AST) extends AST {
 
 case class FnDef(
     name: String,
-    arity: Int,
-    params: Option[List[String]],
+    arityOrParams: List[Int | String],
     body: AST
 ) extends AST {
-  override def toVyxal = {
-    val paramsStr = params.fold(s"$arity")(_.mkString(" "))
-    s"@$name:$paramsStr|${body.toVyxal};"
+  def arity: Int = arityOrParams match {
+    case List(arity: Int) => arity
+    case ps => 1.max(ps.count(_.isInstanceOf[String]))
   }
+
+  override def toVyxal =
+    arityOrParams
+      .map(_.toString)
+      .mkString(s"@$name:", ":", s"|${body.toVyxal};")
 }
 
 case class Modified(
     onExec: () => Context ?=> Unit,
     modName: String,
-    elems: Seq[AST]
+    elems: Seq[AST],
+    arity: Int
 ) extends AST {
   override def toVyxal = modName + elems.map(_.toVyxal).mkString("")
 }

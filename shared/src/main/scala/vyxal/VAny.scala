@@ -9,8 +9,10 @@ type VVal = VNum | String
 
 enum VFun(arity: Int) {
   case Lam(lam: Lambda) extends VFun(1)
-  case FnRef(fnDef: FnDef, arity: Int) extends VFun(arity)
-  case ElemRef(elem: AST, arity: Int) extends VFun(arity)
+  case FnRef(fnDef: FnDef) extends VFun(fnDef.arity)
+  case ElemRef(elem: String, arity: Int) extends VFun(arity)
+  /** Function created by applying a modifier */
+  case ModRes(mod: Modified) extends VFun(mod.arity)
 }
 
 given Typeable[VAtom] = (x: Any) =>
