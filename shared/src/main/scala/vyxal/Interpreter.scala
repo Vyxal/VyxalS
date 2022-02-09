@@ -3,17 +3,23 @@ package vyxal
 import vyxal.Helpers.toBool
 
 object Interpreter {
-  def interpret(code: String, inputs: List[VAny]): Context = {
+  def execute(
+      code: String,
+      inputs: List[VAny] = List.empty,
+      flags: List[String] = List.empty
+  ): Context = {
     val VyFile(ast, _) = Parser.parse(code)
     given ctx: Context = Context()
     execute(ast)
+    println(ctx.pop())
     ctx
   }
 
   def execute(ast: AST)(using ctx: Context): Unit = {
     try {
       ast match {
-        case Literal(value) => println("literal:" + value); ctx.push(value); println(ctx)
+        case Literal(value) =>
+          println("literal:" + value); ctx.push(value); println(ctx)
         case l: Lambda => ctx.push(VFun.Lam(l))
         case Element(name) => Builtins.getElement(name)()
         case Cmds(cmds*) => cmds.foreach(execute)
@@ -46,22 +52,23 @@ object Interpreter {
           ???
         case ExecFn() =>
           ctx.pop() match {
-            case vf: VFun => vf match {
-              case VFun.FnRef(fn) =>
-                fn.arityOrParams match {
-                  case List(arity: Int) =>
-                    execute(fn.body)
-                  case _ =>
-                    for (param <- fn.arityOrParams) {
-                      param match {
-                        case s: String => execute(VarSet(s))
-                        case n: Int => ctx.push(VNum(n))
+            case vf: VFun =>
+              vf match {
+                case VFun.FnRef(fn) =>
+                  fn.arityOrParams match {
+                    case List(arity: Int) =>
+                      execute(fn.body)
+                    case _ =>
+                      for (param <- fn.arityOrParams) {
+                        param match {
+                          case s: String => execute(VarSet(s))
+                          case n: Int => ctx.push(VNum(n))
+                        }
                       }
-                    }
-                    execute(fn.body)
-                }
-              case _ => ???
-            }
+                      execute(fn.body)
+                  }
+                case _ => ???
+              }
             case _ => Builtins.getElement("†")()
           }
       }
@@ -69,7 +76,10 @@ object Interpreter {
       case e: Exception =>
         throw Exception(s"Errored while executing element $ast, ctx=$ctx", e)
       case re: RuntimeException =>
-        throw RuntimeException(s"Errored while executing element $ast, ctx=$ctx", re)
+        throw RuntimeException(
+          s"Errored while executing element $ast, ctx=$ctx",
+          re
+        )
       case e: Error =>
         throw Error(s"Errored while executing element $ast, ctx=$ctx", e)
     }
