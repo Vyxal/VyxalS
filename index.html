@@ -7,15 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Vyxal Interpreter in Scala.JS</title>
 
-    <script type="text/javascript" src="./js/target/scala-3.1.1/vyxal-opt/main.js"></script>
-
-    <script>
-        function executeCode() {
-            var code = document.getElementById("codebox").value;
-            var outputBox = document.getElementById("outputbox");
-            Vyxal.execute(code, [], [], s => outputBox.innerHTML += s);
-        }
-    </script>
+    <script type="text/javascript" src="./js/target/scala-3.1.1/vyxal-fastopt/main.js"></script>
 
     <body>
         <p>Code:</p>
@@ -25,4 +17,21 @@
         <p>Output:</p>
         <p id="outputbox"></p>
     </body>
+
+    <script>
+        function codeBox() {
+            return document.getElementById("codebox");
+        }
+
+        function executeCode() {
+            var code = codeBox().value;
+            var outputBox = document.getElementById("outputbox");
+            Vyxal.execute(code, [], [], s => outputBox.innerHTML += s);
+        }
+
+        const urlCode = new URLSearchParams(window.location.search).get("code");
+        if (urlCode != "") {
+            codeBox().value = urlCode;
+        }
+    </script>
 </body>

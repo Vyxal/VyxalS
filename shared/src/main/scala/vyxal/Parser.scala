@@ -198,10 +198,11 @@ class Parser(private val prog: Iterator[Char]) {
         while (this.nonEmpty && this.peek != '|') {
           val param = StringBuilder()
           var allDigits = true
-          while (this.nonEmpty && this.peek != ':') {
+          while (this.nonEmpty && this.peek != ':' && this.peek != '|') {
             val c = this.next()
             param += c
-            if (c.isDigit) {
+            println(s"param=$param")
+            if (!c.isDigit) {
               allDigits = false
             }
           }
@@ -211,6 +212,7 @@ class Parser(private val prog: Iterator[Char]) {
           } else {
             params += param.toString
           }
+          println(s"params=$params")
         }
         if (this.nonEmpty) this.next()
         params.toList

@@ -119,5 +119,10 @@ object Builtins {
           "What's the sum of a function even supposed to be?"
         )
     }
+
+    val exec = addMonad("†") {
+      case x =>
+        throw NotImplementedError(s"† is still unimplemented (tried executing on $x)")
+    }
   }
 }

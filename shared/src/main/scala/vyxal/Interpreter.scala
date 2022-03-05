@@ -18,13 +18,12 @@ object Interpreter {
   }
 
   def execute(ast: AST)(using ctx: Context): Unit = {
-    println(s"executing ast:")
-    println(ast)
+    println(s"executing ast $ast, ctx=$ctx")
     try {
       ast match {
         case Literal(value) =>
           println("literal:" + value); ctx.push(value); println(ctx)
-        case l: Lambda => ctx.push(VFun.Lam(l))
+        case l: Lambda => ctx.push(VFun.Lam(l, ctx.createChild()))
         case Element(name) => Builtins.getElement(name)()
         case Cmds(cmds*) => cmds.foreach(execute)
         case Modified(onExec, _, _, arity) => onExec()
@@ -32,10 +31,10 @@ object Interpreter {
           execute(lam)
           execute(after)
         case VarGet(varName) =>
-          ctx.push(ctx.vars(varName))
-        case VarSet(varName) => ctx.vars += (varName -> ctx.pop())
+          ctx.push(ctx.getVar(varName))
+        case VarSet(varName) => ctx.setVar(varName, ctx.pop())
         case fn: FnDef =>
-          ctx.vars += (fn.name -> VFun.FnRef(fn))
+          ctx.setVar(fn.name, VFun.FnRef(fn, ctx.createChild()))
         case If(truthy, falsey) =>
           execute(
             if (ctx.pop().toBool) truthy
@@ -58,18 +57,22 @@ object Interpreter {
           ctx.pop() match {
             case vf: VFun =>
               vf match {
-                case VFun.FnRef(fn) =>
+                case VFun.FnRef(fn, fnCtx) =>
+                  val newCtx = fnCtx.copy()
                   fn.arityOrParams match {
                     case List(arity: Int) =>
-                      execute(fn.body)
+                      execute(fn.body)(using newCtx)
                     case _ =>
                       for (param <- fn.arityOrParams) {
                         param match {
-                          case s: String => execute(VarSet(s))
-                          case n: Int => ctx.push(VNum(n))
+                          case s: String =>
+                            newCtx.push(ctx.pop())
+                            execute(VarSet(s))(using newCtx)
+                          case n: Int => newCtx.push(VNum(n))
                         }
                       }
-                      execute(fn.body)
+                      execute(fn.body)(using newCtx)
+                      if (!newCtx.isStackEmpty) ctx.push(newCtx.pop())
                   }
                 case _ => ???
               }
@@ -78,16 +81,16 @@ object Interpreter {
       }
     } catch {
       case e: Exception =>
-        throw Exception(s"Errored while executing element $ast, ctx=$ctx", e)
+        throw Exception(s"Errored while executing element $ast, ctx=$ctx, e=${e.getMessage}", e)
       case re: RuntimeException =>
         throw RuntimeException(
           s"Errored while executing element $ast, ctx=$ctx",
           re
         )
       case e: Error =>
-        throw Error(s"Errored while executing element $ast, ctx=$ctx", e)
+        throw Error(s"Errored while executing element $ast, ctx=$ctx, e=${e.getMessage}", e)
       case e =>
-        throw Error(s"Magic Errored while executing element $ast, ctx=$ctx", e)
+        throw Error(s"Magic Errored while executing element $ast, ctx=$ctx, e=${e.getMessage}", e)
     }
   }
 }
