@@ -18,7 +18,7 @@ if needed
 Use compile to just compile when testing on your computer
 Use vyxalJVM/run to actually run the JVMMain class
 
-Use fastLinkJS to quickly link JS, and fullLinkJS when releasing
+Use fastOptJS to quickly link JS, and fullOptJS when releasing
 Use vyxalJS/run to run the JSMain class (you will need Node.JS for this)
  */
 
@@ -60,4 +60,6 @@ lazy val vyxal = crossProject(JSPlatform, JVMPlatform)
     // Add JS-specific settings here
     Compile / mainClass := Some("vyxal.JSMain"),
     scalaJSUseMainModuleInitializer := true,
+    Compile / fastOptJS / artifactPath := baseDirectory.value / "lib" / "main.js",
+    Compile / fullOptJS / artifactPath := baseDirectory.value / "lib" / "main.js",
   )
