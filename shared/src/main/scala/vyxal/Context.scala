@@ -65,9 +65,9 @@ class Context private (
       parent.fold(default)(_.getVar(varName, default))
     }
 
-  /** Set a variable to a given value. If found in this context, changes its value.
-    * If it's not found in the current context but it exists in the parent context, sets it there.
-    * Otherwise, creates a new variable
+  /** Set a variable to a given value. If found in this context, changes its
+    * value. If it's not found in the current context but it exists in the
+    * parent context, sets it there. Otherwise, creates a new variable
     */
   def setVar(varName: String, value: VAny): Unit = {
     if (vars.contains(varName) && this.vars(varName) == null) {

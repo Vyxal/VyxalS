@@ -120,9 +120,10 @@ object Builtins {
         )
     }
 
-    val exec = addMonad("†") {
-      case x =>
-        throw NotImplementedError(s"† is still unimplemented (tried executing on $x)")
+    val exec = addMonad("†") { case x =>
+      throw NotImplementedError(
+        s"† is still unimplemented (tried executing on $x)"
+      )
     }
   }
 }
