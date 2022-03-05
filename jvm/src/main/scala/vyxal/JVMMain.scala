@@ -12,6 +12,10 @@ object JVMMain {
     // I know there's a lot of nested Seq's here, but that can be sugared later
     // and this won't even be used that often
 
+    given Backend with {
+      override def print(s: String) = Predef.print(s)
+    }
+
     given ctx: Context = Context(Seq(VList.of(1, 2, 3)))
 
     Interpreter.execute(Element("∑"))

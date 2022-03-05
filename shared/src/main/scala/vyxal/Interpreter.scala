@@ -7,15 +7,19 @@ object Interpreter {
       code: String,
       inputs: List[VAny] = List.empty,
       flags: List[String] = List.empty
-  ): Context = {
+  )(using Backend): Context = {
     val VyFile(ast, _) = Parser.parse(code)
     given ctx: Context = Context()
     execute(ast)
-    println(ctx.pop())
+    if (!ctx.isStackEmpty) {
+      ctx.println(ctx.pop())
+    }
     ctx
   }
 
   def execute(ast: AST)(using ctx: Context): Unit = {
+    println(s"executing ast:")
+    println(ast)
     try {
       ast match {
         case Literal(value) =>
@@ -82,6 +86,8 @@ object Interpreter {
         )
       case e: Error =>
         throw Error(s"Errored while executing element $ast, ctx=$ctx", e)
+      case e =>
+        throw Error(s"Magic Errored while executing element $ast, ctx=$ctx", e)
     }
   }
 }

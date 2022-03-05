@@ -67,7 +67,10 @@ object Builtins {
     def addDirect(name: String)(impl: Context ?=> Unit): Unit =
       elements += name -> DirectFn(() => impl, -1)
 
-    addDirect(",") { ctx ?=> Helpers.vyPrint(ctx.pop()) }
+    addDirect(",") { ctx ?=>
+      Helpers.vyPrint(ctx.pop())
+      Helpers.vyPrint("\n")
+    }
 
     val add = addDyad("+")(vect2 {
       case (n1: VNum, n2: VNum) => n1 + n2

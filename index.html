@@ -8,4 +8,21 @@
     <title>Vyxal Interpreter in Scala.JS</title>
 
     <script type="text/javascript" src="./js/target/scala-3.1.1/vyxal-opt/main.js"></script>
+
+    <script>
+        function executeCode() {
+            var code = document.getElementById("codebox").value;
+            var outputBox = document.getElementById("outputbox");
+            Vyxal.execute(code, [], [], s => outputBox.innerHTML += s);
+        }
+    </script>
+
+    <body>
+        <p>Code:</p>
+        <textarea id="codebox"></textarea>
+        <br>
+        <button onclick="executeCode()">Run</button>
+        <p>Output:</p>
+        <p id="outputbox"></p>
+    </body>
 </body>
