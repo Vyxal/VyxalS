@@ -51,8 +51,11 @@ object Interpreter {
               while (true) execute(body)
           }
         case For(loopVar, body) =>
-          val elems = ctx.pop()
-          ???
+          val elems: VList = ctx.pop()
+          val contextVar = loopVar.getOrElse("n")
+          for (elem <- elems) {
+            stack.execute(body)
+          }
         case ExecFn() =>
           ctx.pop() match {
             case vf: VFun =>
