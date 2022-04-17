@@ -1,6 +1,6 @@
 package vyxal
 
-import vyxal.Helpers.toBool
+import vyxal.Helpers.{toBool, toList}
 
 object Interpreter {
   def execute(
@@ -51,10 +51,11 @@ object Interpreter {
               while (true) execute(body)
           }
         case For(loopVar, body) =>
-          val elems: VList = ctx.pop()
-          val contextVar = loopVar.getOrElse("n")
+          val elems = ctx.pop().toList
           for (elem <- elems) {
-            stack.execute(body)
+            given newCtx: Context = ctx.createChild(contextVar = elem)
+            loopVar.map { varName => newCtx.setVar(varName, elem) }
+            execute(body)
           }
         case ExecFn() =>
           ctx.pop() match {

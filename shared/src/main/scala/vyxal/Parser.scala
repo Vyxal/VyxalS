@@ -76,7 +76,7 @@ class Parser(private val prog: Iterator[Char]) {
         if (char == 'λ') {
           lam
         } else {
-          val elem = char match {
+          val elem = (char: @unchecked) match {
             case 'ƛ' => "M"
             case '\'' => "F"
             case 'µ' => "ṡ"
@@ -126,6 +126,8 @@ class Parser(private val prog: Iterator[Char]) {
             VNum(num, 1)
           }
         )
+      case c @ ('∆' | 'ø' | 'Þ' | '¨' | 'k') =>
+        parseModifierOrElem(s"$c${this.next()}")
       case c => parseModifierOrElem(s"$c")
     }
     // Record the position of this AST

@@ -23,7 +23,17 @@ case class VNum private (val numer: BigInt, val denom: BigInt) {
 
   def /(div: Int): VNum = VNum(numer, denom * div)
 
+  def <(that: VNum): Boolean = (that - this).isPositive
+  def >(that: VNum): Boolean = (this - that).isPositive
+
   def toInt: Int = (numer / denom).toInt
+
+  def to(exclusiveEnd: VNum, step: VNum = VNum(1)): VList =
+    VList(
+      Seq.unfold(this)(last => Option.when(last < exclusiveEnd)((last, last + step)))
+    )
+
+  def isPositive: Boolean = this.numer > 0
 
   override def canEqual(other: Any) = other.isInstanceOf[VNum]
 
@@ -44,9 +54,15 @@ object VNum {
   def apply(numer: BigInt, denom: BigInt): VNum = {
     assert(denom != 0, "Division by zero is not defined")
     val gcd = numer.gcd(denom)
-    new VNum(numer / gcd, denom / gcd)
+    val num = numer / gcd
+    val den = denom / gcd
+    if (den < 0) new VNum(-num, -den)
+    else new VNum(num, den)
   }
   def apply(numer: Int): VNum = VNum(BigInt(numer), BigInt(1))
+
+  /** Least common multiple because BigInt doesn't have its own */
+  private def lcm(x: BigInt, y: BigInt): BigInt = (x * y) / x.gcd(y)
 }
 
 given CanEqual[VNum, Int] = CanEqual.derived

@@ -18,9 +18,8 @@ object Builtins {
       */
     val elements = mut.Map[String, DirectFn]()
 
-    def addNilad(name: String)(impl: () => Context ?=> VAny) = {
-      elements += name -> DirectFn(() => ctx ?=> ctx.push(impl()), 1)
-      impl
+    def addNilad(name: String)(impl: Context ?=> VAny): Unit = {
+      elements += name -> DirectFn(() => ctx ?=> ctx.push(impl(using ctx)), 1)
     }
 
     def addMonad(name: String)(impl: Monad): Monad = {
@@ -120,9 +119,14 @@ object Builtins {
         )
     }
 
-    val exec = addMonad("†") {
-      case x =>
-        throw NotImplementedError(s"† is still unimplemented (tried executing on $x)")
+    val exec = addMonad("†") { case x =>
+      throw NotImplementedError(
+        s"† is still unimplemented (tried executing on $x)"
+      )
     }
+
+    addNilad("n") { ctx ?=> ctx.contextVar }
+
+    addNilad("ka") { "abcdefghijklmnopqrstuvwxyz" }
   }
 }
