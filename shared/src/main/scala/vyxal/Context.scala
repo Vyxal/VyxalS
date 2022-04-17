@@ -56,7 +56,10 @@ class Context private (
     * @param default
     *   What to return if the variable doesn't exist
     */
-  def getVar(varName: String, default: VAny = this.settings.defaultValue): VAny =
+  def getVar(
+      varName: String,
+      default: VAny = this.settings.defaultValue
+  ): VAny =
     if (vars.contains(varName)) {
       this.vars(varName) match {
         case null => parent.get.getVar(varName, default)

@@ -30,7 +30,9 @@ case class VNum private (val numer: BigInt, val denom: BigInt) {
 
   def to(exclusiveEnd: VNum, step: VNum = VNum(1)): VList =
     VList(
-      Seq.unfold(this)(last => Option.when(last < exclusiveEnd)((last, last + step)))
+      Seq.unfold(this)(last =>
+        Option.when(last < exclusiveEnd)((last, last + step))
+      )
     )
 
   def isPositive: Boolean = this.numer > 0

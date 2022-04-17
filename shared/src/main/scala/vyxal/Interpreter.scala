@@ -85,16 +85,25 @@ object Interpreter {
       }
     } catch {
       case e: Exception =>
-        throw Exception(s"Errored while executing element $ast, ctx=$ctx, e=${e.getMessage}", e)
+        throw Exception(
+          s"Errored while executing element $ast, ctx=$ctx, e=${e.getMessage}",
+          e
+        )
       case re: RuntimeException =>
         throw RuntimeException(
           s"Errored while executing element $ast, ctx=$ctx",
           re
         )
       case e: Error =>
-        throw Error(s"Errored while executing element $ast, ctx=$ctx, e=${e.getMessage}", e)
+        throw Error(
+          s"Errored while executing element $ast, ctx=$ctx, e=${e.getMessage}",
+          e
+        )
       case e =>
-        throw Error(s"Magic Errored while executing element $ast, ctx=$ctx, e=${e.getMessage}", e)
+        throw Error(
+          s"Magic Errored while executing element $ast, ctx=$ctx, e=${e.getMessage}",
+          e
+        )
     }
   }
 }
