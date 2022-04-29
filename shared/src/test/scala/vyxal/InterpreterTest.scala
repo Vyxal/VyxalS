@@ -3,6 +3,8 @@ package vyxal
 import org.scalatest.flatspec.AnyFlatSpec
 
 class InterpreterTest extends AnyFlatSpec {
+  given Backend = new Backend {}
+
   "random stuff" should "execute properly" in {
     val parsed = Parser
       .parse(raw"""

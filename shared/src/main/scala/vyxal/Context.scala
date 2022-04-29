@@ -13,19 +13,15 @@ import scala.collection.{mutable => mut}
   * @param parent
   *   The context inside which this context is (to inherit variables). `None`
   *   for toplevel contexts
-  * @param defaultValue
-  *   The default value if popping off an empty stack or accessing an undefined
-  *   variable. 0 by default
   */
 class Context private (
-    initStack: Seq[VAny],
+    private var stack: mut.ArrayBuffer[VAny],
     val contextVar: VAny = VNum(0),
     private val vars: mut.Map[String, VAny | Null] = mut.Map(),
     val inputs: List[List[VAny]] = List(),
     private val parent: Option[Context] = None,
     val settings: Settings = Settings()
-)(using backend: Backend) {
-  private var stack = mut.ArrayBuffer(initStack*)
+)(using private val backend: Backend) {
   private var printed = false
 
   def peek: VAny = stack(stack.size - 1)
@@ -87,7 +83,7 @@ class Context private (
       contextVar: VAny = this.contextVar,
       inputs: List[List[VAny]] = this.inputs
   ) = new Context(
-    stack,
+    mut.ArrayBuffer(stack*),
     contextVar,
     mut.Map(vars.toSeq*),
     inputs,
@@ -101,7 +97,7 @@ class Context private (
       contextVar: VAny = this.contextVar,
       inputs: List[List[VAny]] = this.inputs
   ) = new Context(
-    initStack = stack,
+    stack = mut.ArrayBuffer(stack*),
     contextVar = contextVar,
     vars = mut.Map(this.vars.toSeq*),
     inputs = inputs,
@@ -126,8 +122,23 @@ object Context {
       inputs: List[List[VAny]] = List(),
       settings: Settings = Settings()
   )(using Backend): Context =
-    new Context(initStack, inputs = inputs, settings = settings)
+    new Context(mut.ArrayBuffer(initStack*), inputs = inputs, settings = settings)
 
   /** Helper to grab stack from implicit Context */
   def stack(using ctx: Context) = ctx.stack
+
+  /** Make a context for a function call
+   * 
+   * @param fnCtx The context where the function was defined
+   * @param currCtx The current context, so the current stack can be gotten
+   */
+  def fnCallCtx(fnCtx: Context, currCtx: Context): Context =
+    new Context(
+      stack = currCtx.stack,
+      contextVar = fnCtx.contextVar,
+      vars = mut.Map(fnCtx.vars.toSeq*),
+      inputs = fnCtx.inputs,
+      parent = fnCtx.parent,
+      settings = fnCtx.settings
+    )(using currCtx.backend)
 }

@@ -62,7 +62,7 @@ object Interpreter {
             case vf: VFun =>
               vf match {
                 case VFun.FnRef(fn, fnCtx) =>
-                  val newCtx = fnCtx.copy()
+                  val newCtx = Context.fnCallCtx(fnCtx, ctx)
                   fn.arityOrParams match {
                     case List(arity: Int) =>
                       execute(fn.body)(using newCtx)
