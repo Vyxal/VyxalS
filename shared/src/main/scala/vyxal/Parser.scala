@@ -11,6 +11,7 @@ case class Pos(row: Int, col: Int)
 class Parser(private val prog: Iterator[Char]) {
   private var row, col = 0
   private val buf = mut.ListBuffer.empty[Char]
+  private val elems = mut.ListBuffer.empty[AST]
 
   /** Record AST positions for debugging later */
   private val astPositions = mut.Map.empty[AST, Pos]
@@ -149,6 +150,12 @@ class Parser(private val prog: Iterator[Char]) {
     VNum(num, den)
   }
 
+  private def pop() = {
+    val ast = elems.last
+    elems.dropRightInPlace(1)
+    ast
+  }
+
   private def parseIdent(): String = {
     val id = StringBuilder()
     while (this.nonEmpty && isAlpha(this.peek)) id += this.next()
@@ -228,18 +235,18 @@ class Parser(private val prog: Iterator[Char]) {
   private def parseModifierOrElem(sym: String): AST = {
     if (Modifiers.monadicModifiers.contains(sym)) {
       Modifiers.monadicModifiers(sym)(
-        parseASTOrEmpty()
+        pop()
       )
     } else if (Modifiers.dyadicModifiers.contains(sym)) {
       Modifiers.dyadicModifiers(sym)(
-        parseASTOrEmpty(),
-        parseASTOrEmpty()
+        pop(),
+        pop()
       )
     } else if (Modifiers.triadicModifiers.contains(sym)) {
       Modifiers.triadicModifiers(sym)(
-        parseASTOrEmpty(),
-        parseASTOrEmpty(),
-        parseASTOrEmpty()
+        pop(),
+        pop(),
+        pop()
       )
     } else {
       Element(sym)
@@ -256,7 +263,6 @@ class Parser(private val prog: Iterator[Char]) {
     * elements as well as the last character parsed.
     */
   private def parseElems(): List[AST] = {
-    val elems = mut.ListBuffer.empty[AST]
     this.trim()
     while (this.nonEmpty && !isStructureCloser(this.peek)) {
       elems += parseAST()

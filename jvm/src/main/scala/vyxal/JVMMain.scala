@@ -18,8 +18,8 @@ object JVMMain {
 
     given ctx: Context = Context(Seq(VList.of(1, 2, 3)))
 
-    Interpreter.execute(Element("∑"))
+    Interpreter.execute("∑")
 
-    println(ctx.peek) // should be 6
+    // println(ctx.peek) // should be 6
   }
 }

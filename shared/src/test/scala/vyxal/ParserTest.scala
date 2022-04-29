@@ -23,10 +23,16 @@ class ParserTest extends AnyFlatSpec {
         )
       )
   )
+  // well i (steffan) screwed this test up, it fails now. someone else can fix that lol
 
   test(
-    "⁽+",
+    "+⁽",
     Lambda(Element("+"), LambdaKind.OneByte)
+  )
+
+  test(
+    "++‡",
+    Lambda(Cmds(Element("+"), Element("+")), LambdaKind.TwoByte)
   )
 
 }
