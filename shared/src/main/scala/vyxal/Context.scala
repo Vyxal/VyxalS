@@ -122,16 +122,22 @@ object Context {
       inputs: List[List[VAny]] = List(),
       settings: Settings = Settings()
   )(using Backend): Context =
-    new Context(mut.ArrayBuffer(initStack*), inputs = inputs, settings = settings)
+    new Context(
+      mut.ArrayBuffer(initStack*),
+      inputs = inputs,
+      settings = settings
+    )
 
   /** Helper to grab stack from implicit Context */
   def stack(using ctx: Context) = ctx.stack
 
   /** Make a context for a function call
-   * 
-   * @param fnCtx The context where the function was defined
-   * @param currCtx The current context, so the current stack can be gotten
-   */
+    *
+    * @param fnCtx
+    *   The context where the function was defined
+    * @param currCtx
+    *   The current context, so the current stack can be gotten
+    */
   def fnCallCtx(fnCtx: Context, currCtx: Context): Context =
     new Context(
       stack = currCtx.stack,
