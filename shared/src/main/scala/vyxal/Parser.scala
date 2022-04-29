@@ -252,6 +252,17 @@ class Parser(private val prog: Iterator[Char]) {
         second,
         third
       )
+    }  else if (Modifiers.tetradicModifiers.contains(sym)) {
+      val fourth = pop()
+      val third = pop()
+      val second = pop()
+      val first = pop()
+      Modifiers.tetradicModifiers(sym)(
+        first,
+        second,
+        third,
+        fourth
+      )
     } else {
       Element(sym)
     }

@@ -26,26 +26,26 @@ class ParserTest extends AnyFlatSpec {
   // well i (steffan) screwed this test up, it fails now. someone else can fix that lol
 
   test(
-    "+⁽",
-    Lambda(Element("+"), LambdaKind.OneByte)
+    "+¤",
+    Lambda(Element("+"), LambdaKind.OneElement)
   )
 
   test(
-    "+-‡",
-    Lambda(Cmds(Element("+"), Element("-")), LambdaKind.TwoByte)
+    "+-¢",
+    Lambda(Cmds(Element("+"), Element("-")), LambdaKind.TwoElement)
   )
 
   test(
-    "+⁽+‡⁽",
+    "+¤+¢¤",
     Lambda(
       Lambda(
         Cmds(
-          Lambda(Element("+"), LambdaKind.OneByte),
+          Lambda(Element("+"), LambdaKind.OneElement),
           Element("+")
         ),
-        LambdaKind.TwoByte
+        LambdaKind.TwoElement
       ),
-      LambdaKind.OneByte
+      LambdaKind.OneElement
     )
   )
 

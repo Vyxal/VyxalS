@@ -96,14 +96,15 @@ case class Lambda(body: AST, kind: LambdaKind) extends AST {
   override def toVyxal =
     kind match {
       case LambdaKind.Normal => "λ" + body.toVyxal + ";"
-      case LambdaKind.OneByte => "⁽" + body.toVyxal
-      case LambdaKind.TwoByte => "‡" + body.toVyxal
-      case LambdaKind.ThreeByte => "≬" + body.toVyxal
+      case LambdaKind.OneElement => "¤" + body.toVyxal
+      case LambdaKind.TwoElement => "¢" + body.toVyxal
+      case LambdaKind.ThreeElement => "€" + body.toVyxal
+      case LambdaKind.FourElement => "§" + body.toVyxal
     }
 }
 
 enum LambdaKind {
-  case Normal, OneByte, TwoByte, ThreeByte
+  case Normal, OneElement, TwoElement, ThreeElement, FourElement
 }
 
 /** A lambda after which an element runs (map, filter, and sort lambdas)
