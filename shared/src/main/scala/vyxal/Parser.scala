@@ -286,8 +286,7 @@ class Parser(private val prog: Iterator[Char]) {
           ast
         }
       }
-      val ast = parseAST()
-      elems += ast
+      elems += parseAST()
       this.trim()
     }
     elems.toList
