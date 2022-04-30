@@ -3,6 +3,8 @@ package vyxal
 import org.scalatest.flatspec.AnyFlatSpec
 
 class ParserTest extends AnyFlatSpec {
+  given Backend = new Backend {}
+
   def test(code: String, expected: AST) = {
     code should "parse correctly" in {
       val parsed = Parser.parse(code).contents
