@@ -18,7 +18,7 @@ object JVMMain {
 
     given ctx: Context = Context(Seq(VList.of(1, 2, 3)))
 
-    Interpreter.execute("∑")
+    Interpreter.execute(Element("∑"))
 
     // println(ctx.peek) // should be 6
   }
