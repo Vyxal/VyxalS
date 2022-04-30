@@ -8,10 +8,13 @@ class SyntaxError(msg: String, row: Int, col: Int)
 /** A position in a file */
 case class Pos(row: Int, col: Int)
 
+trait Popper {
+  def pop: AST
+}
+
 class Parser(private val prog: Iterator[Char]) {
   private var row, col = 0
   private val buf = mut.ListBuffer.empty[Char]
-  private val elems = mut.ListBuffer.empty[AST]
 
   /** Record AST positions for debugging later */
   private val astPositions = mut.Map.empty[AST, Pos]
@@ -62,7 +65,7 @@ class Parser(private val prog: Iterator[Char]) {
 
   /** Parse a single AST. Expects the program to have been trimmed beforehand
     */
-  private def parseAST(): AST = {
+  private def parseAST()(using pp: Popper): AST = {
     assert(this.nonEmpty)
 
     val char = next()
@@ -90,7 +93,7 @@ class Parser(private val prog: Iterator[Char]) {
           If(truthy, falsey.getOrElse(Cmds.empty))
         }
       case '{' =>
-        parseCtrlStruct(')') {
+        parseCtrlStruct('}') {
           case (cond, Some(body)) => While(Some(cond), body)
           case (body, None) => While(None, body)
         }
@@ -148,12 +151,6 @@ class Parser(private val prog: Iterator[Char]) {
       den *= 10
     }
     VNum(num, den)
-  }
-
-  private def pop() = {
-    val ast = elems.last
-    elems.dropRightInPlace(1)
-    ast
   }
 
   private def parseIdent(): String = {
@@ -232,31 +229,31 @@ class Parser(private val prog: Iterator[Char]) {
     }
   }
 
-  private def parseModifierOrElem(sym: String): AST = {
+  private def parseModifierOrElem(sym: String)(using pp: Popper): AST = {
     if (Modifiers.monadicModifiers.contains(sym)) {
       Modifiers.monadicModifiers(sym)(
-        pop()
+        pp.pop
       )
     } else if (Modifiers.dyadicModifiers.contains(sym)) {
-      val second = pop()
-      val first = pop()
+      val second = pp.pop
+      val first = pp.pop
       Modifiers.dyadicModifiers(sym)(
         first, second
       )
     } else if (Modifiers.triadicModifiers.contains(sym)) {
-      val third = pop()
-      val second = pop()
-      val first = pop()
+      val third = pp.pop
+      val second = pp.pop
+      val first = pp.pop
       Modifiers.triadicModifiers(sym)(
         first,
         second,
         third
       )
-    }  else if (Modifiers.tetradicModifiers.contains(sym)) {
-      val fourth = pop()
-      val third = pop()
-      val second = pop()
-      val first = pop()
+    } else if (Modifiers.tetradicModifiers.contains(sym)) {
+      val fourth = pp.pop
+      val third = pp.pop
+      val second = pp.pop
+      val first = pp.pop
       Modifiers.tetradicModifiers(sym)(
         first,
         second,
@@ -268,7 +265,7 @@ class Parser(private val prog: Iterator[Char]) {
     }
   }
 
-  private def parseASTOrEmpty(): AST = {
+  private def parseASTOrEmpty()(using pp: Popper): AST = {
     this.trim()
     if (this.nonEmpty) parseAST()
     else Cmds.empty
@@ -278,9 +275,18 @@ class Parser(private val prog: Iterator[Char]) {
     * elements as well as the last character parsed.
     */
   private def parseElems(): List[AST] = {
+    val elems = mut.ListBuffer.empty[AST]
     this.trim()
     while (this.nonEmpty && !isStructureCloser(this.peek)) {
-      elems += parseAST()
+      given pp: Popper with {
+        override def pop: AST = {
+          val ast = elems.last
+          elems.dropRightInPlace(1)
+          ast
+        }
+      }
+      val ast = parseAST()
+      elems += ast
       this.trim()
     }
     elems.toList

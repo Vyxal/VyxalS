@@ -20,6 +20,6 @@ object JVMMain {
 
     Interpreter.execute(Element("∑"))
 
-    // println(ctx.peek) // should be 6
+    println(ctx.peek) // should be 6
   }
 }
