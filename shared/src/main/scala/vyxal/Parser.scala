@@ -238,7 +238,8 @@ class Parser(private val prog: Iterator[Char]) {
       val second = pp.pop
       val first = pp.pop
       Modifiers.dyadicModifiers(sym)(
-        first, second
+        first,
+        second
       )
     } else if (Modifiers.triadicModifiers.contains(sym)) {
       val third = pp.pop
