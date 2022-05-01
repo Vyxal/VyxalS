@@ -14,7 +14,6 @@ object JSVyxal extends js.Object {
     given Backend with {
       override def print(s: String) = outputFn(s)
     }
-    given ctx: Context = Context()
     Interpreter.execute(code, inputs.toList, flags.toList)
   }
 }
