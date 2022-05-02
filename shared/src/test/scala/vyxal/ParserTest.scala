@@ -27,8 +27,27 @@ class ParserTest extends AnyFlatSpec {
   )
 
   test(
-    "⁽+",
-    Lambda(Element("+"), LambdaKind.OneByte)
+    "+¤",
+    Lambda(Element("+"), LambdaKind.OneElement)
+  )
+
+  test(
+    "+-¢",
+    Lambda(Cmds(Element("+"), Element("-")), LambdaKind.TwoElement)
+  )
+
+  test(
+    "+¤+¢¤",
+    Lambda(
+      Lambda(
+        Cmds(
+          Lambda(Element("+"), LambdaKind.OneElement),
+          Element("+")
+        ),
+        LambdaKind.TwoElement
+      ),
+      LambdaKind.OneElement
+    )
   )
 
 }

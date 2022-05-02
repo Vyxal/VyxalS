@@ -11,6 +11,9 @@ class InterpreterTest extends AnyFlatSpec {
       3 2 +
       """)
       .contents
+    given Backend with {
+      override def print(s: String) = {} // bad code
+    }
     given ctx: Context = Context()
     Interpreter.execute(parsed)
     val top = ctx.pop()
@@ -25,6 +28,9 @@ class InterpreterTest extends AnyFlatSpec {
       """)
       .contents
     println(parsed)
+    given Backend with {
+      override def print(s: String) = {} // bad code
+    }
     given ctx: Context = Context()
     Interpreter.execute(parsed)
     val top = ctx.pop()
