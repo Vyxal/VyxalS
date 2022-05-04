@@ -10,7 +10,7 @@ case class VNum private (val numer: BigInt, val denom: BigInt) {
 
   def -(that: VNum): VNum = that match {
     case VNum(num, den) =>
-      VNum(numer * den + num * denom, denom * den)
+      VNum(num * denom - numer * den, denom * den)
   }
 
   def *(that: VNum): VNum = that match {
