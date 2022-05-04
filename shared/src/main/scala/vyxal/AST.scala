@@ -89,17 +89,17 @@ case class Modified(
     elems: Seq[AST],
     arity: Int
 ) extends AST {
-  override def toVyxal = modName + elems.map(_.toVyxal).mkString("")
+  override def toVyxal = elems.map(_.toVyxal).mkString("") + modName
 }
 
 case class Lambda(body: AST, kind: LambdaKind) extends AST {
   override def toVyxal =
     kind match {
       case LambdaKind.Normal => "λ" + body.toVyxal + ";"
-      case LambdaKind.OneElement => "¤" + body.toVyxal
-      case LambdaKind.TwoElement => "¢" + body.toVyxal
-      case LambdaKind.ThreeElement => "€" + body.toVyxal
-      case LambdaKind.FourElement => "§" + body.toVyxal
+      case LambdaKind.OneElement => body.toVyxal + "¤"
+      case LambdaKind.TwoElement => body.toVyxal + "¢"
+      case LambdaKind.ThreeElement => body.toVyxal + "€"
+      case LambdaKind.FourElement => body.toVyxal + "§"
     }
 }
 
