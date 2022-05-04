@@ -1,6 +1,7 @@
 package vyxal
 
 import org.scalatest.flatspec.AnyFlatSpec
+import vyxal.Helpers.intToNum
 
 class InterpreterTest extends AnyFlatSpec {
   given Backend = new Backend {}
@@ -86,12 +87,12 @@ class InterpreterTest extends AnyFlatSpec {
     given ctx: Context = Context()
     Interpreter.execute(parsed)
     var top = ctx.pop()
-    assert(top == VList(Seq(VNum(1), VNum(2), VNum(3), VNum(4))))
+    assert(top == VList.of(1, 2, 3, 4))
 
     parsed = Parser.parse(raw"5 1 7 2 4 2+¢æ W").contents
     Interpreter.execute(parsed)
     top = ctx.pop()
-    assert(top == VList(Seq(VNum(7), VNum(3), VNum(9), VNum(4), VNum(6))))
+    assert(top == VList.of(7, 3, 9, 4, 6))
 
     // TODO: currently modifiers that take a lambda don't work
   }
