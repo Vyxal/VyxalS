@@ -58,7 +58,7 @@ class Parser(private val prog: Iterator[Char]) {
   /** Whether or not this character closes a structure
     */
   private def isStructureCloser(char: Char) =
-    char == ';' || char == ']' || char == ')' || char == '}' || char == '|'
+    char == '}' || char == '|'
 
   private def isAlpha(char: Char) =
     'a' <= char && char <= 'z' || 'A' <= char && char <= 'Z'
@@ -89,7 +89,7 @@ class Parser(private val prog: Iterator[Char]) {
         }
       case '†' => ExecFn()
       case '[' =>
-        parseCtrlStruct(']') { (truthy, falsey) =>
+        parseCtrlStruct('}') { (truthy, falsey) =>
           If(truthy, falsey.getOrElse(Cmds.empty))
         }
       case '{' =>
@@ -98,7 +98,7 @@ class Parser(private val prog: Iterator[Char]) {
           case (body, None) => While(None, body)
         }
       case '(' =>
-        parseCtrlStruct(')') {
+        parseCtrlStruct('}') {
           case (varName, Some(body)) =>
             val nameStr = varName match {
               case Element(name) => name
@@ -224,7 +224,7 @@ class Parser(private val prog: Iterator[Char]) {
         params.toList
       }
       val body = parseElemGroup()
-      if (this.nonEmpty && this.peek == ';') this.next()
+      if (this.nonEmpty && this.peek == '}') this.next()
       FnDef(name.toString, arityOrParams, body)
     }
   }
