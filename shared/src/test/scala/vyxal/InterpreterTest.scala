@@ -88,10 +88,10 @@ class InterpreterTest extends AnyFlatSpec {
     var top = ctx.pop()
     assert(top == VList(Seq(VNum(1), VNum(2), VNum(3), VNum(4))))
 
-    // parsed = Parser.parse(raw"5 1 7 2 4 2+¢æ W").contents
-    // Interpreter.execute(parsed)
-    // top = ctx.pop()
-    // assert(top == VList(Seq(VNum(7), VNum(3), VNum(9), VNum(4), VNum(6))))
+    parsed = Parser.parse(raw"5 1 7 2 4 2+¢æ W").contents
+    Interpreter.execute(parsed)
+    top = ctx.pop()
+    assert(top == VList(Seq(VNum(7), VNum(3), VNum(9), VNum(4), VNum(6))))
 
     // TODO: currently modifiers that take a lambda don't work
   }

@@ -55,6 +55,15 @@ class Parser(private val prog: Iterator[Char]) {
     }
   }
 
+  private def pop(using pp: Popper) = {
+    val ast = pp.pop
+    if (ast.isInstanceOf[Lambda]) {
+      ast.asInstanceOf[Lambda].body
+    } else {
+      ast
+    }
+  }
+
   /** Whether or not this character closes a structure
     */
   private def isStructureCloser(char: Char) =
@@ -232,29 +241,29 @@ class Parser(private val prog: Iterator[Char]) {
   private def parseModifierOrElem(sym: String)(using pp: Popper): AST = {
     if (Modifiers.monadicModifiers.contains(sym)) {
       Modifiers.monadicModifiers(sym)(
-        pp.pop
+        pop
       )
     } else if (Modifiers.dyadicModifiers.contains(sym)) {
-      val second = pp.pop
-      val first = pp.pop
+      val second = pop
+      val first = pop
       Modifiers.dyadicModifiers(sym)(
         first,
         second
       )
     } else if (Modifiers.triadicModifiers.contains(sym)) {
-      val third = pp.pop
-      val second = pp.pop
-      val first = pp.pop
+      val third = pop
+      val second = pop
+      val first = pop
       Modifiers.triadicModifiers(sym)(
         first,
         second,
         third
       )
     } else if (Modifiers.tetradicModifiers.contains(sym)) {
-      val fourth = pp.pop
-      val third = pp.pop
-      val second = pp.pop
-      val first = pp.pop
+      val fourth = pop
+      val third = pop
+      val second = pop
+      val first = pop
       Modifiers.tetradicModifiers(sym)(
         first,
         second,
