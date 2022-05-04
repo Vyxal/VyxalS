@@ -6,7 +6,8 @@ import vyxal.Interpreter.execute
 object Modifiers {
   val monadicModifiers: Map[String, AST => AST] = Map(
     "¤" -> (a => Lambda(a, LambdaKind.OneElement)),
-    "¿" -> (a => Modified(conditionalExecute(a), "¿", Seq(a), 1))
+    "¿" -> (a => Modified(conditionalExecute(a), "¿", Seq(a), 1)),
+    "æ" -> (a => Modified(applyToEachStackItem(a), "æ", Seq(a), 1)),
   )
 
   val dyadicModifiers: Map[String, (AST, AST) => AST] = Map(
@@ -33,6 +34,14 @@ object Modifiers {
       execute(a)
     } else {
       execute(b)
+    }
+  }
+
+  private def applyToEachStackItem(a: AST)()(using ctx: Context): Unit = {
+    val stack = ctx.popAll()
+    stack.foreach { x =>
+      ctx.push(x)
+      execute(a)
     }
   }
 

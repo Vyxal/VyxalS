@@ -28,6 +28,12 @@ class Context private (
 
   def pop(): VAny = if (stack.isEmpty) VNum(0) else stack.remove(stack.size - 1)
 
+  def popAll(): VList = {
+    val res = VList(stack.toSeq)
+    stack.clear()
+    res
+  }
+
   def push(item: VAny): Unit = stack += item
 
   /** The last n items on the stack, in reverse order e.g. Popping 3 of

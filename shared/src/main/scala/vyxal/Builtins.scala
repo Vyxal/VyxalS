@@ -125,6 +125,10 @@ object Builtins {
       )
     }
 
+    val wrapStack = addNilad("W") { ctx ?=>
+      ctx.popAll()
+    }
+
     addNilad("n") { ctx ?=> ctx.contextVar }
 
     addNilad("ka") { "abcdefghijklmnopqrstuvwxyz" }

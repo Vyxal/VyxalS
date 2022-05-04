@@ -78,5 +78,16 @@ class InterpreterTest extends AnyFlatSpec {
     assert(top == VNum(8))
   }
 
+  "apply to each stack item modifier" should "work" in {
+    var parsed = Parser.parse(raw"2 4 6 8 ½æ W").contents
+    given Backend with {
+      override def print(s: String) = {}
+    }
+    given ctx: Context = Context()
+    Interpreter.execute(parsed)
+    var top = ctx.pop()
+    assert(top == VList(Seq(VNum(1), VNum(2), VNum(3), VNum(4))))
+  }
+
   // TODO: auto-generate some of these tests from the YAML
 }
