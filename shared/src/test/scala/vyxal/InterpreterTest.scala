@@ -6,7 +6,7 @@ class InterpreterTest extends AnyFlatSpec {
   given Backend = new Backend {}
 
   "random stuff" should "execute properly" in {
-    val parsed = Parser
+    var parsed = Parser
       .parse(raw"""
       3 2 +
       """)
@@ -16,8 +16,13 @@ class InterpreterTest extends AnyFlatSpec {
     }
     given ctx: Context = Context()
     Interpreter.execute(parsed)
-    val top = ctx.pop()
+    var top = ctx.pop()
     assert(top == VNum(5))
+
+    parsed = Parser.parse(raw"3 2 -").contents
+    Interpreter.execute(parsed)
+    top = ctx.pop()
+    assert(top == VNum(1))
   }
 
   "triple function" should "execute properly" in {
