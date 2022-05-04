@@ -4,10 +4,12 @@ package vyxal
 type Monad = VAny => Context ?=> VAny
 type Dyad = (VAny, VAny) => Context ?=> VAny
 type Triad = (VAny, VAny, VAny) => Context ?=> VAny
+type Tetrad = (VAny, VAny, VAny, VAny) => Context ?=> VAny
 //These are the same as Monad, Dyad, and Triad, except they don't work on lists
 type SimpleMonad = VAtom => Context ?=> VAny
 type SimpleDyad = (VAtom, VAtom) => Context ?=> VAny
 type SimpleTriad = (VAtom, VAtom, VAtom) => Context ?=> VAny
+type SimpleTetrad = (VAtom, VAtom, VAtom, VAtom) => Context ?=> VAny
 
 /** A function that works directly on the stack */
 case class DirectFn(fn: () => Context ?=> Unit, arity: Int) {
@@ -82,3 +84,5 @@ def vect3(f: SimpleTriad): Triad = {
   }
   res
 }
+
+// TODO: add vect4

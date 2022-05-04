@@ -62,6 +62,18 @@ object Builtins {
     def addTriadVect(name: String)(impl: SimpleTriad) =
       addTriad(name)(vect3(impl))
 
+    def addTetrad(name: String)(impl: Tetrad): Tetrad = {
+      elements += name -> DirectFn(
+        { () => ctx ?=>
+          ctx.push(
+            impl(ctx.pop(), ctx.pop(), ctx.pop(), ctx.pop())
+          )
+        },
+        4
+      )
+      impl
+    }
+
     /** Add an element that works directly on the entire stack */
     def addDirect(name: String)(impl: Context ?=> Unit): Unit =
       elements += name -> DirectFn(() => impl, -1)
