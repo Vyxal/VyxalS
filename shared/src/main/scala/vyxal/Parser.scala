@@ -83,7 +83,7 @@ class Parser(private val prog: Iterator[Char]) {
     assert(char != '#')
 
     val ast = char match {
-      case 'λ' | 'ƛ' | '\'' | 'µ' =>
+      case 'λ' | 'ƛ' | 'Ω' | 'Λ' | 'µ' =>
         val body = parseElemGroup()
         val lam = Lambda(body, LambdaKind.Normal)
         if (char == 'λ') {
@@ -91,7 +91,8 @@ class Parser(private val prog: Iterator[Char]) {
         } else {
           val elem = (char: @unchecked) match {
             case 'ƛ' => "M"
-            case '\'' => "F"
+            case 'Ω' => "F"
+            case 'Λ' => "R"
             case 'µ' => "ṡ"
           }
           LambdaWithOp(lam, Element(elem))
