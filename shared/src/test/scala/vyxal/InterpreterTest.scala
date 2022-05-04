@@ -50,7 +50,28 @@ class InterpreterTest extends AnyFlatSpec {
     Interpreter.execute(parsed)
     top = ctx.pop()
     assert(top == VNum(3))
-
-    // eventually these tests will be auto-generated from the YAML
   }
+
+  "ternary if modifier" should "work" in {
+    var parsed = Parser.parse(raw"4 2 3]").contents
+    given Backend with {
+      override def print(s: String) = {}
+    }
+    given ctx: Context = Context()
+    Interpreter.execute(parsed)
+    var top = ctx.pop()
+    assert(top == VNum(2))
+
+    parsed = Parser.parse(raw"5 3 0 +-]").contents
+    Interpreter.execute(parsed)
+    top = ctx.pop()
+    assert(top == VNum(2))
+
+    parsed = Parser.parse(raw"5 3 9 +-]").contents
+    Interpreter.execute(parsed)
+    top = ctx.pop()
+    assert(top == VNum(8))
+  }
+
+  // TODO: auto-generate some of these tests from the YAML
 }
