@@ -9,7 +9,7 @@ class SyntaxError(msg: String, row: Int, col: Int)
 case class Pos(row: Int, col: Int)
 
 trait Popper {
-  def pop: AST
+  def pop(): AST
 }
 
 class Parser(private val prog: Iterator[Char]) {
@@ -55,8 +55,8 @@ class Parser(private val prog: Iterator[Char]) {
     }
   }
 
-  private def pop(using pp: Popper) = {
-    val ast = pp.pop
+  private def pop()(using pp: Popper) = {
+    val ast = pp.pop()
     if (ast.isInstanceOf[Lambda]) {
       ast.asInstanceOf[Lambda].body
     } else {
@@ -242,29 +242,29 @@ class Parser(private val prog: Iterator[Char]) {
   private def parseModifierOrElem(sym: String)(using pp: Popper): AST = {
     if (Modifiers.monadicModifiers.contains(sym)) {
       Modifiers.monadicModifiers(sym)(
-        pop
+        pop()
       )
     } else if (Modifiers.dyadicModifiers.contains(sym)) {
-      val second = pop
-      val first = pop
+      val second = pop()
+      val first = pop()
       Modifiers.dyadicModifiers(sym)(
         first,
         second
       )
     } else if (Modifiers.triadicModifiers.contains(sym)) {
-      val third = pop
-      val second = pop
-      val first = pop
+      val third = pop()
+      val second = pop()
+      val first = pop()
       Modifiers.triadicModifiers(sym)(
         first,
         second,
         third
       )
     } else if (Modifiers.tetradicModifiers.contains(sym)) {
-      val fourth = pop
-      val third = pop
-      val second = pop
-      val first = pop
+      val fourth = pop()
+      val third = pop()
+      val second = pop()
+      val first = pop()
       Modifiers.tetradicModifiers(sym)(
         first,
         second,
@@ -290,7 +290,7 @@ class Parser(private val prog: Iterator[Char]) {
     this.trim()
     while (this.nonEmpty && !isStructureCloser(this.peek)) {
       given pp: Popper with {
-        override def pop: AST = {
+        override def pop(): AST = {
           val ast = elems.last
           elems.dropRightInPlace(1)
           ast
