@@ -20,9 +20,9 @@ jobs:
           distribution: 'adopt'
       - name: Generate documentation
         run: sbt yaml/run
-      - name: Commit
-        run: |
-          git config --global user.name 'Scala CI'
-          git config --global user.email 'scala-ci@users.noreply.github.com'
-          git commit -am "Generate text and markdown documentation files"
-          git push origin HEAD:HEAD
+      - name: Stage changes
+        run: git add .
+      - name: Commit and push
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Generate MD and text documentation"
