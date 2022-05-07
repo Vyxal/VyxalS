@@ -1,0 +1,81 @@
+- modifier: "¿"
+  name: Conditional Execution
+  description: Execute an element if the top of the stack is truthy.
+  arity: 1
+  elements: 1
+  tests:
+      - program: "5 6 1 +¿"
+        output: 11
+      - program: "5 6 0 +¿"
+        output: 6
+
+- modifier: "¤"
+  name: Last Element as a Function
+  description: Pushes the last element as a lambda.
+  arity: 0
+  elements: 1
+  # This needs to be a parser test
+
+- modifier: "¢"
+  name: Last Two Elements as a Function
+  description: Pushes the last two elements as a lambda.
+  arity: 0
+  elements: 2
+  # This needs to be a parser test
+
+- modifier: "€"
+  name: Last Three Elements as a Function
+  description: Pushes the last three elements as a lambda.
+  arity: 0
+  elements: 3
+  # This needs to be a parser test
+
+- modifier: "§"
+  name: Last Four Elements as a Function
+  description: Pushes the last four elements as a lambda.
+  arity: 0
+  elements: 4
+  # This needs to be a parser test
+
+- modifier: "æ"
+  name: Apply to Each Stack Item
+  description: Apply an element to every item on the stack
+  arity: varies
+  elements: 1
+  tests:
+      - program: "1 2 3 4 dæ W"
+        output: [2, 4, 6, 8]
+      - program: "5 1 7 2 4 2+¢æ W"
+        output: [7, 3, 9, 4, 6]
+
+- element: "+"
+  name: Addition / Concatenation
+  description: Addition of two numbers / Concatenation of two strings
+  arity: 2
+  overloads:
+      num-num: a + b
+      num-str: a + to_string(b)
+      str-num: to_string(a) + b
+      str-str: a + b
+  vectorise: true
+  tests:
+      - inputs: [0, 0]
+        output: 0
+      - inputs: [4, 2]
+        output: 6
+      - inputs: [5, 3]
+        output: 8
+      - inputs: [5, 0]
+        output: 5
+      - inputs: ["Hello", 7]
+        output: "Hello7"
+      - inputs: ["Hello", 5]
+        output: "Hello5"
+      - inputs: ["Hello", 0]
+        output: "Hello0"
+      - inputs: ["", 4]
+        output: "4"
+      - inputs: ["Hello, ", "World"]
+        output: "Hello, World"
+      - inputs: ["Hello, ", ["World", "!"]]
+        output: ["Hello, World", "Hello, !"]
