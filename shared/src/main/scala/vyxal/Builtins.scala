@@ -122,7 +122,7 @@ object Builtins {
     })
 
     val sum = addMonad("∑") {
-      case n: VNum => ???
+      case n: VNum => n.toInt.abs.toString().map(_.asDigit).sum
       case s: String => s
       case l: VList => l.foldl(0)((a, b) => add.norm.apply(a, b))
       case f =>
