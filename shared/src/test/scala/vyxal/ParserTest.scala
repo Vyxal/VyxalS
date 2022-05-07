@@ -12,7 +12,7 @@ class ParserTest extends AnyFlatSpec {
     }
   }
   test(
-    "(foo | bar) [a+ | a324] { 3",
+    "(foo | bar} [a+ | a324} { 3",
     Cmds(
         For(Some("foo"), Cmds(Element("b"), Element("a"), Element("r"))),
         If(
@@ -39,13 +39,7 @@ class ParserTest extends AnyFlatSpec {
   test(
     "+¤+¢¤",
     Lambda(
-      Lambda(
-        Cmds(
-          Lambda(Element("+"), LambdaKind.OneElement),
-          Element("+")
-        ),
-        LambdaKind.TwoElement
-      ),
+      Cmds(Element("+"), Element("+")),
       LambdaKind.OneElement
     )
   )

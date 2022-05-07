@@ -16,7 +16,7 @@ object JVMMain {
       override def print(s: String) = Predef.print(s)
     }
 
-    given ctx: Context = Context(Seq(VList.of(1, 2, 3)))
+    given ctx: Context = Context(Seq(-123))
 
     Interpreter.execute(Element("∑"))
 

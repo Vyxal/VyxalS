@@ -62,6 +62,18 @@ object Builtins {
     def addTriadVect(name: String)(impl: SimpleTriad) =
       addTriad(name)(vect3(impl))
 
+    def addTetrad(name: String)(impl: Tetrad): Tetrad = {
+      elements += name -> DirectFn(
+        { () => ctx ?=>
+          ctx.push(
+            impl(ctx.pop(), ctx.pop(), ctx.pop(), ctx.pop())
+          )
+        },
+        4
+      )
+      impl
+    }
+
     /** Add an element that works directly on the entire stack */
     def addDirect(name: String)(impl: Context ?=> Unit): Unit =
       elements += name -> DirectFn(() => impl, -1)
@@ -110,7 +122,7 @@ object Builtins {
     })
 
     val sum = addMonad("∑") {
-      case n: VNum => ???
+      case n: VNum => n.toInt.abs.toString().map(_.asDigit).sum
       case s: String => s
       case l: VList => l.foldl(0)((a, b) => add.norm.apply(a, b))
       case f =>
@@ -123,6 +135,10 @@ object Builtins {
       throw NotImplementedError(
         s"† is still unimplemented (tried executing on $x)"
       )
+    }
+
+    val wrapStack = addNilad("W") { ctx ?=>
+      ctx.popAll()
     }
 
     addNilad("n") { ctx ?=> ctx.contextVar }

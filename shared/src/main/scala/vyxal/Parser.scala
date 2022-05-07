@@ -9,7 +9,7 @@ class SyntaxError(msg: String, row: Int, col: Int)
 case class Pos(row: Int, col: Int)
 
 trait Popper {
-  def pop: AST
+  def pop(): AST
 }
 
 class Parser(private val prog: Iterator[Char]) {
@@ -55,10 +55,19 @@ class Parser(private val prog: Iterator[Char]) {
     }
   }
 
+  private def pop()(using pp: Popper) = {
+    val ast = pp.pop()
+    if (ast.isInstanceOf[Lambda]) {
+      ast.asInstanceOf[Lambda].body
+    } else {
+      ast
+    }
+  }
+
   /** Whether or not this character closes a structure
     */
   private def isStructureCloser(char: Char) =
-    char == ';' || char == ']' || char == ')' || char == '}' || char == '|'
+    char == '}' || char == '|'
 
   private def isAlpha(char: Char) =
     'a' <= char && char <= 'z' || 'A' <= char && char <= 'Z'
@@ -74,7 +83,7 @@ class Parser(private val prog: Iterator[Char]) {
     assert(char != '#')
 
     val ast = char match {
-      case 'λ' | 'ƛ' | '\'' | 'µ' =>
+      case 'λ' | 'ƛ' | 'Ω' | 'Λ' | 'µ' =>
         val body = parseElemGroup()
         val lam = Lambda(body, LambdaKind.Normal)
         if (char == 'λ') {
@@ -82,14 +91,15 @@ class Parser(private val prog: Iterator[Char]) {
         } else {
           val elem = (char: @unchecked) match {
             case 'ƛ' => "M"
-            case '\'' => "F"
+            case 'Ω' => "F"
+            case 'Λ' => "R"
             case 'µ' => "ṡ"
           }
           LambdaWithOp(lam, Element(elem))
         }
       case '†' => ExecFn()
       case '[' =>
-        parseCtrlStruct(']') { (truthy, falsey) =>
+        parseCtrlStruct('}') { (truthy, falsey) =>
           If(truthy, falsey.getOrElse(Cmds.empty))
         }
       case '{' =>
@@ -98,7 +108,7 @@ class Parser(private val prog: Iterator[Char]) {
           case (body, None) => While(None, body)
         }
       case '(' =>
-        parseCtrlStruct(')') {
+        parseCtrlStruct('}') {
           case (varName, Some(body)) =>
             val nameStr = varName match {
               case Element(name) => name
@@ -224,7 +234,7 @@ class Parser(private val prog: Iterator[Char]) {
         params.toList
       }
       val body = parseElemGroup()
-      if (this.nonEmpty && this.peek == ';') this.next()
+      if (this.nonEmpty && this.peek == '}') this.next()
       FnDef(name.toString, arityOrParams, body)
     }
   }
@@ -232,29 +242,29 @@ class Parser(private val prog: Iterator[Char]) {
   private def parseModifierOrElem(sym: String)(using pp: Popper): AST = {
     if (Modifiers.monadicModifiers.contains(sym)) {
       Modifiers.monadicModifiers(sym)(
-        pp.pop
+        pop()
       )
     } else if (Modifiers.dyadicModifiers.contains(sym)) {
-      val second = pp.pop
-      val first = pp.pop
+      val second = pop()
+      val first = pop()
       Modifiers.dyadicModifiers(sym)(
         first,
         second
       )
     } else if (Modifiers.triadicModifiers.contains(sym)) {
-      val third = pp.pop
-      val second = pp.pop
-      val first = pp.pop
+      val third = pop()
+      val second = pop()
+      val first = pop()
       Modifiers.triadicModifiers(sym)(
         first,
         second,
         third
       )
     } else if (Modifiers.tetradicModifiers.contains(sym)) {
-      val fourth = pp.pop
-      val third = pp.pop
-      val second = pp.pop
-      val first = pp.pop
+      val fourth = pop()
+      val third = pop()
+      val second = pop()
+      val first = pop()
       Modifiers.tetradicModifiers(sym)(
         first,
         second,
@@ -280,7 +290,7 @@ class Parser(private val prog: Iterator[Char]) {
     this.trim()
     while (this.nonEmpty && !isStructureCloser(this.peek)) {
       given pp: Popper with {
-        override def pop: AST = {
+        override def pop(): AST = {
           val ast = elems.last
           elems.dropRightInPlace(1)
           ast

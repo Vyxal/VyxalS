@@ -44,7 +44,7 @@ case class ExecFn() extends AST {
 }
 
 case class If(truthy: AST, falsey: AST) extends AST {
-  override def toVyxal = s"[${truthy.toVyxal}|${falsey.toVyxal}]"
+  override def toVyxal = s"[${truthy.toVyxal}|${falsey.toVyxal}}"
 }
 
 /** A for loop
@@ -54,7 +54,7 @@ case class If(truthy: AST, falsey: AST) extends AST {
   *   The body of the loop
   */
 case class For(loopVar: Option[String], body: AST) extends AST {
-  override def toVyxal = "(" + loopVar.fold("")(_ + "|") + body.toVyxal + ")"
+  override def toVyxal = "(" + loopVar.fold("")(_ + "|") + body.toVyxal + "}"
 }
 
 /** @param cond
@@ -80,7 +80,7 @@ case class FnDef(
   override def toVyxal =
     arityOrParams
       .map(_.toString)
-      .mkString(s"@$name:", ":", s"|${body.toVyxal};")
+      .mkString(s"@$name:", ":", s"|${body.toVyxal}}")
 }
 
 case class Modified(
@@ -89,17 +89,17 @@ case class Modified(
     elems: Seq[AST],
     arity: Int
 ) extends AST {
-  override def toVyxal = modName + elems.map(_.toVyxal).mkString("")
+  override def toVyxal = elems.map(_.toVyxal).mkString("") + modName
 }
 
 case class Lambda(body: AST, kind: LambdaKind) extends AST {
   override def toVyxal =
     kind match {
-      case LambdaKind.Normal => "λ" + body.toVyxal + ";"
-      case LambdaKind.OneElement => "¤" + body.toVyxal
-      case LambdaKind.TwoElement => "¢" + body.toVyxal
-      case LambdaKind.ThreeElement => "€" + body.toVyxal
-      case LambdaKind.FourElement => "§" + body.toVyxal
+      case LambdaKind.Normal => "λ" + body.toVyxal + "}"
+      case LambdaKind.OneElement => body.toVyxal + "¤"
+      case LambdaKind.TwoElement => body.toVyxal + "¢"
+      case LambdaKind.ThreeElement => body.toVyxal + "€"
+      case LambdaKind.FourElement => body.toVyxal + "§"
     }
 }
 
