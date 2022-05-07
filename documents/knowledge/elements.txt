@@ -36,4 +36,6 @@
     num a, str b: a + to_string(b)
     str a, num b: to_string(a) + b
     str a, str b: a + b
+    otherwise: vectorise
+
 -------------------------------
