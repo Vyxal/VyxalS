@@ -57,7 +57,7 @@
       num-str: a + to_string(b)
       str-num: to_string(a) + b
       str-str: a + b
-  vectorise: false
+  vectorise: true
   tests:
       - inputs: [0, 0]
         output: 0
