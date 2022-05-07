@@ -24,9 +24,13 @@ Use vyxalJS/run to run the JSMain class (you will need Node.JS for this)
 
 import org.scalajs.linker.interface.OutputPatterns
 
+lazy val yaml = project.settings(
+  libraryDependencies += "io.circe" %% "circe-yaml" % "0.14.1"
+)
+
 lazy val root = project
   .in(file("."))
-  .aggregate(vyxal.js, vyxal.jvm)
+  .aggregate(vyxal.js, vyxal.jvm, yaml)
   .settings(
     publish := {},
     publishLocal := {}
