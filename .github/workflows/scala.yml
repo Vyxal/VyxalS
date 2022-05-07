@@ -38,4 +38,4 @@ jobs:
           git config --global user.name 'Scala CI'
           git config --global user.email 'scala-ci@users.noreply.github.com'
           git commit -am "Generate text and markdown documentation files"
-          git push
+          git push origin HEAD
