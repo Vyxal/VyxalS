@@ -128,3 +128,60 @@
         output: "Truthy"
       - program: "5 0 NI]"
         output: -5
+
+- element: "W"
+  name: Wrap Stack
+  description: Wrap the stack in a single list
+  arity: varies
+  vectorise: false
+  tests:
+      - inputs: [1, 2, 3, 4, 5]
+        output: [1, 2, 3, 4, 5]
+      - inputs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        output: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      - inputs:
+            [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+            ]
+        output:
+            [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+            ]
