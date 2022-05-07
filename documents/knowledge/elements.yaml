@@ -54,8 +54,8 @@
   arity: 2
   overloads:
       num-num: a + b
-      num-str: a + to_string(b)
-      str-num: to_string(a) + b
+      num-str: to_string(a) + b
+      str-num: a + to_string(b)
       str-str: a + b
   vectorise: true
   tests:
@@ -79,3 +79,52 @@
         output: "Hello, World"
       - inputs: ["Hello, ", ["World", "!"]]
         output: ["Hello, World", "Hello, !"]
+
+- element: "×"
+  name: Multiplication / Ring Translate
+  description: Multiply two numbers together / Repeat a string / Ring translate one string according to another
+  arity: 2
+  overloads:
+      num-num: lhs * rhs
+      num-str: rhs repeated lhs times
+      str-num: lhs repeated rhs times
+      str-str: ring translate rhs according to lhs
+  vectorise: true
+  tests:
+      - inputs: [5, 20]
+        output: 100
+      - inputs: ["abc", 5]
+        output: "abcabcabcabcabc"
+      - inputs: [3, "abcde"]
+        output: "abcdeabcdeabcde"
+      - inputs: ["aeiou", "hello"]
+        output: "alihu"
+
+- element: "½"
+  name: Halve
+  description: Halve a number / Split a string into two halves
+  arity: 1
+  overloads:
+      num: lhs / 2
+      str: split lhs into two strings of equal lengths (as close as possible)
+  vectorise: true
+  tests:
+      - inputs: [8]
+        output: 4
+      - inputs: ["FizzBuzz"]
+        output: ["Fizz", "Buzz"]
+      - inputs: [[1, 4, 8, "Vyxal", "Even Length "]]
+        output: [0.5, 2, 4, ["Vyx", "al"], ["Even L", "ength "]]
+
+- modifier: "]"
+  name: Ternary If
+  description: >-
+      Pop the top of the stack as a condition, and if that value is considered
+      truthy, execute the first element. Otherwise, execute the second element.
+  arity: 1
+  elements: 2
+  tests:
+      - program: '4 "Truthy""Falsey"]'
+        output: "Truthy"
+      - program: "5 0 NI]"
+        output: -5

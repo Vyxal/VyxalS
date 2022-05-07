@@ -85,7 +85,7 @@ object Builtins {
 
     val add = addDyad("+")(vect2 {
       case (n1: VNum, n2: VNum) => n1 + n2
-      case (s: String, n: VNum) => s + n
+      case (s: String, n: VNum) => s + n.toString
       case (n: VNum, s: String) => n.toString + s
       case (s1: String, s2: String) => s1 + s2
       case _ => throw VyOverloadError("Functions can't be added")
@@ -106,10 +106,11 @@ object Builtins {
 
     val lor = addDyad("∨")(_.toBool || _.toBool)
 
-    val mul = addDyad("*")(vect2 {
+    val mul = addDyad("×")(vect2 {
       case (n1: VNum, n2: VNum) => n1 * n2
       case (n: VNum, s: String) => s * n.toInt
       case (s: String, n: VNum) => s * n.toInt
+      case (s1: String, s2: String) => ??? // TODO: ring translate
       case _ => ???
     })
 

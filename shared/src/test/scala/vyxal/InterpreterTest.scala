@@ -29,7 +29,7 @@ class InterpreterTest extends AnyFlatSpec {
   "triple function" should "execute properly" in {
     val parsed = Parser
       .parse(raw"""
-      @triple|3 *}
+      @triple|3 ×}
       4 ←triple†
       """)
       .contents

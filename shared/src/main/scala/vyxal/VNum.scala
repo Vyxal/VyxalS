@@ -17,6 +17,8 @@ case class VNum private (val numer: BigInt, val denom: BigInt) {
     case VNum(num, den) => VNum(numer * num, denom * den)
   }
 
+  // TODO: add exponent function. this is going to be mathy with fractions.
+
   def /(that: VNum): VNum = that match {
     case VNum(num, den) => VNum(numer * den, denom * num)
   }
