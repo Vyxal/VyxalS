@@ -1,5 +1,7 @@
 package vyxal
 
+import vyxal.num.VNum
+
 object Helpers {
   def vyPrint(elem: VAny)(using ctx: Context): Unit = {
     elem match {
@@ -7,11 +9,6 @@ object Helpers {
       case top => ctx.print(top.toString)
     }
   }
-
-  given boolToNum: Conversion[Boolean, VAny] = bool =>
-    VNum(if (bool) 1 else 0, 1)
-
-  given intToNum: Conversion[Int, VAny] = VNum(_, 1)
 
   extension (any: VAny) {
     def toBool: Boolean = any match {

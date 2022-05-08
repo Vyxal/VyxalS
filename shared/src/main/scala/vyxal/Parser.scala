@@ -1,6 +1,8 @@
 package vyxal
 
-import collection.{mutable => mut}
+import scala.collection.{mutable => mut}
+
+import vyxal.num.VNum
 
 class SyntaxError(msg: String, row: Int, col: Int)
     extends RuntimeException(s"Syntax error: $msg at $row:$col")
@@ -126,7 +128,7 @@ class Parser(private val prog: Iterator[Char]) {
       case '@' =>
         parseFn()
       case '.' =>
-        Literal(if (this.isEmpty) VNum(1, 2) else afterDecimal(0))
+        Literal(if (this.isEmpty) VNum.frac(1, 2) else afterDecimal(0))
       case d if d.isDigit =>
         var num = BigInt(d - '0')
         while (nonEmpty && this.peek.isDigit) {
@@ -137,7 +139,7 @@ class Parser(private val prog: Iterator[Char]) {
             this.next()
             afterDecimal(num)
           } else {
-            VNum(num, 1)
+            VNum.frac(num, 1)
           }
         )
       case c @ ('∆' | 'ø' | 'Þ' | '¨' | 'k') =>
@@ -160,7 +162,7 @@ class Parser(private val prog: Iterator[Char]) {
       num = num * 10 + (next() - '0')
       den *= 10
     }
-    VNum(num, den)
+    VNum.frac(num, den)
   }
 
   private def parseIdent(): String = {

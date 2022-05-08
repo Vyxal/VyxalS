@@ -3,6 +3,8 @@ package vyxal
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.Typeable
 
+import vyxal.num.VNum
+
 type VAny = VAtom | VList
 type VAtom = VVal | VFun
 type VVal = VNum | String

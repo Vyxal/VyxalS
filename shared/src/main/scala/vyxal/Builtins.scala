@@ -2,6 +2,7 @@ package vyxal
 
 import Helpers.*
 import Helpers.given
+import vyxal.num.*
 
 import scala.collection.{mutable => mut}
 
