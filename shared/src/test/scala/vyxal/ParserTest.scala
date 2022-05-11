@@ -1,6 +1,8 @@
 package vyxal
 
 import org.scalatest.flatspec.AnyFlatSpec
+import vyxal.num.VNum
+import vyxal.num.VNum.given
 
 class ParserTest extends AnyFlatSpec {
   given Backend = new Backend {}
@@ -17,11 +19,11 @@ class ParserTest extends AnyFlatSpec {
         For(Some("foo"), Cmds(Element("b"), Element("a"), Element("r"))),
         If(
           Cmds(Element("a"), Element("+")),
-          Cmds(Element("a"), Literal(VNum(324, 1)))
+          Cmds(Element("a"), Literal(VNum.frac(324, 1)))
         ),
         While(
           None,
-          Literal(VNum(3, 1))
+          Literal(VNum.frac(3, 1))
         )
       )
   )

@@ -2,24 +2,24 @@ package vyxal
 
 //TODO make a REPL
 object JVMMain {
+  private given Backend with {
+    override def print(s: String) = Console.print(s)
+
+    override def err(s: String) = Console.err.print(s)
+
+    override def warn(s: String) = Console.print(Console.YELLOW + s)
+  }
+
   def main(args: Array[String]): Unit = {
     println("Hello from the JVM!")
 
-    // Import the implicit conversion from Int to VNum
-    import vyxal.Helpers.intToNum
-    import vyxal.given
+    given ctx: Context = Context()
 
-    // I know there's a lot of nested Seq's here, but that can be sugared later
-    // and this won't even be used that often
+    var line = scala.io.StdIn.readLine()
 
-    given Backend with {
-      override def print(s: String) = Predef.print(s)
+    while (line != null) {
+      Interpreter.executeLine(line)(using ctx)
+      line = scala.io.StdIn.readLine()
     }
-
-    given ctx: Context = Context(Seq(-123))
-
-    Interpreter.execute(Element("∑"))
-
-    println(ctx.peek) // should be 6
   }
 }

@@ -18,6 +18,17 @@ object Interpreter {
     ctx
   }
 
+  def executeLine(
+      line: String
+  )(using ctx: Context): Context = {
+    val VyFile(ast, _) = Parser.parse(line)
+    execute(ast)
+    if (!ctx.isStackEmpty) {
+      ctx.println(ctx.pop())
+    }
+    ctx
+  }
+
   def execute(ast: AST)(using ctx: Context): Unit = {
     println(s"executing ast $ast, ctx=$ctx")
     try {

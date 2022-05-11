@@ -1,7 +1,8 @@
 package vyxal
 
 import org.scalatest.flatspec.AnyFlatSpec
-import vyxal.Helpers.intToNum
+import vyxal.num.VNum
+import vyxal.num.VNum.given
 
 class InterpreterTest extends AnyFlatSpec {
   given Backend = new Backend {}
@@ -18,12 +19,12 @@ class InterpreterTest extends AnyFlatSpec {
     given ctx: Context = Context()
     Interpreter.execute(parsed)
     var top = ctx.pop()
-    assert(top == VNum(5))
+    assert(top == VNum.int(5))
 
     parsed = Parser.parse(raw"3 2 -").contents
     Interpreter.execute(parsed)
     top = ctx.pop()
-    assert(top == VNum(1))
+    assert(top == VNum.int(1))
   }
 
   "triple function" should "execute properly" in {
@@ -39,7 +40,7 @@ class InterpreterTest extends AnyFlatSpec {
     given ctx: Context = Context()
     Interpreter.execute(parsed)
     val top = ctx.pop()
-    assert(top == VNum(12))
+    assert(top == VNum.int(12))
   }
 
   "conditional execute modifier" should "work" in {
@@ -50,12 +51,12 @@ class InterpreterTest extends AnyFlatSpec {
     given ctx: Context = Context()
     Interpreter.execute(parsed)
     var top = ctx.pop()
-    assert(top == VNum(4))
+    assert(top == VNum.int(4))
 
     parsed = Parser.parse(raw"1 3 0 +¿").contents
     Interpreter.execute(parsed)
     top = ctx.pop()
-    assert(top == VNum(3))
+    assert(top == VNum.int(3))
   }
 
   "ternary if modifier" should "work" in {
@@ -66,17 +67,17 @@ class InterpreterTest extends AnyFlatSpec {
     given ctx: Context = Context()
     Interpreter.execute(parsed)
     var top = ctx.pop()
-    assert(top == VNum(2))
+    assert(top == VNum.int(2))
 
     parsed = Parser.parse(raw"5 3 0 +-]").contents
     Interpreter.execute(parsed)
     top = ctx.pop()
-    assert(top == VNum(2))
+    assert(top == VNum.int(2))
 
     parsed = Parser.parse(raw"5 3 9 +-]").contents
     Interpreter.execute(parsed)
     top = ctx.pop()
-    assert(top == VNum(8))
+    assert(top == VNum.int(8))
   }
 
   "apply to each stack item modifier" should "work" in {
