@@ -1,5 +1,3 @@
-// import cats.syntax.either._
-// import io.circe._
 import io.circe.yaml
 import scala.io.Source
 import java.io.FileOutputStream
@@ -31,16 +29,19 @@ object GenElements {
             val overloads = json \\ "overloads"
             if (overloads.nonEmpty) {
               mdOutStr ++= "### Overloads\n\n"
-              overloads.head.asObject.get.toList.foreach { case (signature, olDesc) =>
-                val params =
-                  signature
-                    .split("-")
-                    .zipWithIndex
-                    .map { case (paramType, i) => paramType + " " + "abcdef"(i) }
-                    .mkString(", ")
-                val desc = olDesc.asString.getOrElse("")
-                mdOutStr ++= s"- $params: `$desc`\n"
-                txtOutStr ++= s"    $params: $desc\n"
+              overloads.head.asObject.get.toList.foreach {
+                case (signature, olDesc) =>
+                  val params =
+                    signature
+                      .split("-")
+                      .zipWithIndex
+                      .map { case (paramType, i) =>
+                        paramType + " " + "abcdef" (i)
+                      }
+                      .mkString(", ")
+                  val desc = olDesc.asString.getOrElse("")
+                  mdOutStr ++= s"- $params: `$desc`\n"
+                  txtOutStr ++= s"    $params: $desc\n"
               }
               mdOutStr ++= "\n"
             }
@@ -48,7 +49,7 @@ object GenElements {
             if (vectorize.nonEmpty && vectorize.head.asBoolean.get) {
               txtOutStr ++= "    otherwise: vectorise\n\n"
             }
-          } else {
+          } else { // It's a modifier
             val modifier = (json \\ "modifier").head.asString.get
             mdOutStr ++= s"## `` $modifier `` ($name)\n\n"
             mdOutStr ++= description + "\n\n"
