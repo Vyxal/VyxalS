@@ -38,6 +38,7 @@ lazy val vyxal = crossProject(JSPlatform, JVMPlatform)
     name := "vyxal",
     version := "0.1-SNAPSHOT",
     libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.10" % Test,
+    libraryDependencies += "org.antlr" % "antlr4" % "4.10.1",
     scalacOptions ++= Seq(
       "-deprecation", // Emit warning and location for usages of deprecated APIs.
       "-encoding",

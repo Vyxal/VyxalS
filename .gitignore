@@ -7,5 +7,6 @@ null/
 root/
 target/
 project/project
+**/.antlr/
 
 metals.sbt
