@@ -10,10 +10,12 @@ sealed trait VNum {
     case PosInf => PosInf
     case NegInf => NegInf
     case Rat(num, den) => Rat(-num, den)
-    case Imag(b) => Imag(-b)
-    case s: Sum => Integer(-1) * s
-    case IrratMulDiv(factor, nums, dens) => IrratMulDiv(-factor, nums, dens)
-    case _ => VNum.int(-1) * this
+    case Imag(n) => Imag(-n)
+    case Sum(terms) => Sum(terms.map(-1 * _))
+    case Frac(nums, dens) =>
+      if (nums.nonEmpty) Frac(-nums.head +: nums, dens)
+      else Frac(nums, -dens.head +: dens)
+    // case _ => VNum.int(-1) * this
   }
 
   final def +(that: VNum): VNum = (this, that) match {
@@ -23,8 +25,16 @@ sealed trait VNum {
       if (inf1 != inf2)
         throw ArithmeticException("Cannot add infinities of opposite sign")
       else inf1
+    case (inf @ (PosInf | NegInf), _) => inf
+    case (_, inf @ (PosInf | NegInf)) => inf
     case (Rat(num1, den1), Rat(num2, den2)) =>
       Rat(num1 * den2 + num2 * den1, den1 * den2)
+    case (s: Sum, x) => addToSum(s, x)
+    case (x, s: Sum) => addToSum(s, x)
+  }
+
+  private def addToSum(sum: Sum, x: VNum): VNum = {
+    ???
   }
 
   final def -(that: VNum): VNum = this + (-that)
@@ -38,20 +48,14 @@ sealed trait VNum {
     case (_, Zero) => Zero
     case (inf @ (PosInf | NegInf), y) => if (y.sign > 0) inf else -inf
     case (x, inf @ (PosInf | NegInf)) => if (x.sign > 0) inf else -inf
-    case (Integer(n1), Integer(n2)) => Integer(n1 * n2)
+    case (Sum(terms), n) => Sum(terms.map(_ * n))
+    case (n, Sum(terms)) => Sum(terms.map(_ * n))
     case (Rat(num1, den1), Rat(num2, den2)) =>
       Rat(num1 * num2, den1 * den2)
-    case (Integer(n), Rat(num, den)) => Rat(num * n, den)
-    case (Rat(num, den), Integer(n)) => Rat(num * n, den)
     case (Imag(n1), Imag(n2)) => -(n1 * n2)
-    case (Imag(n1), n2) => Imag(n1 * n2)
-    case (n1, Imag(n2)) => Imag(n1 * n2)
-    case (Sum(nonIrrat1, irrats1), Sum(nonIrrat2, irrats2)) =>
-      Sum(nonIrrat1 * nonIrrat2, irrats1 ++ irrats2)
-    case (IrratMulDiv(fact1, num1, den1), IrratMulDiv(fact2, num2, den2)) =>
-      IrratMulDiv(fact1 * fact2, num1 ++ num2, den1 ++ den2)
-    case (IrratMulDiv(fact, num, den), ir: Irrat) => IrratMulDiv(fact, ir +: num, den)
-    case (ir: Irrat, IrratMulDiv(fact, num, den)) => IrratMulDiv(fact, ir +: num, den)
+    case (n1, Imag(n2)) => Imag(n2 * n2)
+    case (Imag(n1), n2) => -(n1 * n2)
+    case (Frac(num1, den1), Frac(num2, den2)) => Frac(num1 ++ num2, den1 ++ den2)
   }
 
   final def /(that: VNum): VNum = (this, that) match {
@@ -81,9 +85,8 @@ sealed trait VNum {
     case Zero => 0.0
     case PosInf => Double.PositiveInfinity
     case NegInf => Double.NegativeInfinity
-    case Integer(n) => n.toDouble
     case Rat(numer, denom) => ???
-    case _: Imag => throw ArithmeticException(s"Cannot convert imaginary number to double ($this)")
+    case _: Imag => throw ArithmeticException(s"Cannot convert imaginary number ($this) to double")
     case ir: Irrat => ir.toDouble
   }
 
@@ -99,17 +102,20 @@ sealed trait VNum {
 
   /** Whether this number is either positive or negative infinity */
   def isInf: Boolean = PosInf == this || NegInf == this
-  def isInt: Boolean = this.isInstanceOf[Integer]
-  def isRat: Boolean = this.isInstanceOf[Rat]
+  def isInt: Boolean = this match {
+    case r: Rat => r.denom == 1
+    case _ => false
+  }
+  def isRat: Boolean = this == Zero || this.isInstanceOf[Rat]
   def isIrrat: Boolean = this.isInstanceOf[Irrat]
-  def isReal: Boolean = this.isInstanceOf[Real]
+  def isReal: Boolean = this.isRat || this.isIrrat
 
   /** 1 if positive, 0 if zero, -1 if negative */
-  def sign: (1 | 0 | -1) = this match {
+  def sign: Int = this match {
     case Zero => 0
     case PosInf => 1
     case NegInf => -1
-    case _ => ???
+    case Rat(num, den) => num.sign.toInt * den.sign.toInt
   }
 
   /** Range from this number (inclusive) to another number (exclusive) */
@@ -138,21 +144,15 @@ sealed trait VNum {
   final def >=(that: Int): Boolean = this < VNum.int(that)
 }
 
-sealed trait Real extends VNum
-
-sealed trait NonIrrat extends VNum
-
-case object Zero extends Real, NonIrrat
+case object Zero extends VNum
 
 /** Positive infinity */
-case object PosInf extends VNum, NonIrrat
+case object PosInf extends VNum
 
 /** Negative infinity */
-case object NegInf extends VNum, NonIrrat
+case object NegInf extends VNum
 
-case class Integer private[num] (num: BigInt) extends Real, NonIrrat
-
-case class Rat private (numer: BigInt, denom: BigInt) extends Real, NonIrrat
+case class Rat private (numer: BigInt, denom: BigInt) extends VNum
 
 object Rat {
   def apply(numer: BigInt, denom: BigInt): VNum =
@@ -170,15 +170,13 @@ object Rat {
     }
 }
 
-case class Imag private[num] (factor: VNum) extends VNum, NonIrrat
+case class Imag private[num] (factor: VNum) extends VNum
 
-sealed trait Irrat extends Real
+sealed trait Irrat extends VNum
 
-/** A fraction with irrationals in the numerator and denominator, multiplied by
-  * a non-irrational number `factor`
+/** A number divided by another
   */
-case class IrratMulDiv private[num] (factor: VNum, numer: Seq[Irrat], denom: Seq[Irrat])
-    extends Irrat
+case class Frac private[num] (numer: Seq[VNum], denom: Seq[VNum]) extends VNum
 
 /** base raised to the power of pow. `pow` will always be a positive number */
 case class Pow private[num] (base: Irrat, pow: Irrat) extends Irrat
@@ -186,38 +184,32 @@ case class Pow private[num] (base: Irrat, pow: Irrat) extends Irrat
 /** The sum of a rational number, an imaginary number, and a finite number of
   * irrational numbers.
   */
-case class Sum private (nonIrrat: VNum, irrats: Seq[Irrat]) extends Irrat
+case class Sum private[num] (terms: Seq[VNum]) extends VNum
 
 object Sum {
-  def apply(nonIrrat: VNum, irrats: Seq[Irrat]): VNum = {
-    ???
-  }
+  // def apply(nonIrrat: VNum, irrats: Seq[Irrat]): VNum = {
+  //   ???
+  // }
 }
 
 /** An irrational number computed using a series whose terms' absolute values
   * are strictly decreasing.
   * @param approx
   *   A precomputed approximation of the number
-  * @param intPart
-  *   The part before the decimal point
-  * @param digits
-  *   All the digits after the decimal point
-  * @param base
-  *   The base that the digits are in
+  * @param terms
+  *   Infinite list of terms whose sum equals the number
   */
 case class IrratSeries private[num] (
     approx: Double,
-    intPart: BigInt,
-    digits: LazyList[Int],
-    base: Int = 10
-) extends VNum
+    terms: LazyList[Rat]
+) extends Irrat
 
 object VNum {
-  def int(i: BigInt) = Integer(i)
+  def int(i: BigInt) = Rat(i, 1)
 
   def double(d: Double) = ???
 
-  def frac(numer: BigInt, denom: BigInt) = Integer(numer) / Integer(denom)
+  def frac(numer: BigInt, denom: BigInt) = Rat(numer, denom)
 
   def parse(str: String): Option[VNum] = ???
 

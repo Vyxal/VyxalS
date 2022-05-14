@@ -39,7 +39,8 @@ object Builtins {
     def addDyad(name: String)(impl: Dyad): Dyad = {
       elements += name -> DirectFn(
         { () => ctx ?=>
-          ctx.push(impl(ctx.pop(), ctx.pop()))
+          val arg2, arg1 = ctx.pop()
+          ctx.push(impl(arg1, arg2))
         },
         2
       )
@@ -51,8 +52,9 @@ object Builtins {
     def addTriad(name: String)(impl: Triad): Triad = {
       elements += name -> DirectFn(
         { () => ctx ?=>
+          val arg3, arg2, arg1 = ctx.pop()
           ctx.push(
-            impl(ctx.pop(), ctx.pop(), ctx.pop())
+            impl(arg1, arg2, arg3)
           )
         },
         3
@@ -66,8 +68,9 @@ object Builtins {
     def addTetrad(name: String)(impl: Tetrad): Tetrad = {
       elements += name -> DirectFn(
         { () => ctx ?=>
+          val arg4, arg3, arg2, arg1 = ctx.pop()
           ctx.push(
-            impl(ctx.pop(), ctx.pop(), ctx.pop(), ctx.pop())
+            impl(arg1, arg2, arg3, arg4)
           )
         },
         4

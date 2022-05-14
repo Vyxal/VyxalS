@@ -1,99 +1,45 @@
 package vyxal
 
-import org.scalatest.flatspec.AnyFlatSpec
 import vyxal.num.VNum
 import vyxal.num.VNum.given
+import org.scalatest.funspec.AnyFunSpec
 
-class InterpreterTest extends AnyFlatSpec {
-  given Backend = new Backend {}
+class InterpreterTest extends AnyFunSpec {
+  given Backend with {}
 
-  "random stuff" should "execute properly" in {
-    var parsed = Parser
-      .parse(raw"""
-      3 2 +
-      """)
-      .contents
-    given Backend with {
-      override def print(s: String) = {}
+  inline def runTest(code: String, expected: VAny) =
+    it("should return the right result for " + code) {
+      val ctx = Interpreter.execute(code)
+      assert(ctx.pop() == expected)
     }
-    given ctx: Context = Context()
-    Interpreter.execute(parsed)
-    var top = ctx.pop()
-    assert(top == VNum.int(5))
-
-    parsed = Parser.parse(raw"3 2 -").contents
-    Interpreter.execute(parsed)
-    top = ctx.pop()
-    assert(top == VNum.int(1))
+  
+  describe("+ and -") {
+    runTest("3 2 +", 5)
+    runTest("3 2 -", 1)
   }
 
-  "triple function" should "execute properly" in {
-    val parsed = Parser
-      .parse(raw"""
+  describe("triple function") {
+    runTest("""
       @triple|3 *}
       4 ←triple†
-      """)
-      .contents
-    given Backend with {
-      override def print(s: String) = {}
-    }
-    given ctx: Context = Context()
-    Interpreter.execute(parsed)
-    val top = ctx.pop()
-    assert(top == VNum.int(12))
+      """, 12)
   }
 
-  "conditional execute modifier" should "work" in {
-    var parsed = Parser.parse(raw"1 3 2 +¿").contents
-    given Backend with {
-      override def print(s: String) = {}
-    }
-    given ctx: Context = Context()
-    Interpreter.execute(parsed)
-    var top = ctx.pop()
-    assert(top == VNum.int(4))
-
-    parsed = Parser.parse(raw"1 3 0 +¿").contents
-    Interpreter.execute(parsed)
-    top = ctx.pop()
-    assert(top == VNum.int(3))
+  describe("conditional execute modifier") {
+    runTest("1 3 2 +¿", 4)
+    runTest("1 3 0 +¿", 3)
   }
 
-  "ternary if modifier" should "work" in {
-    var parsed = Parser.parse(raw"4 2 3]").contents
-    given Backend with {
-      override def print(s: String) = {}
-    }
-    given ctx: Context = Context()
-    Interpreter.execute(parsed)
-    var top = ctx.pop()
-    assert(top == VNum.int(2))
-
-    parsed = Parser.parse(raw"5 3 0 +-]").contents
-    Interpreter.execute(parsed)
-    top = ctx.pop()
-    assert(top == VNum.int(2))
-
-    parsed = Parser.parse(raw"5 3 9 +-]").contents
-    Interpreter.execute(parsed)
-    top = ctx.pop()
-    assert(top == VNum.int(8))
+  describe("ternary if modifier") {
+    runTest("4 2 3]", 2)
+    runTest("5 3 0 +-]", 2)
+    runTest("5 3 9 +-]", 8)
   }
 
-  "apply to each stack item modifier" should "work" in {
-    var parsed = Parser.parse(raw"2 4 6 8 ½æ W").contents
-    given Backend with {
-      override def print(s: String) = {}
-    }
-    given ctx: Context = Context()
-    Interpreter.execute(parsed)
-    var top = ctx.pop()
-    assert(top == VList.of(1, 2, 3, 4))
+  describe("apply to each stack item modifier") {
+    runTest("2 4 6 8 ½æ W", VList.of(1, 2, 3, 4))
 
-    parsed = Parser.parse(raw"5 1 7 2 4 2+¢æ W").contents
-    Interpreter.execute(parsed)
-    top = ctx.pop()
-    assert(top == VList.of(7, 3, 9, 4, 6))
+    runTest("5 1 7 2 4 2+¢æ W", VList.of(7, 3, 9, 4, 6))
 
     // TODO: currently modifiers that take a lambda don't work
   }

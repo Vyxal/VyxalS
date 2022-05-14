@@ -13,7 +13,7 @@ object Interpreter {
     given ctx: Context = Context()
     execute(ast)
     if (!ctx.isStackEmpty) {
-      ctx.println(ctx.pop())
+      ctx.println(ctx.peek)
     }
     ctx
   }
