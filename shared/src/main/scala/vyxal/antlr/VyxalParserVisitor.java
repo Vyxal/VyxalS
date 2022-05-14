@@ -17,12 +17,6 @@ public interface VyxalParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFile(VyxalParser.FileContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link VyxalParser#alias}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAlias(VyxalParser.AliasContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link VyxalParser#program}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -59,12 +53,6 @@ public interface VyxalParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInteger(VyxalParser.IntegerContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link VyxalParser#compressed_number}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCompressed_number(VyxalParser.Compressed_numberContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link VyxalParser#complex_number}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -89,12 +77,6 @@ public interface VyxalParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIf_statement(VyxalParser.If_statementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link VyxalParser#fori_loop}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFori_loop(VyxalParser.Fori_loopContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link VyxalParser#for_loop}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -113,24 +95,6 @@ public interface VyxalParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLambda(VyxalParser.LambdaContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link VyxalParser#one_element_lambda}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOne_element_lambda(VyxalParser.One_element_lambdaContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link VyxalParser#two_element_lambda}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTwo_element_lambda(VyxalParser.Two_element_lambdaContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link VyxalParser#three_element_lambda}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitThree_element_lambda(VyxalParser.Three_element_lambdaContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link VyxalParser#variable_assn}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -148,6 +112,36 @@ public interface VyxalParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitModifier(VyxalParser.ModifierContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link VyxalParser#monadic_modifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMonadic_modifier(VyxalParser.Monadic_modifierContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link VyxalParser#dyadic_modifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDyadic_modifier(VyxalParser.Dyadic_modifierContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link VyxalParser#triadic_modifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTriadic_modifier(VyxalParser.Triadic_modifierContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link VyxalParser#tetradic_modifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTetradic_modifier(VyxalParser.Tetradic_modifierContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link VyxalParser#infinite_modifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInfinite_modifier(VyxalParser.Infinite_modifierContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link VyxalParser#element}.
 	 * @param ctx the parse tree

@@ -1,125 +1,76 @@
 parser grammar VyxalParser;
 
 options {
-    tokenVocab=VyxalLexer;
+	tokenVocab = VyxalLexer;
 }
 
-@members {
-boolean isAlias = false;
-}
+file: program EOF;
 
-file
-    : {isAlias = true;} alias* {isAlias = false;} program EOF
-    ;
+program: (program_node | WHITESPACE)*;
 
-alias
-    : program ALIAS theAlias=element WHITESPACE*
-    ;
+program_node: statement | literal | modifier | element;
 
-program
-    : (program_node | WHITESPACE)*
-    ;
+literal:
+	string
+	| number
+	| COMPRESSED_NUMBER
+	| complex_number
+	| list;
 
-program_node
-    : statement | literal | modifier | element
-    ;
+string:
+	NORMAL_STRING
+	| COMPRESSED_STRING
+	| SINGLE_CHAR_STRING
+	| DOUBLE_CHAR_STRING;
 
-literal
-    : string
-    | number
-    | compressed_number
-    | complex_number
-    | list
-    ;
+number: integer (PERIOD integer)?;
 
-string
-    : NORMAL_STRING
-    | COMPRESSED_STRING
-    | SINGLE_CHAR_STRING
-    | DOUBLE_CHAR_STRING
-    ;
+integer: DIGIT+;
 
-number
-    : MINUS? integer (PERIOD integer)?
-    ;
+complex_number: number COMPLEX_SEPARATOR number;
 
-integer
-    : DIGIT+
-    ;
+list: LIST_OPEN program (PIPE program)* LIST_CLOSE?;
 
-compressed_number
-    : COMPRESSED_NUMBER .*? COMPRESSED_NUMBER
-    ;
+statement:
+	if_statement
+	| for_loop
+	| while_loop
+	| lambda
+	| variable_assn;
 
-complex_number
-    : number COMPLEX_SEPARATOR number
-    ;
+if_statement: IF_OPEN program (PIPE program)? CLOSE?;
 
-list
-    : LIST_OPEN program (PIPE program)* LIST_CLOSE?
-    ;
+for_loop: FOR_OPEN (variable PIPE)? program CLOSE?;
 
-statement
-    : if_statement
-    | fori_loop
-    | for_loop
-    | while_loop
-    | lambda
-    | one_element_lambda
-    | two_element_lambda
-    | three_element_lambda
-    | variable_assn
-    ;
+while_loop:
+	WHILE_OPEN (cond = program PIPE)? body = program CLOSE?;
 
-if_statement
-    : IF_OPEN program (PIPE program)? IF_CLOSE?
-    ;
+lambda: LAMBDA_TYPE (integer PIPE)? program CLOSE?;
 
-fori_loop
-    : DIGIT DIGIT? DIGIT? DIGIT? DIGIT? DIGIT? DIGIT? DIGIT? DIGIT? FOR_OPEN program FOR_CLOSE?
-    ;
+variable_assn: ASSN_SIGN variable;
 
-for_loop
-    : FOR_OPEN (variable PIPE)? program FOR_CLOSE?
-    ;
+variable: ALPHA+;
 
-while_loop
-    : WHILE_OPEN (cond=program PIPE)? body=program WHILE_CLOSE?
-    ;
+modifier:
+	monadic_modifier
+	| dyadic_modifier
+	| triadic_modifier
+	| tetradic_modifier
+	| infinite_modifier;
 
-lambda
-    : LAMBDA_TYPE (integer PIPE)? program SEMICOLON?
-    ;
+monadic_modifier: MONADIC_MODIFIER program_node;
 
-one_element_lambda
-    : ONE_ELEMENT_LAMBDA program_node
-    ;
+dyadic_modifier: DYADIC_MODIFIER program_node program_node;
 
-two_element_lambda
-    : TWO_ELEMENT_LAMBDA program_node program_node
-    ;
+triadic_modifier:
+	TRIADIC_MODIFIER program_node program_node program_node;
 
-three_element_lambda
-    : THREE_ELEMENT_LAMBDA program_node program_node program_node
-    ;
+tetradic_modifier:
+	TETRADIC_MODIFIER program_node program_node program_node program_node;
 
-variable_assn
-    : ASSN_SIGN variable
-    ;
+infinite_modifier: INFINITE_MODIFIER program_node*;
 
-variable
-    : (ALPHA | DIGIT | CONTEXT_VAR)+
-    ;
+element: PREFIX? element_type;
 
-modifier
-    : MODIFIER program_node
-    ;
-
-element locals [boolean isInAlias]
-    : PREFIX? element_type {$isInAlias = isAlias;}
-    ;
-
-element_type
-    : ALPHA | LITERALLY_ANY_TEXT | CONTEXT_VAR | DIGIT | MODIFIER | MINUS | STAR
-    ;
+element_type: ALPHA | LITERALLY_ANY_TEXT | CONTEXT_VAR | DIGIT;
 

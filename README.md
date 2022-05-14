@@ -22,4 +22,6 @@ If you want to run the compiled jar, you can do `java -jar nameofbuiltvyxaljar.j
 
 To compile the ANTLR4 files to Java files, you will need to download the ANTLR jar files. Download the complete jar file [here](https://www.antlr.org/download.html). Then, run this command:
 
-`java -jar path/to/your-antlr-4.jar ./shared/src/main/antlr/VyxalLexer.g4 ./shared/src/main/antlr/VyxalParser.g4 -visitor -no-listener -encoding UTF-8 -package vyxal -o ./shared/src/main/scala/vyxal/antlr/ -Xexact-output-dir`
+```bash
+java -jar path/to/your-antlr-4.jar ./shared/src/main/antlr/VyxalLexer.g4 ./shared/src/main/antlr/VyxalParser.g4 -visitor -no-listener -encoding UTF-8 -package vyxal -o ./shared/src/main/scala/vyxal/antlr/ -Xexact-output-dir
+```

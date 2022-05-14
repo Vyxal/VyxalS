@@ -8,7 +8,7 @@ object Interpreter {
       inputs: List[VAny] = List.empty,
       flags: List[String] = List.empty
   )(using Backend): Context = {
-    val VyFile(ast, _) = Parser.parse(code)
+    val VyFile(ast, _) = VParser.parse(code)
     given ctx: Context = Context()
     execute(ast)
     if (!ctx.isStackEmpty) {

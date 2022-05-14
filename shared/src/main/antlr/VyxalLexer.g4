@@ -1,151 +1,66 @@
 lexer grammar VyxalLexer;
 
-PREFIX
-    : [¨Þø∆k]
-    ;
+PREFIX: [#Þø∆k];
 
-CONTEXT_VAR
-    : 'n'
-    ;
+CONTEXT_VAR: 'n';
 
-ALIAS
-    : '¢'
-    ;
+MONADIC_MODIFIER: [¡¿¤©®æð$&/;];
 
-MODIFIER
-    : 'ß'
-    |'v'
-    |'ƒ'
-    |'ɖ'
-    |'⁺'
-    |'₌'
-    |'₍'
-    |'~'
-    |'&'
-    |'¨='
-    ;
+DYADIC_MODIFIER: [¢\]];
 
-COMMENT
-    : '#' (~'\n' .)* -> skip
-    ;
+TRIADIC_MODIFIER: [€];
 
-DIGIT
-    : [0-9]
-    ;
+TETRADIC_MODIFIER: [§];
 
-MINUS
-    : '-'
-    ;
+INFINITE_MODIFIER: [)];
 
-ALPHA
-    : [A-Za-z]
-    ;
+COMMENT: '#' (~'\n' .)* -> skip;
 
-WHITESPACE
-    : [ \t\r\n]
-    ;
+BLOCK_COMMENT: '#{' .*? '}#' -> skip;
 
-ASSN_SIGN
-    : '→' | '←'
-    ;
+DIGIT: [0-9];
 
-LAMBDA_TYPE
-    : [λƛ'µ]
-    ;
+MINUS: '-';
 
-NORMAL_STRING
-    : '"' .*? '"'
-    ;
+ALPHA: [A-Za-z];
 
-COMPRESSED_STRING
-    : '«' .*? '«'
-    ;
+WHITESPACE: [ \t\r\n];
 
-SINGLE_CHAR_STRING
-    : '\\' .
-    ;
+ASSN_SIGN: '→' | '←';
 
-DOUBLE_CHAR_STRING
-    : '‛' . .
-    ;
+LAMBDA_TYPE: [λƛΩΛµ];
+
+NORMAL_STRING: '"' .*? '"';
+
+COMPRESSED_STRING: '▲' .*? '▲';
+
+SINGLE_CHAR_STRING: '\'' .;
+
+DOUBLE_CHAR_STRING: '‛' . .;
 
 // syntax elements
-PIPE
-    : '|'
-    ;
+PIPE: '|';
 
-WHILE_OPEN
-    : '{'
-    ;
+WHILE_OPEN: '{';
 
-WHILE_CLOSE
-    : '}'
-    ;
+CLOSE: '}';
 
-IF_OPEN
-    : '['
-    ;
+IF_OPEN: '[';
 
-IF_CLOSE
-    : ']'
-    ;
+FOR_OPEN: '(';
 
-FOR_OPEN
-    : '('
-    ;
+LIST_OPEN: '⟨';
 
-FOR_CLOSE
-    : ')'
-    ;
+LIST_CLOSE: '⟩';
 
-LIST_OPEN
-    : '⟨'
-    ;
+PERIOD: '.';
 
-LIST_CLOSE
-    : '⟩'
-    ;
+SEMICOLON: ';';
 
-PERIOD
-    : '.'
-    ;
+AT_SIGN: '@';
 
-SEMICOLON
-    : ';'
-    ;
+COMPRESSED_NUMBER: '▼' .*? '▼';
 
-AT_SIGN
-    : '@'
-    ;
+COMPLEX_SEPARATOR: '°';
 
-STAR
-    : '*'
-    ;
-
-COLON
-    : ':'
-    ;
-
-COMPRESSED_NUMBER
-    : '»'
-    ;
-
-COMPLEX_SEPARATOR
-    : '°'
-    ;
-
-ONE_ELEMENT_LAMBDA
-    : '⁽'
-    ;
-
-TWO_ELEMENT_LAMBDA
-    : '‡'
-    ;
-
-THREE_ELEMENT_LAMBDA
-    : '≬'
-    ;
-
-LITERALLY_ANY_TEXT
-    : [\u0010-\uFFFF]
-    ;
+LITERALLY_ANY_TEXT: [\u0010-\uFFFF];

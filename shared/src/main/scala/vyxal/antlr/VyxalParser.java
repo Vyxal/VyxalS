@@ -17,50 +17,49 @@ public class VyxalParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		PREFIX=1, CONTEXT_VAR=2, ALIAS=3, MODIFIER=4, COMMENT=5, DIGIT=6, MINUS=7, 
-		ALPHA=8, WHITESPACE=9, ASSN_SIGN=10, LAMBDA_TYPE=11, NORMAL_STRING=12, 
-		COMPRESSED_STRING=13, SINGLE_CHAR_STRING=14, DOUBLE_CHAR_STRING=15, PIPE=16, 
-		WHILE_OPEN=17, WHILE_CLOSE=18, IF_OPEN=19, IF_CLOSE=20, FOR_OPEN=21, FOR_CLOSE=22, 
-		LIST_OPEN=23, LIST_CLOSE=24, PERIOD=25, SEMICOLON=26, AT_SIGN=27, STAR=28, 
-		COLON=29, COMPRESSED_NUMBER=30, COMPLEX_SEPARATOR=31, ONE_ELEMENT_LAMBDA=32, 
-		TWO_ELEMENT_LAMBDA=33, THREE_ELEMENT_LAMBDA=34, LITERALLY_ANY_TEXT=35;
+		PREFIX=1, CONTEXT_VAR=2, MONADIC_MODIFIER=3, DYADIC_MODIFIER=4, TRIADIC_MODIFIER=5, 
+		TETRADIC_MODIFIER=6, INFINITE_MODIFIER=7, COMMENT=8, BLOCK_COMMENT=9, 
+		DIGIT=10, MINUS=11, ALPHA=12, WHITESPACE=13, ASSN_SIGN=14, LAMBDA_TYPE=15, 
+		NORMAL_STRING=16, COMPRESSED_STRING=17, SINGLE_CHAR_STRING=18, DOUBLE_CHAR_STRING=19, 
+		PIPE=20, WHILE_OPEN=21, CLOSE=22, IF_OPEN=23, FOR_OPEN=24, LIST_OPEN=25, 
+		LIST_CLOSE=26, PERIOD=27, SEMICOLON=28, AT_SIGN=29, COMPRESSED_NUMBER=30, 
+		COMPLEX_SEPARATOR=31, LITERALLY_ANY_TEXT=32;
 	public static final int
-		RULE_file = 0, RULE_alias = 1, RULE_program = 2, RULE_program_node = 3, 
-		RULE_literal = 4, RULE_string = 5, RULE_number = 6, RULE_integer = 7, 
-		RULE_compressed_number = 8, RULE_complex_number = 9, RULE_list = 10, RULE_statement = 11, 
-		RULE_if_statement = 12, RULE_fori_loop = 13, RULE_for_loop = 14, RULE_while_loop = 15, 
-		RULE_lambda = 16, RULE_one_element_lambda = 17, RULE_two_element_lambda = 18, 
-		RULE_three_element_lambda = 19, RULE_variable_assn = 20, RULE_variable = 21, 
-		RULE_modifier = 22, RULE_element = 23, RULE_element_type = 24;
+		RULE_file = 0, RULE_program = 1, RULE_program_node = 2, RULE_literal = 3, 
+		RULE_string = 4, RULE_number = 5, RULE_integer = 6, RULE_complex_number = 7, 
+		RULE_list = 8, RULE_statement = 9, RULE_if_statement = 10, RULE_for_loop = 11, 
+		RULE_while_loop = 12, RULE_lambda = 13, RULE_variable_assn = 14, RULE_variable = 15, 
+		RULE_modifier = 16, RULE_monadic_modifier = 17, RULE_dyadic_modifier = 18, 
+		RULE_triadic_modifier = 19, RULE_tetradic_modifier = 20, RULE_infinite_modifier = 21, 
+		RULE_element = 22, RULE_element_type = 23;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"file", "alias", "program", "program_node", "literal", "string", "number", 
-			"integer", "compressed_number", "complex_number", "list", "statement", 
-			"if_statement", "fori_loop", "for_loop", "while_loop", "lambda", "one_element_lambda", 
-			"two_element_lambda", "three_element_lambda", "variable_assn", "variable", 
-			"modifier", "element", "element_type"
+			"file", "program", "program_node", "literal", "string", "number", "integer", 
+			"complex_number", "list", "statement", "if_statement", "for_loop", "while_loop", 
+			"lambda", "variable_assn", "variable", "modifier", "monadic_modifier", 
+			"dyadic_modifier", "triadic_modifier", "tetradic_modifier", "infinite_modifier", 
+			"element", "element_type"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, null, "'n'", "'\\u00A2'", null, null, null, "'-'", null, null, 
-			null, null, null, null, null, null, "'|'", "'{'", "'}'", "'['", "']'", 
-			"'('", "')'", "'\\u27E8'", "'\\u27E9'", "'.'", "';'", "'@'", "'*'", "':'", 
-			"'\\u00BB'", "'\\u00B0'", "'\\u207D'", "'\\u2021'", "'\\u226C'"
+			null, null, "'n'", null, null, null, null, null, null, null, null, "'-'", 
+			null, null, null, null, null, null, null, null, "'|'", "'{'", "'}'", 
+			"'['", "'('", "'\\u27E8'", "'\\u27E9'", "'.'", "';'", "'@'", null, "'\\u00B0'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "PREFIX", "CONTEXT_VAR", "ALIAS", "MODIFIER", "COMMENT", "DIGIT", 
-			"MINUS", "ALPHA", "WHITESPACE", "ASSN_SIGN", "LAMBDA_TYPE", "NORMAL_STRING", 
-			"COMPRESSED_STRING", "SINGLE_CHAR_STRING", "DOUBLE_CHAR_STRING", "PIPE", 
-			"WHILE_OPEN", "WHILE_CLOSE", "IF_OPEN", "IF_CLOSE", "FOR_OPEN", "FOR_CLOSE", 
-			"LIST_OPEN", "LIST_CLOSE", "PERIOD", "SEMICOLON", "AT_SIGN", "STAR", 
-			"COLON", "COMPRESSED_NUMBER", "COMPLEX_SEPARATOR", "ONE_ELEMENT_LAMBDA", 
-			"TWO_ELEMENT_LAMBDA", "THREE_ELEMENT_LAMBDA", "LITERALLY_ANY_TEXT"
+			null, "PREFIX", "CONTEXT_VAR", "MONADIC_MODIFIER", "DYADIC_MODIFIER", 
+			"TRIADIC_MODIFIER", "TETRADIC_MODIFIER", "INFINITE_MODIFIER", "COMMENT", 
+			"BLOCK_COMMENT", "DIGIT", "MINUS", "ALPHA", "WHITESPACE", "ASSN_SIGN", 
+			"LAMBDA_TYPE", "NORMAL_STRING", "COMPRESSED_STRING", "SINGLE_CHAR_STRING", 
+			"DOUBLE_CHAR_STRING", "PIPE", "WHILE_OPEN", "CLOSE", "IF_OPEN", "FOR_OPEN", 
+			"LIST_OPEN", "LIST_CLOSE", "PERIOD", "SEMICOLON", "AT_SIGN", "COMPRESSED_NUMBER", 
+			"COMPLEX_SEPARATOR", "LITERALLY_ANY_TEXT"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -109,9 +108,6 @@ public class VyxalParser extends Parser {
 	@Override
 	public ATN getATN() { return _ATN; }
 
-
-	boolean isAlias = false;
-
 	public VyxalParser(TokenStream input) {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
@@ -122,12 +118,6 @@ public class VyxalParser extends Parser {
 			return getRuleContext(ProgramContext.class,0);
 		}
 		public TerminalNode EOF() { return getToken(VyxalParser.EOF, 0); }
-		public List<AliasContext> alias() {
-			return getRuleContexts(AliasContext.class);
-		}
-		public AliasContext alias(int i) {
-			return getRuleContext(AliasContext.class,i);
-		}
 		public FileContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -143,97 +133,12 @@ public class VyxalParser extends Parser {
 		FileContext _localctx = new FileContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_file);
 		try {
-			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			isAlias = true;
-			setState(54);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,0,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					{
-					{
-					setState(51);
-					alias();
-					}
-					} 
-				}
-				setState(56);
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,0,_ctx);
-			}
-			isAlias = false;
-			setState(58);
+			setState(48);
 			program();
-			setState(59);
+			setState(49);
 			match(EOF);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class AliasContext extends ParserRuleContext {
-		public ElementContext theAlias;
-		public ProgramContext program() {
-			return getRuleContext(ProgramContext.class,0);
-		}
-		public TerminalNode ALIAS() { return getToken(VyxalParser.ALIAS, 0); }
-		public ElementContext element() {
-			return getRuleContext(ElementContext.class,0);
-		}
-		public List<TerminalNode> WHITESPACE() { return getTokens(VyxalParser.WHITESPACE); }
-		public TerminalNode WHITESPACE(int i) {
-			return getToken(VyxalParser.WHITESPACE, i);
-		}
-		public AliasContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_alias; }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof VyxalParserVisitor ) return ((VyxalParserVisitor<? extends T>)visitor).visitAlias(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final AliasContext alias() throws RecognitionException {
-		AliasContext _localctx = new AliasContext(_ctx, getState());
-		enterRule(_localctx, 2, RULE_alias);
-		try {
-			int _alt;
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(61);
-			program();
-			setState(62);
-			match(ALIAS);
-			setState(63);
-			((AliasContext)_localctx).theAlias = element();
-			setState(67);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					{
-					{
-					setState(64);
-					match(WHITESPACE);
-					}
-					} 
-				}
-				setState(69);
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
-			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -271,25 +176,28 @@ public class VyxalParser extends Parser {
 
 	public final ProgramContext program() throws RecognitionException {
 		ProgramContext _localctx = new ProgramContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_program);
+		enterRule(_localctx, 2, RULE_program);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(74);
+			setState(55);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
-					setState(72);
+					setState(53);
 					_errHandler.sync(this);
 					switch (_input.LA(1)) {
 					case PREFIX:
 					case CONTEXT_VAR:
-					case MODIFIER:
+					case MONADIC_MODIFIER:
+					case DYADIC_MODIFIER:
+					case TRIADIC_MODIFIER:
+					case TETRADIC_MODIFIER:
+					case INFINITE_MODIFIER:
 					case DIGIT:
-					case MINUS:
 					case ALPHA:
 					case ASSN_SIGN:
 					case LAMBDA_TYPE:
@@ -301,20 +209,16 @@ public class VyxalParser extends Parser {
 					case IF_OPEN:
 					case FOR_OPEN:
 					case LIST_OPEN:
-					case STAR:
 					case COMPRESSED_NUMBER:
-					case ONE_ELEMENT_LAMBDA:
-					case TWO_ELEMENT_LAMBDA:
-					case THREE_ELEMENT_LAMBDA:
 					case LITERALLY_ANY_TEXT:
 						{
-						setState(70);
+						setState(51);
 						program_node();
 						}
 						break;
 					case WHITESPACE:
 						{
-						setState(71);
+						setState(52);
 						match(WHITESPACE);
 						}
 						break;
@@ -323,9 +227,9 @@ public class VyxalParser extends Parser {
 					}
 					} 
 				}
-				setState(76);
+				setState(57);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
 			}
 			}
 		}
@@ -366,36 +270,36 @@ public class VyxalParser extends Parser {
 
 	public final Program_nodeContext program_node() throws RecognitionException {
 		Program_nodeContext _localctx = new Program_nodeContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_program_node);
+		enterRule(_localctx, 4, RULE_program_node);
 		try {
-			setState(81);
+			setState(62);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(77);
+				setState(58);
 				statement();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(78);
+				setState(59);
 				literal();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(79);
+				setState(60);
 				modifier();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(80);
+				setState(61);
 				element();
 				}
 				break;
@@ -419,9 +323,7 @@ public class VyxalParser extends Parser {
 		public NumberContext number() {
 			return getRuleContext(NumberContext.class,0);
 		}
-		public Compressed_numberContext compressed_number() {
-			return getRuleContext(Compressed_numberContext.class,0);
-		}
+		public TerminalNode COMPRESSED_NUMBER() { return getToken(VyxalParser.COMPRESSED_NUMBER, 0); }
 		public Complex_numberContext complex_number() {
 			return getRuleContext(Complex_numberContext.class,0);
 		}
@@ -441,43 +343,43 @@ public class VyxalParser extends Parser {
 
 	public final LiteralContext literal() throws RecognitionException {
 		LiteralContext _localctx = new LiteralContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_literal);
+		enterRule(_localctx, 6, RULE_literal);
 		try {
-			setState(88);
+			setState(69);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(83);
+				setState(64);
 				string();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(84);
+				setState(65);
 				number();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(85);
-				compressed_number();
+				setState(66);
+				match(COMPRESSED_NUMBER);
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(86);
+				setState(67);
 				complex_number();
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(87);
+				setState(68);
 				list();
 				}
 				break;
@@ -512,12 +414,12 @@ public class VyxalParser extends Parser {
 
 	public final StringContext string() throws RecognitionException {
 		StringContext _localctx = new StringContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_string);
+		enterRule(_localctx, 8, RULE_string);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(90);
+			setState(71);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NORMAL_STRING) | (1L << COMPRESSED_STRING) | (1L << SINGLE_CHAR_STRING) | (1L << DOUBLE_CHAR_STRING))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -547,7 +449,6 @@ public class VyxalParser extends Parser {
 		public IntegerContext integer(int i) {
 			return getRuleContext(IntegerContext.class,i);
 		}
-		public TerminalNode MINUS() { return getToken(VyxalParser.MINUS, 0); }
 		public TerminalNode PERIOD() { return getToken(VyxalParser.PERIOD, 0); }
 		public NumberContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -562,31 +463,21 @@ public class VyxalParser extends Parser {
 
 	public final NumberContext number() throws RecognitionException {
 		NumberContext _localctx = new NumberContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_number);
+		enterRule(_localctx, 10, RULE_number);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(93);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==MINUS) {
-				{
-				setState(92);
-				match(MINUS);
-				}
-			}
-
-			setState(95);
+			setState(73);
 			integer();
-			setState(98);
+			setState(76);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==PERIOD) {
 				{
-				setState(96);
+				setState(74);
 				match(PERIOD);
-				setState(97);
+				setState(75);
 				integer();
 				}
 			}
@@ -622,12 +513,12 @@ public class VyxalParser extends Parser {
 
 	public final IntegerContext integer() throws RecognitionException {
 		IntegerContext _localctx = new IntegerContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_integer);
+		enterRule(_localctx, 12, RULE_integer);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(101); 
+			setState(79); 
 			_errHandler.sync(this);
 			_alt = 1;
 			do {
@@ -635,7 +526,7 @@ public class VyxalParser extends Parser {
 				case 1:
 					{
 					{
-					setState(100);
+					setState(78);
 					match(DIGIT);
 					}
 					}
@@ -643,66 +534,10 @@ public class VyxalParser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(103); 
+				setState(81); 
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Compressed_numberContext extends ParserRuleContext {
-		public List<TerminalNode> COMPRESSED_NUMBER() { return getTokens(VyxalParser.COMPRESSED_NUMBER); }
-		public TerminalNode COMPRESSED_NUMBER(int i) {
-			return getToken(VyxalParser.COMPRESSED_NUMBER, i);
-		}
-		public Compressed_numberContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_compressed_number; }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof VyxalParserVisitor ) return ((VyxalParserVisitor<? extends T>)visitor).visitCompressed_number(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final Compressed_numberContext compressed_number() throws RecognitionException {
-		Compressed_numberContext _localctx = new Compressed_numberContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_compressed_number);
-		try {
-			int _alt;
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(105);
-			match(COMPRESSED_NUMBER);
-			setState(109);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
-			while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1+1 ) {
-					{
-					{
-					setState(106);
-					matchWildcard();
-					}
-					} 
-				}
-				setState(111);
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
-			}
-			setState(112);
-			match(COMPRESSED_NUMBER);
 			}
 		}
 		catch (RecognitionException re) {
@@ -737,15 +572,15 @@ public class VyxalParser extends Parser {
 
 	public final Complex_numberContext complex_number() throws RecognitionException {
 		Complex_numberContext _localctx = new Complex_numberContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_complex_number);
+		enterRule(_localctx, 14, RULE_complex_number);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(114);
+			setState(83);
 			number();
-			setState(115);
+			setState(84);
 			match(COMPLEX_SEPARATOR);
-			setState(116);
+			setState(85);
 			number();
 			}
 		}
@@ -786,39 +621,39 @@ public class VyxalParser extends Parser {
 
 	public final ListContext list() throws RecognitionException {
 		ListContext _localctx = new ListContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_list);
+		enterRule(_localctx, 16, RULE_list);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(118);
+			setState(87);
 			match(LIST_OPEN);
-			setState(119);
+			setState(88);
 			program();
-			setState(124);
+			setState(93);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,10,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(120);
+					setState(89);
 					match(PIPE);
-					setState(121);
+					setState(90);
 					program();
 					}
 					} 
 				}
-				setState(126);
+				setState(95);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,10,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
 			}
-			setState(128);
+			setState(97);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,7,_ctx) ) {
 			case 1:
 				{
-				setState(127);
+				setState(96);
 				match(LIST_CLOSE);
 				}
 				break;
@@ -840,9 +675,6 @@ public class VyxalParser extends Parser {
 		public If_statementContext if_statement() {
 			return getRuleContext(If_statementContext.class,0);
 		}
-		public Fori_loopContext fori_loop() {
-			return getRuleContext(Fori_loopContext.class,0);
-		}
 		public For_loopContext for_loop() {
 			return getRuleContext(For_loopContext.class,0);
 		}
@@ -851,15 +683,6 @@ public class VyxalParser extends Parser {
 		}
 		public LambdaContext lambda() {
 			return getRuleContext(LambdaContext.class,0);
-		}
-		public One_element_lambdaContext one_element_lambda() {
-			return getRuleContext(One_element_lambdaContext.class,0);
-		}
-		public Two_element_lambdaContext two_element_lambda() {
-			return getRuleContext(Two_element_lambdaContext.class,0);
-		}
-		public Three_element_lambdaContext three_element_lambda() {
-			return getRuleContext(Three_element_lambdaContext.class,0);
 		}
 		public Variable_assnContext variable_assn() {
 			return getRuleContext(Variable_assnContext.class,0);
@@ -877,71 +700,43 @@ public class VyxalParser extends Parser {
 
 	public final StatementContext statement() throws RecognitionException {
 		StatementContext _localctx = new StatementContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_statement);
+		enterRule(_localctx, 18, RULE_statement);
 		try {
-			setState(139);
+			setState(104);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case IF_OPEN:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(130);
+				setState(99);
 				if_statement();
 				}
 				break;
-			case DIGIT:
+			case FOR_OPEN:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(131);
-				fori_loop();
-				}
-				break;
-			case FOR_OPEN:
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(132);
+				setState(100);
 				for_loop();
 				}
 				break;
 			case WHILE_OPEN:
-				enterOuterAlt(_localctx, 4);
+				enterOuterAlt(_localctx, 3);
 				{
-				setState(133);
+				setState(101);
 				while_loop();
 				}
 				break;
 			case LAMBDA_TYPE:
-				enterOuterAlt(_localctx, 5);
+				enterOuterAlt(_localctx, 4);
 				{
-				setState(134);
+				setState(102);
 				lambda();
 				}
 				break;
-			case ONE_ELEMENT_LAMBDA:
-				enterOuterAlt(_localctx, 6);
-				{
-				setState(135);
-				one_element_lambda();
-				}
-				break;
-			case TWO_ELEMENT_LAMBDA:
-				enterOuterAlt(_localctx, 7);
-				{
-				setState(136);
-				two_element_lambda();
-				}
-				break;
-			case THREE_ELEMENT_LAMBDA:
-				enterOuterAlt(_localctx, 8);
-				{
-				setState(137);
-				three_element_lambda();
-				}
-				break;
 			case ASSN_SIGN:
-				enterOuterAlt(_localctx, 9);
+				enterOuterAlt(_localctx, 5);
 				{
-				setState(138);
+				setState(103);
 				variable_assn();
 				}
 				break;
@@ -969,7 +764,7 @@ public class VyxalParser extends Parser {
 			return getRuleContext(ProgramContext.class,i);
 		}
 		public TerminalNode PIPE() { return getToken(VyxalParser.PIPE, 0); }
-		public TerminalNode IF_CLOSE() { return getToken(VyxalParser.IF_CLOSE, 0); }
+		public TerminalNode CLOSE() { return getToken(VyxalParser.CLOSE, 0); }
 		public If_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -983,170 +778,33 @@ public class VyxalParser extends Parser {
 
 	public final If_statementContext if_statement() throws RecognitionException {
 		If_statementContext _localctx = new If_statementContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_if_statement);
+		enterRule(_localctx, 20, RULE_if_statement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(141);
+			setState(106);
 			match(IF_OPEN);
-			setState(142);
+			setState(107);
 			program();
-			setState(145);
+			setState(110);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,13,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
 			case 1:
 				{
-				setState(143);
+				setState(108);
 				match(PIPE);
-				setState(144);
+				setState(109);
 				program();
 				}
 				break;
 			}
-			setState(148);
+			setState(113);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,14,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
 			case 1:
 				{
-				setState(147);
-				match(IF_CLOSE);
-				}
-				break;
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Fori_loopContext extends ParserRuleContext {
-		public List<TerminalNode> DIGIT() { return getTokens(VyxalParser.DIGIT); }
-		public TerminalNode DIGIT(int i) {
-			return getToken(VyxalParser.DIGIT, i);
-		}
-		public TerminalNode FOR_OPEN() { return getToken(VyxalParser.FOR_OPEN, 0); }
-		public ProgramContext program() {
-			return getRuleContext(ProgramContext.class,0);
-		}
-		public TerminalNode FOR_CLOSE() { return getToken(VyxalParser.FOR_CLOSE, 0); }
-		public Fori_loopContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_fori_loop; }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof VyxalParserVisitor ) return ((VyxalParserVisitor<? extends T>)visitor).visitFori_loop(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final Fori_loopContext fori_loop() throws RecognitionException {
-		Fori_loopContext _localctx = new Fori_loopContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_fori_loop);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(150);
-			match(DIGIT);
-			setState(152);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,15,_ctx) ) {
-			case 1:
-				{
-				setState(151);
-				match(DIGIT);
-				}
-				break;
-			}
-			setState(155);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
-			case 1:
-				{
-				setState(154);
-				match(DIGIT);
-				}
-				break;
-			}
-			setState(158);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,17,_ctx) ) {
-			case 1:
-				{
-				setState(157);
-				match(DIGIT);
-				}
-				break;
-			}
-			setState(161);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,18,_ctx) ) {
-			case 1:
-				{
-				setState(160);
-				match(DIGIT);
-				}
-				break;
-			}
-			setState(164);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
-			case 1:
-				{
-				setState(163);
-				match(DIGIT);
-				}
-				break;
-			}
-			setState(167);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,20,_ctx) ) {
-			case 1:
-				{
-				setState(166);
-				match(DIGIT);
-				}
-				break;
-			}
-			setState(170);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,21,_ctx) ) {
-			case 1:
-				{
-				setState(169);
-				match(DIGIT);
-				}
-				break;
-			}
-			setState(173);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==DIGIT) {
-				{
-				setState(172);
-				match(DIGIT);
-				}
-			}
-
-			setState(175);
-			match(FOR_OPEN);
-			setState(176);
-			program();
-			setState(178);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,23,_ctx) ) {
-			case 1:
-				{
-				setState(177);
-				match(FOR_CLOSE);
+				setState(112);
+				match(CLOSE);
 				}
 				break;
 			}
@@ -1172,7 +830,7 @@ public class VyxalParser extends Parser {
 			return getRuleContext(VariableContext.class,0);
 		}
 		public TerminalNode PIPE() { return getToken(VyxalParser.PIPE, 0); }
-		public TerminalNode FOR_CLOSE() { return getToken(VyxalParser.FOR_CLOSE, 0); }
+		public TerminalNode CLOSE() { return getToken(VyxalParser.CLOSE, 0); }
 		public For_loopContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1186,33 +844,33 @@ public class VyxalParser extends Parser {
 
 	public final For_loopContext for_loop() throws RecognitionException {
 		For_loopContext _localctx = new For_loopContext(_ctx, getState());
-		enterRule(_localctx, 28, RULE_for_loop);
+		enterRule(_localctx, 22, RULE_for_loop);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(180);
+			setState(115);
 			match(FOR_OPEN);
-			setState(184);
+			setState(119);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,24,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
 			case 1:
 				{
-				setState(181);
+				setState(116);
 				variable();
-				setState(182);
+				setState(117);
 				match(PIPE);
 				}
 				break;
 			}
-			setState(186);
+			setState(121);
 			program();
-			setState(188);
+			setState(123);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,25,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
 			case 1:
 				{
-				setState(187);
-				match(FOR_CLOSE);
+				setState(122);
+				match(CLOSE);
 				}
 				break;
 			}
@@ -1240,7 +898,7 @@ public class VyxalParser extends Parser {
 			return getRuleContext(ProgramContext.class,i);
 		}
 		public TerminalNode PIPE() { return getToken(VyxalParser.PIPE, 0); }
-		public TerminalNode WHILE_CLOSE() { return getToken(VyxalParser.WHILE_CLOSE, 0); }
+		public TerminalNode CLOSE() { return getToken(VyxalParser.CLOSE, 0); }
 		public While_loopContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1254,33 +912,33 @@ public class VyxalParser extends Parser {
 
 	public final While_loopContext while_loop() throws RecognitionException {
 		While_loopContext _localctx = new While_loopContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_while_loop);
+		enterRule(_localctx, 24, RULE_while_loop);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(190);
+			setState(125);
 			match(WHILE_OPEN);
-			setState(194);
+			setState(129);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,26,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,13,_ctx) ) {
 			case 1:
 				{
-				setState(191);
+				setState(126);
 				((While_loopContext)_localctx).cond = program();
-				setState(192);
+				setState(127);
 				match(PIPE);
 				}
 				break;
 			}
-			setState(196);
+			setState(131);
 			((While_loopContext)_localctx).body = program();
-			setState(198);
+			setState(133);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,27,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,14,_ctx) ) {
 			case 1:
 				{
-				setState(197);
-				match(WHILE_CLOSE);
+				setState(132);
+				match(CLOSE);
 				}
 				break;
 			}
@@ -1306,7 +964,7 @@ public class VyxalParser extends Parser {
 			return getRuleContext(IntegerContext.class,0);
 		}
 		public TerminalNode PIPE() { return getToken(VyxalParser.PIPE, 0); }
-		public TerminalNode SEMICOLON() { return getToken(VyxalParser.SEMICOLON, 0); }
+		public TerminalNode CLOSE() { return getToken(VyxalParser.CLOSE, 0); }
 		public LambdaContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1320,165 +978,36 @@ public class VyxalParser extends Parser {
 
 	public final LambdaContext lambda() throws RecognitionException {
 		LambdaContext _localctx = new LambdaContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_lambda);
+		enterRule(_localctx, 26, RULE_lambda);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(200);
+			setState(135);
 			match(LAMBDA_TYPE);
-			setState(204);
+			setState(139);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,28,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,15,_ctx) ) {
 			case 1:
 				{
-				setState(201);
+				setState(136);
 				integer();
-				setState(202);
+				setState(137);
 				match(PIPE);
 				}
 				break;
 			}
-			setState(206);
+			setState(141);
 			program();
-			setState(208);
+			setState(143);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,29,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
 			case 1:
 				{
-				setState(207);
-				match(SEMICOLON);
+				setState(142);
+				match(CLOSE);
 				}
 				break;
 			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class One_element_lambdaContext extends ParserRuleContext {
-		public TerminalNode ONE_ELEMENT_LAMBDA() { return getToken(VyxalParser.ONE_ELEMENT_LAMBDA, 0); }
-		public Program_nodeContext program_node() {
-			return getRuleContext(Program_nodeContext.class,0);
-		}
-		public One_element_lambdaContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_one_element_lambda; }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof VyxalParserVisitor ) return ((VyxalParserVisitor<? extends T>)visitor).visitOne_element_lambda(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final One_element_lambdaContext one_element_lambda() throws RecognitionException {
-		One_element_lambdaContext _localctx = new One_element_lambdaContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_one_element_lambda);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(210);
-			match(ONE_ELEMENT_LAMBDA);
-			setState(211);
-			program_node();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Two_element_lambdaContext extends ParserRuleContext {
-		public TerminalNode TWO_ELEMENT_LAMBDA() { return getToken(VyxalParser.TWO_ELEMENT_LAMBDA, 0); }
-		public List<Program_nodeContext> program_node() {
-			return getRuleContexts(Program_nodeContext.class);
-		}
-		public Program_nodeContext program_node(int i) {
-			return getRuleContext(Program_nodeContext.class,i);
-		}
-		public Two_element_lambdaContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_two_element_lambda; }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof VyxalParserVisitor ) return ((VyxalParserVisitor<? extends T>)visitor).visitTwo_element_lambda(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final Two_element_lambdaContext two_element_lambda() throws RecognitionException {
-		Two_element_lambdaContext _localctx = new Two_element_lambdaContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_two_element_lambda);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(213);
-			match(TWO_ELEMENT_LAMBDA);
-			setState(214);
-			program_node();
-			setState(215);
-			program_node();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Three_element_lambdaContext extends ParserRuleContext {
-		public TerminalNode THREE_ELEMENT_LAMBDA() { return getToken(VyxalParser.THREE_ELEMENT_LAMBDA, 0); }
-		public List<Program_nodeContext> program_node() {
-			return getRuleContexts(Program_nodeContext.class);
-		}
-		public Program_nodeContext program_node(int i) {
-			return getRuleContext(Program_nodeContext.class,i);
-		}
-		public Three_element_lambdaContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_three_element_lambda; }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof VyxalParserVisitor ) return ((VyxalParserVisitor<? extends T>)visitor).visitThree_element_lambda(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final Three_element_lambdaContext three_element_lambda() throws RecognitionException {
-		Three_element_lambdaContext _localctx = new Three_element_lambdaContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_three_element_lambda);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(217);
-			match(THREE_ELEMENT_LAMBDA);
-			setState(218);
-			program_node();
-			setState(219);
-			program_node();
-			setState(220);
-			program_node();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1510,13 +1039,13 @@ public class VyxalParser extends Parser {
 
 	public final Variable_assnContext variable_assn() throws RecognitionException {
 		Variable_assnContext _localctx = new Variable_assnContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_variable_assn);
+		enterRule(_localctx, 28, RULE_variable_assn);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(222);
+			setState(145);
 			match(ASSN_SIGN);
-			setState(223);
+			setState(146);
 			variable();
 			}
 		}
@@ -1536,14 +1065,6 @@ public class VyxalParser extends Parser {
 		public TerminalNode ALPHA(int i) {
 			return getToken(VyxalParser.ALPHA, i);
 		}
-		public List<TerminalNode> DIGIT() { return getTokens(VyxalParser.DIGIT); }
-		public TerminalNode DIGIT(int i) {
-			return getToken(VyxalParser.DIGIT, i);
-		}
-		public List<TerminalNode> CONTEXT_VAR() { return getTokens(VyxalParser.CONTEXT_VAR); }
-		public TerminalNode CONTEXT_VAR(int i) {
-			return getToken(VyxalParser.CONTEXT_VAR, i);
-		}
 		public VariableContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1557,13 +1078,12 @@ public class VyxalParser extends Parser {
 
 	public final VariableContext variable() throws RecognitionException {
 		VariableContext _localctx = new VariableContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_variable);
-		int _la;
+		enterRule(_localctx, 30, RULE_variable);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(226); 
+			setState(149); 
 			_errHandler.sync(this);
 			_alt = 1;
 			do {
@@ -1571,25 +1091,17 @@ public class VyxalParser extends Parser {
 				case 1:
 					{
 					{
-					setState(225);
-					_la = _input.LA(1);
-					if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << CONTEXT_VAR) | (1L << DIGIT) | (1L << ALPHA))) != 0)) ) {
-					_errHandler.recoverInline(this);
-					}
-					else {
-						if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-						_errHandler.reportMatch(this);
-						consume();
-					}
+					setState(148);
+					match(ALPHA);
 					}
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(228); 
+				setState(151); 
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,30,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,17,_ctx);
 			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 			}
 		}
@@ -1605,9 +1117,20 @@ public class VyxalParser extends Parser {
 	}
 
 	public static class ModifierContext extends ParserRuleContext {
-		public TerminalNode MODIFIER() { return getToken(VyxalParser.MODIFIER, 0); }
-		public Program_nodeContext program_node() {
-			return getRuleContext(Program_nodeContext.class,0);
+		public Monadic_modifierContext monadic_modifier() {
+			return getRuleContext(Monadic_modifierContext.class,0);
+		}
+		public Dyadic_modifierContext dyadic_modifier() {
+			return getRuleContext(Dyadic_modifierContext.class,0);
+		}
+		public Triadic_modifierContext triadic_modifier() {
+			return getRuleContext(Triadic_modifierContext.class,0);
+		}
+		public Tetradic_modifierContext tetradic_modifier() {
+			return getRuleContext(Tetradic_modifierContext.class,0);
+		}
+		public Infinite_modifierContext infinite_modifier() {
+			return getRuleContext(Infinite_modifierContext.class,0);
 		}
 		public ModifierContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1622,13 +1145,86 @@ public class VyxalParser extends Parser {
 
 	public final ModifierContext modifier() throws RecognitionException {
 		ModifierContext _localctx = new ModifierContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_modifier);
+		enterRule(_localctx, 32, RULE_modifier);
+		try {
+			setState(158);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case MONADIC_MODIFIER:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(153);
+				monadic_modifier();
+				}
+				break;
+			case DYADIC_MODIFIER:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(154);
+				dyadic_modifier();
+				}
+				break;
+			case TRIADIC_MODIFIER:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(155);
+				triadic_modifier();
+				}
+				break;
+			case TETRADIC_MODIFIER:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(156);
+				tetradic_modifier();
+				}
+				break;
+			case INFINITE_MODIFIER:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(157);
+				infinite_modifier();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Monadic_modifierContext extends ParserRuleContext {
+		public TerminalNode MONADIC_MODIFIER() { return getToken(VyxalParser.MONADIC_MODIFIER, 0); }
+		public Program_nodeContext program_node() {
+			return getRuleContext(Program_nodeContext.class,0);
+		}
+		public Monadic_modifierContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_monadic_modifier; }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof VyxalParserVisitor ) return ((VyxalParserVisitor<? extends T>)visitor).visitMonadic_modifier(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Monadic_modifierContext monadic_modifier() throws RecognitionException {
+		Monadic_modifierContext _localctx = new Monadic_modifierContext(_ctx, getState());
+		enterRule(_localctx, 34, RULE_monadic_modifier);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(230);
-			match(MODIFIER);
-			setState(231);
+			setState(160);
+			match(MONADIC_MODIFIER);
+			setState(161);
 			program_node();
 			}
 		}
@@ -1643,8 +1239,202 @@ public class VyxalParser extends Parser {
 		return _localctx;
 	}
 
+	public static class Dyadic_modifierContext extends ParserRuleContext {
+		public TerminalNode DYADIC_MODIFIER() { return getToken(VyxalParser.DYADIC_MODIFIER, 0); }
+		public List<Program_nodeContext> program_node() {
+			return getRuleContexts(Program_nodeContext.class);
+		}
+		public Program_nodeContext program_node(int i) {
+			return getRuleContext(Program_nodeContext.class,i);
+		}
+		public Dyadic_modifierContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_dyadic_modifier; }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof VyxalParserVisitor ) return ((VyxalParserVisitor<? extends T>)visitor).visitDyadic_modifier(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Dyadic_modifierContext dyadic_modifier() throws RecognitionException {
+		Dyadic_modifierContext _localctx = new Dyadic_modifierContext(_ctx, getState());
+		enterRule(_localctx, 36, RULE_dyadic_modifier);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(163);
+			match(DYADIC_MODIFIER);
+			setState(164);
+			program_node();
+			setState(165);
+			program_node();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Triadic_modifierContext extends ParserRuleContext {
+		public TerminalNode TRIADIC_MODIFIER() { return getToken(VyxalParser.TRIADIC_MODIFIER, 0); }
+		public List<Program_nodeContext> program_node() {
+			return getRuleContexts(Program_nodeContext.class);
+		}
+		public Program_nodeContext program_node(int i) {
+			return getRuleContext(Program_nodeContext.class,i);
+		}
+		public Triadic_modifierContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_triadic_modifier; }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof VyxalParserVisitor ) return ((VyxalParserVisitor<? extends T>)visitor).visitTriadic_modifier(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Triadic_modifierContext triadic_modifier() throws RecognitionException {
+		Triadic_modifierContext _localctx = new Triadic_modifierContext(_ctx, getState());
+		enterRule(_localctx, 38, RULE_triadic_modifier);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(167);
+			match(TRIADIC_MODIFIER);
+			setState(168);
+			program_node();
+			setState(169);
+			program_node();
+			setState(170);
+			program_node();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Tetradic_modifierContext extends ParserRuleContext {
+		public TerminalNode TETRADIC_MODIFIER() { return getToken(VyxalParser.TETRADIC_MODIFIER, 0); }
+		public List<Program_nodeContext> program_node() {
+			return getRuleContexts(Program_nodeContext.class);
+		}
+		public Program_nodeContext program_node(int i) {
+			return getRuleContext(Program_nodeContext.class,i);
+		}
+		public Tetradic_modifierContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_tetradic_modifier; }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof VyxalParserVisitor ) return ((VyxalParserVisitor<? extends T>)visitor).visitTetradic_modifier(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Tetradic_modifierContext tetradic_modifier() throws RecognitionException {
+		Tetradic_modifierContext _localctx = new Tetradic_modifierContext(_ctx, getState());
+		enterRule(_localctx, 40, RULE_tetradic_modifier);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(172);
+			match(TETRADIC_MODIFIER);
+			setState(173);
+			program_node();
+			setState(174);
+			program_node();
+			setState(175);
+			program_node();
+			setState(176);
+			program_node();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Infinite_modifierContext extends ParserRuleContext {
+		public TerminalNode INFINITE_MODIFIER() { return getToken(VyxalParser.INFINITE_MODIFIER, 0); }
+		public List<Program_nodeContext> program_node() {
+			return getRuleContexts(Program_nodeContext.class);
+		}
+		public Program_nodeContext program_node(int i) {
+			return getRuleContext(Program_nodeContext.class,i);
+		}
+		public Infinite_modifierContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_infinite_modifier; }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof VyxalParserVisitor ) return ((VyxalParserVisitor<? extends T>)visitor).visitInfinite_modifier(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Infinite_modifierContext infinite_modifier() throws RecognitionException {
+		Infinite_modifierContext _localctx = new Infinite_modifierContext(_ctx, getState());
+		enterRule(_localctx, 42, RULE_infinite_modifier);
+		try {
+			int _alt;
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(178);
+			match(INFINITE_MODIFIER);
+			setState(182);
+			_errHandler.sync(this);
+			_alt = getInterpreter().adaptivePredict(_input,19,_ctx);
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1 ) {
+					{
+					{
+					setState(179);
+					program_node();
+					}
+					} 
+				}
+				setState(184);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,19,_ctx);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
 	public static class ElementContext extends ParserRuleContext {
-		public boolean isInAlias;
 		public Element_typeContext element_type() {
 			return getRuleContext(Element_typeContext.class,0);
 		}
@@ -1662,24 +1452,23 @@ public class VyxalParser extends Parser {
 
 	public final ElementContext element() throws RecognitionException {
 		ElementContext _localctx = new ElementContext(_ctx, getState());
-		enterRule(_localctx, 46, RULE_element);
+		enterRule(_localctx, 44, RULE_element);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(234);
+			setState(186);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==PREFIX) {
 				{
-				setState(233);
+				setState(185);
 				match(PREFIX);
 				}
 			}
 
-			setState(236);
+			setState(188);
 			element_type();
-			((ElementContext)_localctx).isInAlias =  isAlias;
 			}
 		}
 		catch (RecognitionException re) {
@@ -1698,9 +1487,6 @@ public class VyxalParser extends Parser {
 		public TerminalNode LITERALLY_ANY_TEXT() { return getToken(VyxalParser.LITERALLY_ANY_TEXT, 0); }
 		public TerminalNode CONTEXT_VAR() { return getToken(VyxalParser.CONTEXT_VAR, 0); }
 		public TerminalNode DIGIT() { return getToken(VyxalParser.DIGIT, 0); }
-		public TerminalNode MODIFIER() { return getToken(VyxalParser.MODIFIER, 0); }
-		public TerminalNode MINUS() { return getToken(VyxalParser.MINUS, 0); }
-		public TerminalNode STAR() { return getToken(VyxalParser.STAR, 0); }
 		public Element_typeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1714,14 +1500,14 @@ public class VyxalParser extends Parser {
 
 	public final Element_typeContext element_type() throws RecognitionException {
 		Element_typeContext _localctx = new Element_typeContext(_ctx, getState());
-		enterRule(_localctx, 48, RULE_element_type);
+		enterRule(_localctx, 46, RULE_element_type);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(239);
+			setState(190);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << CONTEXT_VAR) | (1L << MODIFIER) | (1L << DIGIT) | (1L << MINUS) | (1L << ALPHA) | (1L << STAR) | (1L << LITERALLY_ANY_TEXT))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << CONTEXT_VAR) | (1L << DIGIT) | (1L << ALPHA) | (1L << LITERALLY_ANY_TEXT))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -1743,162 +1529,122 @@ public class VyxalParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001#\u00f2\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001 \u00c1\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
 		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
 		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+
 		"\f\u0007\f\u0002\r\u0007\r\u0002\u000e\u0007\u000e\u0002\u000f\u0007\u000f"+
 		"\u0002\u0010\u0007\u0010\u0002\u0011\u0007\u0011\u0002\u0012\u0007\u0012"+
 		"\u0002\u0013\u0007\u0013\u0002\u0014\u0007\u0014\u0002\u0015\u0007\u0015"+
-		"\u0002\u0016\u0007\u0016\u0002\u0017\u0007\u0017\u0002\u0018\u0007\u0018"+
-		"\u0001\u0000\u0001\u0000\u0005\u00005\b\u0000\n\u0000\f\u00008\t\u0000"+
-		"\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0001\u0001\u0001"+
-		"\u0001\u0001\u0001\u0001\u0005\u0001B\b\u0001\n\u0001\f\u0001E\t\u0001"+
-		"\u0001\u0002\u0001\u0002\u0005\u0002I\b\u0002\n\u0002\f\u0002L\t\u0002"+
-		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0003\u0003R\b\u0003"+
-		"\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0003\u0004"+
-		"Y\b\u0004\u0001\u0005\u0001\u0005\u0001\u0006\u0003\u0006^\b\u0006\u0001"+
-		"\u0006\u0001\u0006\u0001\u0006\u0003\u0006c\b\u0006\u0001\u0007\u0004"+
-		"\u0007f\b\u0007\u000b\u0007\f\u0007g\u0001\b\u0001\b\u0005\bl\b\b\n\b"+
-		"\f\bo\t\b\u0001\b\u0001\b\u0001\t\u0001\t\u0001\t\u0001\t\u0001\n\u0001"+
-		"\n\u0001\n\u0001\n\u0005\n{\b\n\n\n\f\n~\t\n\u0001\n\u0003\n\u0081\b\n"+
-		"\u0001\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0001\u000b"+
-		"\u0001\u000b\u0001\u000b\u0001\u000b\u0003\u000b\u008c\b\u000b\u0001\f"+
-		"\u0001\f\u0001\f\u0001\f\u0003\f\u0092\b\f\u0001\f\u0003\f\u0095\b\f\u0001"+
-		"\r\u0001\r\u0003\r\u0099\b\r\u0001\r\u0003\r\u009c\b\r\u0001\r\u0003\r"+
-		"\u009f\b\r\u0001\r\u0003\r\u00a2\b\r\u0001\r\u0003\r\u00a5\b\r\u0001\r"+
-		"\u0003\r\u00a8\b\r\u0001\r\u0003\r\u00ab\b\r\u0001\r\u0003\r\u00ae\b\r"+
-		"\u0001\r\u0001\r\u0001\r\u0003\r\u00b3\b\r\u0001\u000e\u0001\u000e\u0001"+
-		"\u000e\u0001\u000e\u0003\u000e\u00b9\b\u000e\u0001\u000e\u0001\u000e\u0003"+
-		"\u000e\u00bd\b\u000e\u0001\u000f\u0001\u000f\u0001\u000f\u0001\u000f\u0003"+
-		"\u000f\u00c3\b\u000f\u0001\u000f\u0001\u000f\u0003\u000f\u00c7\b\u000f"+
-		"\u0001\u0010\u0001\u0010\u0001\u0010\u0001\u0010\u0003\u0010\u00cd\b\u0010"+
-		"\u0001\u0010\u0001\u0010\u0003\u0010\u00d1\b\u0010\u0001\u0011\u0001\u0011"+
-		"\u0001\u0011\u0001\u0012\u0001\u0012\u0001\u0012\u0001\u0012\u0001\u0013"+
-		"\u0001\u0013\u0001\u0013\u0001\u0013\u0001\u0013\u0001\u0014\u0001\u0014"+
-		"\u0001\u0014\u0001\u0015\u0004\u0015\u00e3\b\u0015\u000b\u0015\f\u0015"+
-		"\u00e4\u0001\u0016\u0001\u0016\u0001\u0016\u0001\u0017\u0003\u0017\u00eb"+
-		"\b\u0017\u0001\u0017\u0001\u0017\u0001\u0017\u0001\u0018\u0001\u0018\u0001"+
-		"\u0018\u0001m\u0000\u0019\u0000\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012"+
-		"\u0014\u0016\u0018\u001a\u001c\u001e \"$&(*,.0\u0000\u0003\u0001\u0000"+
-		"\f\u000f\u0003\u0000\u0002\u0002\u0006\u0006\b\b\u0005\u0000\u0002\u0002"+
-		"\u0004\u0004\u0006\b\u001c\u001c##\u0104\u00002\u0001\u0000\u0000\u0000"+
-		"\u0002=\u0001\u0000\u0000\u0000\u0004J\u0001\u0000\u0000\u0000\u0006Q"+
-		"\u0001\u0000\u0000\u0000\bX\u0001\u0000\u0000\u0000\nZ\u0001\u0000\u0000"+
-		"\u0000\f]\u0001\u0000\u0000\u0000\u000ee\u0001\u0000\u0000\u0000\u0010"+
-		"i\u0001\u0000\u0000\u0000\u0012r\u0001\u0000\u0000\u0000\u0014v\u0001"+
-		"\u0000\u0000\u0000\u0016\u008b\u0001\u0000\u0000\u0000\u0018\u008d\u0001"+
-		"\u0000\u0000\u0000\u001a\u0096\u0001\u0000\u0000\u0000\u001c\u00b4\u0001"+
-		"\u0000\u0000\u0000\u001e\u00be\u0001\u0000\u0000\u0000 \u00c8\u0001\u0000"+
-		"\u0000\u0000\"\u00d2\u0001\u0000\u0000\u0000$\u00d5\u0001\u0000\u0000"+
-		"\u0000&\u00d9\u0001\u0000\u0000\u0000(\u00de\u0001\u0000\u0000\u0000*"+
-		"\u00e2\u0001\u0000\u0000\u0000,\u00e6\u0001\u0000\u0000\u0000.\u00ea\u0001"+
-		"\u0000\u0000\u00000\u00ef\u0001\u0000\u0000\u000026\u0006\u0000\uffff"+
-		"\uffff\u000035\u0003\u0002\u0001\u000043\u0001\u0000\u0000\u000058\u0001"+
-		"\u0000\u0000\u000064\u0001\u0000\u0000\u000067\u0001\u0000\u0000\u0000"+
-		"79\u0001\u0000\u0000\u000086\u0001\u0000\u0000\u00009:\u0006\u0000\uffff"+
-		"\uffff\u0000:;\u0003\u0004\u0002\u0000;<\u0005\u0000\u0000\u0001<\u0001"+
-		"\u0001\u0000\u0000\u0000=>\u0003\u0004\u0002\u0000>?\u0005\u0003\u0000"+
-		"\u0000?C\u0003.\u0017\u0000@B\u0005\t\u0000\u0000A@\u0001\u0000\u0000"+
-		"\u0000BE\u0001\u0000\u0000\u0000CA\u0001\u0000\u0000\u0000CD\u0001\u0000"+
-		"\u0000\u0000D\u0003\u0001\u0000\u0000\u0000EC\u0001\u0000\u0000\u0000"+
-		"FI\u0003\u0006\u0003\u0000GI\u0005\t\u0000\u0000HF\u0001\u0000\u0000\u0000"+
-		"HG\u0001\u0000\u0000\u0000IL\u0001\u0000\u0000\u0000JH\u0001\u0000\u0000"+
-		"\u0000JK\u0001\u0000\u0000\u0000K\u0005\u0001\u0000\u0000\u0000LJ\u0001"+
-		"\u0000\u0000\u0000MR\u0003\u0016\u000b\u0000NR\u0003\b\u0004\u0000OR\u0003"+
-		",\u0016\u0000PR\u0003.\u0017\u0000QM\u0001\u0000\u0000\u0000QN\u0001\u0000"+
-		"\u0000\u0000QO\u0001\u0000\u0000\u0000QP\u0001\u0000\u0000\u0000R\u0007"+
-		"\u0001\u0000\u0000\u0000SY\u0003\n\u0005\u0000TY\u0003\f\u0006\u0000U"+
-		"Y\u0003\u0010\b\u0000VY\u0003\u0012\t\u0000WY\u0003\u0014\n\u0000XS\u0001"+
-		"\u0000\u0000\u0000XT\u0001\u0000\u0000\u0000XU\u0001\u0000\u0000\u0000"+
-		"XV\u0001\u0000\u0000\u0000XW\u0001\u0000\u0000\u0000Y\t\u0001\u0000\u0000"+
-		"\u0000Z[\u0007\u0000\u0000\u0000[\u000b\u0001\u0000\u0000\u0000\\^\u0005"+
-		"\u0007\u0000\u0000]\\\u0001\u0000\u0000\u0000]^\u0001\u0000\u0000\u0000"+
-		"^_\u0001\u0000\u0000\u0000_b\u0003\u000e\u0007\u0000`a\u0005\u0019\u0000"+
-		"\u0000ac\u0003\u000e\u0007\u0000b`\u0001\u0000\u0000\u0000bc\u0001\u0000"+
-		"\u0000\u0000c\r\u0001\u0000\u0000\u0000df\u0005\u0006\u0000\u0000ed\u0001"+
-		"\u0000\u0000\u0000fg\u0001\u0000\u0000\u0000ge\u0001\u0000\u0000\u0000"+
-		"gh\u0001\u0000\u0000\u0000h\u000f\u0001\u0000\u0000\u0000im\u0005\u001e"+
-		"\u0000\u0000jl\t\u0000\u0000\u0000kj\u0001\u0000\u0000\u0000lo\u0001\u0000"+
-		"\u0000\u0000mn\u0001\u0000\u0000\u0000mk\u0001\u0000\u0000\u0000np\u0001"+
-		"\u0000\u0000\u0000om\u0001\u0000\u0000\u0000pq\u0005\u001e\u0000\u0000"+
-		"q\u0011\u0001\u0000\u0000\u0000rs\u0003\f\u0006\u0000st\u0005\u001f\u0000"+
-		"\u0000tu\u0003\f\u0006\u0000u\u0013\u0001\u0000\u0000\u0000vw\u0005\u0017"+
-		"\u0000\u0000w|\u0003\u0004\u0002\u0000xy\u0005\u0010\u0000\u0000y{\u0003"+
-		"\u0004\u0002\u0000zx\u0001\u0000\u0000\u0000{~\u0001\u0000\u0000\u0000"+
-		"|z\u0001\u0000\u0000\u0000|}\u0001\u0000\u0000\u0000}\u0080\u0001\u0000"+
-		"\u0000\u0000~|\u0001\u0000\u0000\u0000\u007f\u0081\u0005\u0018\u0000\u0000"+
-		"\u0080\u007f\u0001\u0000\u0000\u0000\u0080\u0081\u0001\u0000\u0000\u0000"+
-		"\u0081\u0015\u0001\u0000\u0000\u0000\u0082\u008c\u0003\u0018\f\u0000\u0083"+
-		"\u008c\u0003\u001a\r\u0000\u0084\u008c\u0003\u001c\u000e\u0000\u0085\u008c"+
-		"\u0003\u001e\u000f\u0000\u0086\u008c\u0003 \u0010\u0000\u0087\u008c\u0003"+
-		"\"\u0011\u0000\u0088\u008c\u0003$\u0012\u0000\u0089\u008c\u0003&\u0013"+
-		"\u0000\u008a\u008c\u0003(\u0014\u0000\u008b\u0082\u0001\u0000\u0000\u0000"+
-		"\u008b\u0083\u0001\u0000\u0000\u0000\u008b\u0084\u0001\u0000\u0000\u0000"+
-		"\u008b\u0085\u0001\u0000\u0000\u0000\u008b\u0086\u0001\u0000\u0000\u0000"+
-		"\u008b\u0087\u0001\u0000\u0000\u0000\u008b\u0088\u0001\u0000\u0000\u0000"+
-		"\u008b\u0089\u0001\u0000\u0000\u0000\u008b\u008a\u0001\u0000\u0000\u0000"+
-		"\u008c\u0017\u0001\u0000\u0000\u0000\u008d\u008e\u0005\u0013\u0000\u0000"+
-		"\u008e\u0091\u0003\u0004\u0002\u0000\u008f\u0090\u0005\u0010\u0000\u0000"+
-		"\u0090\u0092\u0003\u0004\u0002\u0000\u0091\u008f\u0001\u0000\u0000\u0000"+
-		"\u0091\u0092\u0001\u0000\u0000\u0000\u0092\u0094\u0001\u0000\u0000\u0000"+
-		"\u0093\u0095\u0005\u0014\u0000\u0000\u0094\u0093\u0001\u0000\u0000\u0000"+
-		"\u0094\u0095\u0001\u0000\u0000\u0000\u0095\u0019\u0001\u0000\u0000\u0000"+
-		"\u0096\u0098\u0005\u0006\u0000\u0000\u0097\u0099\u0005\u0006\u0000\u0000"+
-		"\u0098\u0097\u0001\u0000\u0000\u0000\u0098\u0099\u0001\u0000\u0000\u0000"+
-		"\u0099\u009b\u0001\u0000\u0000\u0000\u009a\u009c\u0005\u0006\u0000\u0000"+
-		"\u009b\u009a\u0001\u0000\u0000\u0000\u009b\u009c\u0001\u0000\u0000\u0000"+
-		"\u009c\u009e\u0001\u0000\u0000\u0000\u009d\u009f\u0005\u0006\u0000\u0000"+
-		"\u009e\u009d\u0001\u0000\u0000\u0000\u009e\u009f\u0001\u0000\u0000\u0000"+
-		"\u009f\u00a1\u0001\u0000\u0000\u0000\u00a0\u00a2\u0005\u0006\u0000\u0000"+
-		"\u00a1\u00a0\u0001\u0000\u0000\u0000\u00a1\u00a2\u0001\u0000\u0000\u0000"+
-		"\u00a2\u00a4\u0001\u0000\u0000\u0000\u00a3\u00a5\u0005\u0006\u0000\u0000"+
-		"\u00a4\u00a3\u0001\u0000\u0000\u0000\u00a4\u00a5\u0001\u0000\u0000\u0000"+
-		"\u00a5\u00a7\u0001\u0000\u0000\u0000\u00a6\u00a8\u0005\u0006\u0000\u0000"+
-		"\u00a7\u00a6\u0001\u0000\u0000\u0000\u00a7\u00a8\u0001\u0000\u0000\u0000"+
-		"\u00a8\u00aa\u0001\u0000\u0000\u0000\u00a9\u00ab\u0005\u0006\u0000\u0000"+
-		"\u00aa\u00a9\u0001\u0000\u0000\u0000\u00aa\u00ab\u0001\u0000\u0000\u0000"+
-		"\u00ab\u00ad\u0001\u0000\u0000\u0000\u00ac\u00ae\u0005\u0006\u0000\u0000"+
-		"\u00ad\u00ac\u0001\u0000\u0000\u0000\u00ad\u00ae\u0001\u0000\u0000\u0000"+
-		"\u00ae\u00af\u0001\u0000\u0000\u0000\u00af\u00b0\u0005\u0015\u0000\u0000"+
-		"\u00b0\u00b2\u0003\u0004\u0002\u0000\u00b1\u00b3\u0005\u0016\u0000\u0000"+
-		"\u00b2\u00b1\u0001\u0000\u0000\u0000\u00b2\u00b3\u0001\u0000\u0000\u0000"+
-		"\u00b3\u001b\u0001\u0000\u0000\u0000\u00b4\u00b8\u0005\u0015\u0000\u0000"+
-		"\u00b5\u00b6\u0003*\u0015\u0000\u00b6\u00b7\u0005\u0010\u0000\u0000\u00b7"+
-		"\u00b9\u0001\u0000\u0000\u0000\u00b8\u00b5\u0001\u0000\u0000\u0000\u00b8"+
-		"\u00b9\u0001\u0000\u0000\u0000\u00b9\u00ba\u0001\u0000\u0000\u0000\u00ba"+
-		"\u00bc\u0003\u0004\u0002\u0000\u00bb\u00bd\u0005\u0016\u0000\u0000\u00bc"+
-		"\u00bb\u0001\u0000\u0000\u0000\u00bc\u00bd\u0001\u0000\u0000\u0000\u00bd"+
-		"\u001d\u0001\u0000\u0000\u0000\u00be\u00c2\u0005\u0011\u0000\u0000\u00bf"+
-		"\u00c0\u0003\u0004\u0002\u0000\u00c0\u00c1\u0005\u0010\u0000\u0000\u00c1"+
-		"\u00c3\u0001\u0000\u0000\u0000\u00c2\u00bf\u0001\u0000\u0000\u0000\u00c2"+
-		"\u00c3\u0001\u0000\u0000\u0000\u00c3\u00c4\u0001\u0000\u0000\u0000\u00c4"+
-		"\u00c6\u0003\u0004\u0002\u0000\u00c5\u00c7\u0005\u0012\u0000\u0000\u00c6"+
-		"\u00c5\u0001\u0000\u0000\u0000\u00c6\u00c7\u0001\u0000\u0000\u0000\u00c7"+
-		"\u001f\u0001\u0000\u0000\u0000\u00c8\u00cc\u0005\u000b\u0000\u0000\u00c9"+
-		"\u00ca\u0003\u000e\u0007\u0000\u00ca\u00cb\u0005\u0010\u0000\u0000\u00cb"+
-		"\u00cd\u0001\u0000\u0000\u0000\u00cc\u00c9\u0001\u0000\u0000\u0000\u00cc"+
-		"\u00cd\u0001\u0000\u0000\u0000\u00cd\u00ce\u0001\u0000\u0000\u0000\u00ce"+
-		"\u00d0\u0003\u0004\u0002\u0000\u00cf\u00d1\u0005\u001a\u0000\u0000\u00d0"+
-		"\u00cf\u0001\u0000\u0000\u0000\u00d0\u00d1\u0001\u0000\u0000\u0000\u00d1"+
-		"!\u0001\u0000\u0000\u0000\u00d2\u00d3\u0005 \u0000\u0000\u00d3\u00d4\u0003"+
-		"\u0006\u0003\u0000\u00d4#\u0001\u0000\u0000\u0000\u00d5\u00d6\u0005!\u0000"+
-		"\u0000\u00d6\u00d7\u0003\u0006\u0003\u0000\u00d7\u00d8\u0003\u0006\u0003"+
-		"\u0000\u00d8%\u0001\u0000\u0000\u0000\u00d9\u00da\u0005\"\u0000\u0000"+
-		"\u00da\u00db\u0003\u0006\u0003\u0000\u00db\u00dc\u0003\u0006\u0003\u0000"+
-		"\u00dc\u00dd\u0003\u0006\u0003\u0000\u00dd\'\u0001\u0000\u0000\u0000\u00de"+
-		"\u00df\u0005\n\u0000\u0000\u00df\u00e0\u0003*\u0015\u0000\u00e0)\u0001"+
-		"\u0000\u0000\u0000\u00e1\u00e3\u0007\u0001\u0000\u0000\u00e2\u00e1\u0001"+
-		"\u0000\u0000\u0000\u00e3\u00e4\u0001\u0000\u0000\u0000\u00e4\u00e2\u0001"+
-		"\u0000\u0000\u0000\u00e4\u00e5\u0001\u0000\u0000\u0000\u00e5+\u0001\u0000"+
-		"\u0000\u0000\u00e6\u00e7\u0005\u0004\u0000\u0000\u00e7\u00e8\u0003\u0006"+
-		"\u0003\u0000\u00e8-\u0001\u0000\u0000\u0000\u00e9\u00eb\u0005\u0001\u0000"+
-		"\u0000\u00ea\u00e9\u0001\u0000\u0000\u0000\u00ea\u00eb\u0001\u0000\u0000"+
-		"\u0000\u00eb\u00ec\u0001\u0000\u0000\u0000\u00ec\u00ed\u00030\u0018\u0000"+
-		"\u00ed\u00ee\u0006\u0017\uffff\uffff\u0000\u00ee/\u0001\u0000\u0000\u0000"+
-		"\u00ef\u00f0\u0007\u0002\u0000\u0000\u00f01\u0001\u0000\u0000\u0000 6"+
-		"CHJQX]bgm|\u0080\u008b\u0091\u0094\u0098\u009b\u009e\u00a1\u00a4\u00a7"+
-		"\u00aa\u00ad\u00b2\u00b8\u00bc\u00c2\u00c6\u00cc\u00d0\u00e4\u00ea";
+		"\u0002\u0016\u0007\u0016\u0002\u0017\u0007\u0017\u0001\u0000\u0001\u0000"+
+		"\u0001\u0000\u0001\u0001\u0001\u0001\u0005\u00016\b\u0001\n\u0001\f\u0001"+
+		"9\t\u0001\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0003\u0002"+
+		"?\b\u0002\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
+		"\u0003\u0003F\b\u0003\u0001\u0004\u0001\u0004\u0001\u0005\u0001\u0005"+
+		"\u0001\u0005\u0003\u0005M\b\u0005\u0001\u0006\u0004\u0006P\b\u0006\u000b"+
+		"\u0006\f\u0006Q\u0001\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0001"+
+		"\b\u0001\b\u0001\b\u0001\b\u0005\b\\\b\b\n\b\f\b_\t\b\u0001\b\u0003\b"+
+		"b\b\b\u0001\t\u0001\t\u0001\t\u0001\t\u0001\t\u0003\ti\b\t\u0001\n\u0001"+
+		"\n\u0001\n\u0001\n\u0003\no\b\n\u0001\n\u0003\nr\b\n\u0001\u000b\u0001"+
+		"\u000b\u0001\u000b\u0001\u000b\u0003\u000bx\b\u000b\u0001\u000b\u0001"+
+		"\u000b\u0003\u000b|\b\u000b\u0001\f\u0001\f\u0001\f\u0001\f\u0003\f\u0082"+
+		"\b\f\u0001\f\u0001\f\u0003\f\u0086\b\f\u0001\r\u0001\r\u0001\r\u0001\r"+
+		"\u0003\r\u008c\b\r\u0001\r\u0001\r\u0003\r\u0090\b\r\u0001\u000e\u0001"+
+		"\u000e\u0001\u000e\u0001\u000f\u0004\u000f\u0096\b\u000f\u000b\u000f\f"+
+		"\u000f\u0097\u0001\u0010\u0001\u0010\u0001\u0010\u0001\u0010\u0001\u0010"+
+		"\u0003\u0010\u009f\b\u0010\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0012"+
+		"\u0001\u0012\u0001\u0012\u0001\u0012\u0001\u0013\u0001\u0013\u0001\u0013"+
+		"\u0001\u0013\u0001\u0013\u0001\u0014\u0001\u0014\u0001\u0014\u0001\u0014"+
+		"\u0001\u0014\u0001\u0014\u0001\u0015\u0001\u0015\u0005\u0015\u00b5\b\u0015"+
+		"\n\u0015\f\u0015\u00b8\t\u0015\u0001\u0016\u0003\u0016\u00bb\b\u0016\u0001"+
+		"\u0016\u0001\u0016\u0001\u0017\u0001\u0017\u0001\u0017\u0000\u0000\u0018"+
+		"\u0000\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u001a"+
+		"\u001c\u001e \"$&(*,.\u0000\u0002\u0001\u0000\u0010\u0013\u0004\u0000"+
+		"\u0002\u0002\n\n\f\f  \u00c8\u00000\u0001\u0000\u0000\u0000\u00027\u0001"+
+		"\u0000\u0000\u0000\u0004>\u0001\u0000\u0000\u0000\u0006E\u0001\u0000\u0000"+
+		"\u0000\bG\u0001\u0000\u0000\u0000\nI\u0001\u0000\u0000\u0000\fO\u0001"+
+		"\u0000\u0000\u0000\u000eS\u0001\u0000\u0000\u0000\u0010W\u0001\u0000\u0000"+
+		"\u0000\u0012h\u0001\u0000\u0000\u0000\u0014j\u0001\u0000\u0000\u0000\u0016"+
+		"s\u0001\u0000\u0000\u0000\u0018}\u0001\u0000\u0000\u0000\u001a\u0087\u0001"+
+		"\u0000\u0000\u0000\u001c\u0091\u0001\u0000\u0000\u0000\u001e\u0095\u0001"+
+		"\u0000\u0000\u0000 \u009e\u0001\u0000\u0000\u0000\"\u00a0\u0001\u0000"+
+		"\u0000\u0000$\u00a3\u0001\u0000\u0000\u0000&\u00a7\u0001\u0000\u0000\u0000"+
+		"(\u00ac\u0001\u0000\u0000\u0000*\u00b2\u0001\u0000\u0000\u0000,\u00ba"+
+		"\u0001\u0000\u0000\u0000.\u00be\u0001\u0000\u0000\u000001\u0003\u0002"+
+		"\u0001\u000012\u0005\u0000\u0000\u00012\u0001\u0001\u0000\u0000\u0000"+
+		"36\u0003\u0004\u0002\u000046\u0005\r\u0000\u000053\u0001\u0000\u0000\u0000"+
+		"54\u0001\u0000\u0000\u000069\u0001\u0000\u0000\u000075\u0001\u0000\u0000"+
+		"\u000078\u0001\u0000\u0000\u00008\u0003\u0001\u0000\u0000\u000097\u0001"+
+		"\u0000\u0000\u0000:?\u0003\u0012\t\u0000;?\u0003\u0006\u0003\u0000<?\u0003"+
+		" \u0010\u0000=?\u0003,\u0016\u0000>:\u0001\u0000\u0000\u0000>;\u0001\u0000"+
+		"\u0000\u0000><\u0001\u0000\u0000\u0000>=\u0001\u0000\u0000\u0000?\u0005"+
+		"\u0001\u0000\u0000\u0000@F\u0003\b\u0004\u0000AF\u0003\n\u0005\u0000B"+
+		"F\u0005\u001e\u0000\u0000CF\u0003\u000e\u0007\u0000DF\u0003\u0010\b\u0000"+
+		"E@\u0001\u0000\u0000\u0000EA\u0001\u0000\u0000\u0000EB\u0001\u0000\u0000"+
+		"\u0000EC\u0001\u0000\u0000\u0000ED\u0001\u0000\u0000\u0000F\u0007\u0001"+
+		"\u0000\u0000\u0000GH\u0007\u0000\u0000\u0000H\t\u0001\u0000\u0000\u0000"+
+		"IL\u0003\f\u0006\u0000JK\u0005\u001b\u0000\u0000KM\u0003\f\u0006\u0000"+
+		"LJ\u0001\u0000\u0000\u0000LM\u0001\u0000\u0000\u0000M\u000b\u0001\u0000"+
+		"\u0000\u0000NP\u0005\n\u0000\u0000ON\u0001\u0000\u0000\u0000PQ\u0001\u0000"+
+		"\u0000\u0000QO\u0001\u0000\u0000\u0000QR\u0001\u0000\u0000\u0000R\r\u0001"+
+		"\u0000\u0000\u0000ST\u0003\n\u0005\u0000TU\u0005\u001f\u0000\u0000UV\u0003"+
+		"\n\u0005\u0000V\u000f\u0001\u0000\u0000\u0000WX\u0005\u0019\u0000\u0000"+
+		"X]\u0003\u0002\u0001\u0000YZ\u0005\u0014\u0000\u0000Z\\\u0003\u0002\u0001"+
+		"\u0000[Y\u0001\u0000\u0000\u0000\\_\u0001\u0000\u0000\u0000][\u0001\u0000"+
+		"\u0000\u0000]^\u0001\u0000\u0000\u0000^a\u0001\u0000\u0000\u0000_]\u0001"+
+		"\u0000\u0000\u0000`b\u0005\u001a\u0000\u0000a`\u0001\u0000\u0000\u0000"+
+		"ab\u0001\u0000\u0000\u0000b\u0011\u0001\u0000\u0000\u0000ci\u0003\u0014"+
+		"\n\u0000di\u0003\u0016\u000b\u0000ei\u0003\u0018\f\u0000fi\u0003\u001a"+
+		"\r\u0000gi\u0003\u001c\u000e\u0000hc\u0001\u0000\u0000\u0000hd\u0001\u0000"+
+		"\u0000\u0000he\u0001\u0000\u0000\u0000hf\u0001\u0000\u0000\u0000hg\u0001"+
+		"\u0000\u0000\u0000i\u0013\u0001\u0000\u0000\u0000jk\u0005\u0017\u0000"+
+		"\u0000kn\u0003\u0002\u0001\u0000lm\u0005\u0014\u0000\u0000mo\u0003\u0002"+
+		"\u0001\u0000nl\u0001\u0000\u0000\u0000no\u0001\u0000\u0000\u0000oq\u0001"+
+		"\u0000\u0000\u0000pr\u0005\u0016\u0000\u0000qp\u0001\u0000\u0000\u0000"+
+		"qr\u0001\u0000\u0000\u0000r\u0015\u0001\u0000\u0000\u0000sw\u0005\u0018"+
+		"\u0000\u0000tu\u0003\u001e\u000f\u0000uv\u0005\u0014\u0000\u0000vx\u0001"+
+		"\u0000\u0000\u0000wt\u0001\u0000\u0000\u0000wx\u0001\u0000\u0000\u0000"+
+		"xy\u0001\u0000\u0000\u0000y{\u0003\u0002\u0001\u0000z|\u0005\u0016\u0000"+
+		"\u0000{z\u0001\u0000\u0000\u0000{|\u0001\u0000\u0000\u0000|\u0017\u0001"+
+		"\u0000\u0000\u0000}\u0081\u0005\u0015\u0000\u0000~\u007f\u0003\u0002\u0001"+
+		"\u0000\u007f\u0080\u0005\u0014\u0000\u0000\u0080\u0082\u0001\u0000\u0000"+
+		"\u0000\u0081~\u0001\u0000\u0000\u0000\u0081\u0082\u0001\u0000\u0000\u0000"+
+		"\u0082\u0083\u0001\u0000\u0000\u0000\u0083\u0085\u0003\u0002\u0001\u0000"+
+		"\u0084\u0086\u0005\u0016\u0000\u0000\u0085\u0084\u0001\u0000\u0000\u0000"+
+		"\u0085\u0086\u0001\u0000\u0000\u0000\u0086\u0019\u0001\u0000\u0000\u0000"+
+		"\u0087\u008b\u0005\u000f\u0000\u0000\u0088\u0089\u0003\f\u0006\u0000\u0089"+
+		"\u008a\u0005\u0014\u0000\u0000\u008a\u008c\u0001\u0000\u0000\u0000\u008b"+
+		"\u0088\u0001\u0000\u0000\u0000\u008b\u008c\u0001\u0000\u0000\u0000\u008c"+
+		"\u008d\u0001\u0000\u0000\u0000\u008d\u008f\u0003\u0002\u0001\u0000\u008e"+
+		"\u0090\u0005\u0016\u0000\u0000\u008f\u008e\u0001\u0000\u0000\u0000\u008f"+
+		"\u0090\u0001\u0000\u0000\u0000\u0090\u001b\u0001\u0000\u0000\u0000\u0091"+
+		"\u0092\u0005\u000e\u0000\u0000\u0092\u0093\u0003\u001e\u000f\u0000\u0093"+
+		"\u001d\u0001\u0000\u0000\u0000\u0094\u0096\u0005\f\u0000\u0000\u0095\u0094"+
+		"\u0001\u0000\u0000\u0000\u0096\u0097\u0001\u0000\u0000\u0000\u0097\u0095"+
+		"\u0001\u0000\u0000\u0000\u0097\u0098\u0001\u0000\u0000\u0000\u0098\u001f"+
+		"\u0001\u0000\u0000\u0000\u0099\u009f\u0003\"\u0011\u0000\u009a\u009f\u0003"+
+		"$\u0012\u0000\u009b\u009f\u0003&\u0013\u0000\u009c\u009f\u0003(\u0014"+
+		"\u0000\u009d\u009f\u0003*\u0015\u0000\u009e\u0099\u0001\u0000\u0000\u0000"+
+		"\u009e\u009a\u0001\u0000\u0000\u0000\u009e\u009b\u0001\u0000\u0000\u0000"+
+		"\u009e\u009c\u0001\u0000\u0000\u0000\u009e\u009d\u0001\u0000\u0000\u0000"+
+		"\u009f!\u0001\u0000\u0000\u0000\u00a0\u00a1\u0005\u0003\u0000\u0000\u00a1"+
+		"\u00a2\u0003\u0004\u0002\u0000\u00a2#\u0001\u0000\u0000\u0000\u00a3\u00a4"+
+		"\u0005\u0004\u0000\u0000\u00a4\u00a5\u0003\u0004\u0002\u0000\u00a5\u00a6"+
+		"\u0003\u0004\u0002\u0000\u00a6%\u0001\u0000\u0000\u0000\u00a7\u00a8\u0005"+
+		"\u0005\u0000\u0000\u00a8\u00a9\u0003\u0004\u0002\u0000\u00a9\u00aa\u0003"+
+		"\u0004\u0002\u0000\u00aa\u00ab\u0003\u0004\u0002\u0000\u00ab\'\u0001\u0000"+
+		"\u0000\u0000\u00ac\u00ad\u0005\u0006\u0000\u0000\u00ad\u00ae\u0003\u0004"+
+		"\u0002\u0000\u00ae\u00af\u0003\u0004\u0002\u0000\u00af\u00b0\u0003\u0004"+
+		"\u0002\u0000\u00b0\u00b1\u0003\u0004\u0002\u0000\u00b1)\u0001\u0000\u0000"+
+		"\u0000\u00b2\u00b6\u0005\u0007\u0000\u0000\u00b3\u00b5\u0003\u0004\u0002"+
+		"\u0000\u00b4\u00b3\u0001\u0000\u0000\u0000\u00b5\u00b8\u0001\u0000\u0000"+
+		"\u0000\u00b6\u00b4\u0001\u0000\u0000\u0000\u00b6\u00b7\u0001\u0000\u0000"+
+		"\u0000\u00b7+\u0001\u0000\u0000\u0000\u00b8\u00b6\u0001\u0000\u0000\u0000"+
+		"\u00b9\u00bb\u0005\u0001\u0000\u0000\u00ba\u00b9\u0001\u0000\u0000\u0000"+
+		"\u00ba\u00bb\u0001\u0000\u0000\u0000\u00bb\u00bc\u0001\u0000\u0000\u0000"+
+		"\u00bc\u00bd\u0003.\u0017\u0000\u00bd-\u0001\u0000\u0000\u0000\u00be\u00bf"+
+		"\u0007\u0001\u0000\u0000\u00bf/\u0001\u0000\u0000\u0000\u001557>ELQ]a"+
+		"hnqw{\u0081\u0085\u008b\u008f\u0097\u009e\u00b6\u00ba";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
