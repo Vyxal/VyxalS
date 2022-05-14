@@ -19,7 +19,7 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Generate documentation
-        run: sbt yaml/run
+        run: sbt genElements
       - name: Stage changes
         run: git add .
       - name: Commit and push
