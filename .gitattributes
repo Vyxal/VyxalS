@@ -2,3 +2,6 @@ js/target/scala-3.1.1/vyxal-opt/main.js linguist-generated=true
 js/target/scala-3.1.1/vyxal-opt/main.js.map linguist-generated=true
 js/lib/main.js linguist-generated=true
 js/lib/main.js.map linguist-generated=true
+
+documents/knowledge/elements.md linguist-generated=true
+documents/knowledge/elements.txt linguist-generated=true

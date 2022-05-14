@@ -1,29 +1,29 @@
-¿ (Conditional Execution)
+Â¿ (Conditional Execution)
 
 - Execute an element if the top of the stack is truthy.
 
 -------------------------------
-¤ (Last Element as a Function)
+Â¤ (Last Element as a Function)
 
 - Pushes the last element as a lambda.
 
 -------------------------------
-¢ (Last Two Elements as a Function)
+Â¢ (Last Two Elements as a Function)
 
 - Pushes the last two elements as a lambda.
 
 -------------------------------
-¬ (Last Three Elements as a Function)
+â‚¬ (Last Three Elements as a Function)
 
 - Pushes the last three elements as a lambda.
 
 -------------------------------
-§ (Last Four Elements as a Function)
+Â§ (Last Four Elements as a Function)
 
 - Pushes the last four elements as a lambda.
 
 -------------------------------
-æ (Apply to Each Stack Item)
+Ã¦ (Apply to Each Stack Item)
 
 - Apply an element to every item on the stack
 

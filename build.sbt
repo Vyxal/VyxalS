@@ -24,13 +24,9 @@ Use vyxalJS/run to run the JSMain class (you will need Node.JS for this)
 
 import org.scalajs.linker.interface.OutputPatterns
 
-lazy val yaml = project.settings(
-  libraryDependencies += "io.circe" %% "circe-yaml" % "0.14.1"
-)
-
 lazy val root = project
   .in(file("."))
-  .aggregate(vyxal.js, vyxal.jvm, yaml)
+  .aggregate(vyxal.js, vyxal.jvm)
   .settings(
     publish := {},
     publishLocal := {}
@@ -67,3 +63,6 @@ lazy val vyxal = crossProject(JSPlatform, JVMPlatform)
     Compile / fastOptJS / artifactPath := baseDirectory.value / "lib" / "main.js",
     Compile / fullOptJS / artifactPath := baseDirectory.value / "lib" / "main.js",
   )
+
+val genElements = taskKey[Unit]("genElements")
+genElements := GenElements.run()
