@@ -11,11 +11,14 @@ sealed trait VNum {
     case NegInf => NegInf
     case Rat(num, den) => Rat(-num, den)
     case Imag(n) => Imag(-n)
+    case Pow(base, pow) =>
+      // todo check if numerator of pow is odd
+      Frac(Seq(base), Seq(-1))
     case Sum(terms) => Sum(terms.map(-1 * _))
     case Frac(nums, dens) =>
       if (nums.nonEmpty) Frac(-nums.head +: nums, dens)
       else Frac(nums, -dens.head +: dens)
-    // case _ => VNum.int(-1) * this
+    case IrratSeries(approx, terms) => IrratSeries(-approx, terms.map(- _))
   }
 
   final def +(that: VNum): VNum = (this, that) match {
@@ -31,6 +34,10 @@ sealed trait VNum {
       Rat(num1 * den2 + num2 * den1, den1 * den2)
     case (s: Sum, x) => addToSum(s, x)
     case (x, s: Sum) => addToSum(s, x)
+    case (s1: IrratSeries, s2: IrratSeries) => ???
+    case (x, IrratSeries(approx, terms)) => IrratSeries(approx + x.toDouble, terms.map(_ + x))
+    case (IrratSeries(approx, terms), x) => IrratSeries(approx + x.toDouble, terms.map(_ + x))
+    case (Frac(num1, den1), Frac(num2, den2)) => ???
   }
 
   private def addToSum(sum: Sum, x: VNum): VNum = {
@@ -48,6 +55,7 @@ sealed trait VNum {
     case (_, Zero) => Zero
     case (inf @ (PosInf | NegInf), y) => if (y.sign > 0) inf else -inf
     case (x, inf @ (PosInf | NegInf)) => if (x.sign > 0) inf else -inf
+    case (Sum(xs), Sum(ys)) => Sum(for (x <- xs; y <- ys) yield x * y)
     case (Sum(terms), n) => Sum(terms.map(_ * n))
     case (n, Sum(terms)) => Sum(terms.map(_ * n))
     case (Rat(num1, den1), Rat(num2, den2)) =>
@@ -176,9 +184,15 @@ sealed trait Irrat extends VNum
 
 /** A number divided by another
   */
-case class Frac private[num] (numer: Seq[VNum], denom: Seq[VNum]) extends VNum
+case class Frac private (numer: Seq[VNum], denom: Seq[VNum]) extends VNum
 
-/** base raised to the power of pow. `pow` will always be a positive number */
+object Frac {
+  def apply(numer: Seq[VNum], denom: Seq[VNum]): VNum = {
+    ???
+  }
+}
+
+/** [[Pow.base]] raised to the power of [[Pow.pow]]. `pow` must be positive, `base` must be nonnegative */
 case class Pow private[num] (base: Irrat, pow: Irrat) extends Irrat
 
 /** The sum of a rational number, an imaginary number, and a finite number of
@@ -201,7 +215,7 @@ object Sum {
   */
 case class IrratSeries private[num] (
     approx: Double,
-    terms: LazyList[Rat]
+    terms: LazyList[VNum]
 ) extends Irrat
 
 object VNum {
@@ -226,25 +240,15 @@ object VNum {
 
   given numeric: Numeric[VNum] with {
     override def compare(x: VNum, y: VNum) = x.compare(y)
-
     override def negate(x: VNum) = -x
-
     override def plus(x: VNum, y: VNum) = x + y
-
     override def minus(x: VNum, y: VNum) = x - y
-
     override def times(x: VNum, y: VNum) = x * y
-
     override def fromInt(x: Int) = VNum.int(x)
-
     override def toDouble(x: VNum) = x.toDouble
-
     override def toLong(x: VNum) = x.toLong
-
     override def toFloat(x: VNum) = x.toDouble.toFloat
-
     override def toInt(x: VNum) = x.toLong.toInt
-
     override def parseString(str: String) = VNum.parse(str)
   }
 }
