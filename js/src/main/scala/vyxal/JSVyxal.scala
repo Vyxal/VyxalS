@@ -2,12 +2,49 @@ package vyxal
 
 import scala.scalajs.js
 import scala.scalajs.js.JSON
-import scala.scalajs.js.annotation.*
+import scala.scalajs.js.annotation.JSExportTopLevel
 import org.scalajs.dom
 import org.scalajs.dom.{document, window}
 
 @JSExportTopLevel("Vyxal")
 object JSVyxal extends js.Object {
+
+  var codepage = "λƛ¬∧⟑∨⟇÷×«␤»°•ß†€"
+  codepage += "½∆ø↔¢⌐æʀʁɾɽÞƈ∞¨␠"
+  codepage += "!\"#$%&'()*+,-./01"
+  codepage += "23456789:;<=>?@A"
+  codepage += "BCDEFGHIJKLMNOPQ"
+  codepage += "RSTUVWXYZ[\\]`^_abc"
+  codepage += "defghijklmnopqrs"
+  codepage += "tuvwxyz{|}~↑↓∴∵›"
+  codepage += "‹∷¤ð→←βτȧḃċḋėḟġḣ"
+  codepage += "ḭŀṁṅȯṗṙṡṫẇẋẏż√⟨⟩"
+  codepage += "‛₀₁₂₃₄₅₆₇₈¶⁋§ε¡"
+  codepage += "∑¦≈µȦḂĊḊĖḞĠḢİĿṀṄ"
+  codepage += "ȮṖṘṠṪẆẊẎŻ₌₍⁰¹²∇⌈"
+  codepage += "⌊¯±₴…□↳↲⋏⋎꘍ꜝ℅≤≥"
+  codepage += "≠⁼ƒɖ∪∩⊍£¥⇧⇩ǍǎǏǐǑ"
+  codepage += "ǒǓǔ⁽‡≬⁺↵⅛¼¾Π„‟"
+
+  search = window
+  glyphQuery = String.fromCharCode(114, 105, 99, 107)
+  this.prevQuery = ""
+  secret = "dQw4"
+  secret += secret[2]
+  temp = "9WgXc"
+  secret += temp + secret[1]
+  temp = "out"
+  temp += temp[1] + "."
+  temp += "be"
+  temp = "y" + temp
+  temp = codepage[47] + temp
+  temp = codepage[115] + codepage[58] + temp[0] + temp
+  secret = "tp" + temp + "/" + secret
+  secret = "h" + codepage[116] + secret
+
+  var og_keyboard_html = ""
+  var selectedBox = "code" // whether 'header', 'code', or 'footer' are selected
+
   def execute(
       code: String,
       inputs: js.Array[VAny],
@@ -220,6 +257,7 @@ $code
     expandBoxes()
   }
 
-  def repr(str: String): String = str.replaceAll("'", "&apos;").replaceAll("\"", "&quot;")
+  def repr(str: String): String =
+    str.replaceAll("'", "&apos;").replaceAll("\"", "&quot;")
 
 }
