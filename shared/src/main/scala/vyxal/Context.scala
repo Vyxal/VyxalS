@@ -2,8 +2,6 @@ package vyxal
 
 import scala.collection.{mutable => mut}
 
-import vyxal.num.VNum
-
 /** @constructor
   *   Make a Context object for the current scope
   * @param vars
@@ -18,7 +16,7 @@ import vyxal.num.VNum
   */
 class Context private (
     private var stack: mut.ArrayBuffer[VAny],
-    val contextVar: VAny = VNum.int(0),
+    val contextVar: VAny = 0.vnum,
     private val vars: mut.Map[String, VAny | Null] = mut.Map(),
     val inputs: List[List[VAny]] = List(),
     private val parent: Option[Context] = None,
@@ -28,10 +26,10 @@ class Context private (
 
   def peek: VAny = stack(stack.size - 1)
 
-  def pop(): VAny = if (stack.isEmpty) VNum.int(0) else stack.remove(stack.size - 1)
+  def pop(): VAny = if (stack.isEmpty) 0.vnum else stack.remove(stack.size - 1)
 
   def popAll(): VList = {
-    val res = VList(stack.toSeq)
+    val res = VList(stack.toSeq*)
     stack.clear()
     res
   }

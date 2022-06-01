@@ -2,7 +2,6 @@ package vyxal
 
 import Helpers.*
 import Helpers.given
-import vyxal.num.*
 
 import scala.collection.{mutable => mut}
 
@@ -99,16 +98,16 @@ object Builtins {
       case n: VNum => n / 2
       case s: String =>
         val half = (s.size + 1) / 2
-        VList.of(s.substring(0, half), s.substring(half + 1))
+        VList(s.substring(0, half), s.substring(half + 1))
       case f =>
         throw VyOverloadError("Sorry, you can't halve functions")
     })
 
-    val land = addDyad("∧")(_.toBool && _.toBool)
+    val land = addDyad("∧") { (a, b) => if (a.toBool && b.toBool) 1 else 0 }
 
-    val lnot = addMonad("¬")(!_.toBool)
+    val lnot = addMonad("¬"){ a => if (!a.toBool) 1 else 0 }
 
-    val lor = addDyad("∨")(_.toBool || _.toBool)
+    val lor = addDyad("∨"){ (a, b) => if (a.toBool || b.toBool) 1 else 0 }
 
     val mul = addDyad("*")(vect2 {
       case (n1: VNum, n2: VNum) => n1 * n2

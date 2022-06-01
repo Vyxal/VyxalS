@@ -1,7 +1,6 @@
 package vyxal
 
 import vyxal.Helpers.{toBool, toList}
-import vyxal.num.VNum
 
 object Interpreter {
   def execute(
@@ -84,7 +83,7 @@ object Interpreter {
                           case s: String =>
                             newCtx.push(ctx.pop())
                             execute(VarSet(s))(using newCtx)
-                          case n: Int => newCtx.push(VNum.int(n))
+                          case n: Int => newCtx.push(n.vnum)
                         }
                       }
                       execute(fn.body)(using newCtx)
