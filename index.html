@@ -103,17 +103,17 @@
     </button>
 
     <button id="permalink" title="Generate Permalink" type="button"
-        onclick="shareOptions('permalink'); resizeCodeBox('output')">
+        onclick="shareOptions('permalink'); Vyxal.resizeCodeBox('output')">
         <i class="fas fa-link"></i>
     </button>
 
     <button id="post-template" title="Generate Code Golf Submission" type="button"
-        onclick="shareOptions('post-template'); resizeCodeBox('output')">
+        onclick="shareOptions('post-template'); Vyxal.resizeCodeBox('output')">
         <i class="fas fa-medal"></i>
     </button>
 
     <button id="markdown" title="Generate Inline Markdown" type="button"
-        onclick="shareOptions('markdown'); resizeCodeBox('output')">
+        onclick="shareOptions('markdown'); Vyxal.resizeCodeBox('output')">
         <i class="fab fa-markdown"></i>
     </button>
 
@@ -143,12 +143,12 @@
 
     <details id="header-detail">
         <summary>Header</summary>
-        <textarea id="header" name="header" oninput="resizeCodeBox('header')"></textarea>
+        <textarea id="header" name="header" oninput="Vyxal.resizeCodeBox('header')"></textarea>
     </details>
 
     <details open id="code-detail">
         <summary id="code-count">Code: 0 bytes</summary>
-        <textarea id="code" name="code" oninput="resizeCodeBox('code'); updateCount()"
+        <textarea id="code" name="code" oninput="Vyxal.resizeCodeBox('code'); updateCount()"
             onkeyup="updateCount()"></textarea>
     </details>
 
@@ -159,7 +159,7 @@
 
     <details open id="inputs-detail">
         <summary>Inputs</summary>
-        <textarea id="inputs" name="inputs" oninput="resizeCodeBox('inputs')"></textarea>
+        <textarea id="inputs" name="inputs" oninput="Vyxal.resizeCodeBox('inputs')"></textarea>
     </details>
 
     <details id="output-detail">
