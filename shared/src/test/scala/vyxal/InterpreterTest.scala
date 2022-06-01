@@ -1,7 +1,5 @@
 package vyxal
 
-import vyxal.num.VNum
-import vyxal.num.VNum.given
 import org.scalatest.funspec.AnyFunSpec
 
 class InterpreterTest extends AnyFunSpec {
@@ -37,9 +35,9 @@ class InterpreterTest extends AnyFunSpec {
   }
 
   describe("apply to each stack item modifier") {
-    runTest("2 4 6 8 ½æ W", VList.of(1, 2, 3, 4))
+    runTest("2 4 6 8 ½æ W", VList(1, 2, 3, 4))
 
-    runTest("5 1 7 2 4 2+¢æ W", VList.of(7, 3, 9, 4, 6))
+    runTest("5 1 7 2 4 2+¢æ W", VList(7, 3, 9, 4, 6))
 
     // TODO: currently modifiers that take a lambda don't work
   }

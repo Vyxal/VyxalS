@@ -39,7 +39,7 @@ lazy val vyxal = crossProject(JSPlatform, JVMPlatform)
     version := "0.1-SNAPSHOT",
     libraryDependencies ++= Seq(
       "org.scalatest" %%% "scalatest" % "3.2.10" % Test,
-      "org.typelevel" % "spire_2.13" % "0.17.0"
+      ("org.typelevel" %%% "spire" % "0.17.0").cross(CrossVersion.for3Use2_13)
     ),
     scalacOptions ++= Seq(
       "-deprecation", // Emit warning and location for usages of deprecated APIs.
