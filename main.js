@@ -116,31 +116,6 @@ ${code}
     expandBoxes()
 }
 
-function decodeURL() {
-    var [flags, header, code, footer, inputs] = decode(window.location.hash.substring(1));
-
-    var flag_box = document.getElementById("flag")
-    var inputs_box = document.getElementById("inputs")
-
-    var queryIsNonEmpty = code || flags || inputs || header || footer
-    var allBoxesAreEmpty = !(flag_box.value
-        || e_header.getValue() || e_code.getValue()
-        || e_footer.getValue() || inputs_box.value)
-
-    if (queryIsNonEmpty && allBoxesAreEmpty) {
-        flag_box.value = flags
-        e_code.doc.setValue(code)
-        inputs_box.value = inputs
-        e_header.doc.setValue(header)
-        e_footer.doc.setValue(footer)
-        e_header.refresh()
-        e_footer.refresh()
-        run_button.click()
-    } else {
-        expandBoxes()
-    }
-}
-
 function expandBoxes() {
     ["flag", "inputs", "output", "extra"].forEach(function (n) {
         var boxToExpand = document.getElementById(n + "-detail")
@@ -186,7 +161,6 @@ function copyToClipboard(arg) {
 
 window.addEventListener("DOMContentLoaded", e => {
     const run = document.getElementById("run_button")
-    const session = $("session-code")[0].innerHTML
 
     const stdin = document.getElementById("inputs")
     const flags = document.getElementById("flag")
@@ -200,46 +174,21 @@ window.addEventListener("DOMContentLoaded", e => {
                 `<svg class="fa-spin" style="width:24px;height:24px" viewBox="0 0 24 24">
                     <path fill="currentColor" d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z"/>
                 </svg>`;
-            $.post("/execute", {
-                code: e_code.doc.getValue(),
-                inputs: stdin.value,
-                flags: flags.value,
-                session: session,
-                footer: e_footer.doc.getValue(),
-                header: e_header.doc.getValue()
-            }, res => {
-                if (flags.value.includes('E') && !flags.value.includes("h")) {
-                    alert('Please read and ensure you 100% trust the JavaScript code which is about to be evaluated. The code is (see next alert):')
-                    alert(res.stdout)
-                    if (confirm('Do you want to execute it? If you are remotely unsure, click Cancel!')) {
-                        try {
-                            res.stdout = new Function(res.stdout)()
-                        } catch (e) {
-                            res.stdout = e
-                        }
-                    }
-                }
-                output.value = res.stdout
-                extra.value = res.stderr
-                run.innerHTML =
-                    `<i class="fas fa-play-circle"></i>
-                    `;
-                if (e_code.doc.getValue() == 'lyxal') {
-                    location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-                }
-                if (flags.value.includes('Ḣ') && !flags.value.includes("h")) {
-                    const container = document.getElementById("html-rendered-output")
-                    const iframe = document.createElement("iframe")
-                    iframe.srcdoc = res.stdout
-                    container.innerHTML = iframe.outerHTML
-                    container.hidden = false
-                } else {
-                    document.getElementById("html-rendered-output").hidden = true
-                }
-                expandBoxes()
-            })
+            output.value = "";
+            extra.value = "";
+
+            Vyxal.execute(
+                e_header.doc.getValue() + e_code.doc.getValue() + e_header.doc.getValue(),
+                stdin.value.split("\n"),
+                [...flags.value],
+                out => output.value += out,
+                warn => extra.value += warn,
+                err => extra.value += err
+            )
+
+            expandBoxes()
         } else {
-            $.post("/kill", { session: session }, res => 0)
+            // todo kill if already running
         }
     }
 
@@ -266,57 +215,6 @@ document.addEventListener('keydown', (event) => {
         $("#run_button").click()
     }
 })
-
-// Codemirror stuff begins here
-function initCodeMirror() {
-    const $$$ = x => document.querySelector(x)
-
-    //Get the corresponding codemirror textarea for any of 'code', 'header', and 'footer'
-    function getCodeMirrorTextArea(boxId) {
-        return $('#' + boxId).parent().children('div').children().not('[class]').children()[0]
-    }
-
-    function resize(elem) {
-        var dummy = $$$("#dummy")
-        dummy.style.fontFamily = getComputedStyle($$$('.CodeMirror.cm-s-default')).fontFamily
-        dummy.style.fontSize = '15px'
-        dummy.style.lineHeight = '24px'
-        dummy.value = elem.doc.getValue()
-        elem.setSize(
-            null,
-            (elem.lineCount() * 22) + 24
-        )
-        elem.refresh();
-        dummy.value = ""
-
-        // Make sure e_code is not null
-        if ("e_code" in globalThis) {
-            updateCount()
-        }
-    }
-
-    let mode = {
-        mode: 'vyxal',
-        lineWrapping: true,
-        autofocus: true,
-    }
-
-    for (const boxId of ['header', 'code', 'footer']) {
-        console.log(boxId)
-        globalThis['e_' + boxId] = CodeMirror.fromTextArea($$$('#' + boxId), mode)
-        globalThis['e_' + boxId].on('change', cm => {
-            resize(globalThis['e_' + boxId])
-            globalThis['e_' + boxId].value = cm.getValue()
-        })
-        resize(globalThis['e_' + boxId])
-
-        var box = getCodeMirrorTextArea(boxId)
-        if (box) {
-            const capturedId = boxId
-            box.addEventListener('focusin', event => selectedBox = capturedId)
-        }
-    }
-}
 
 function repr(str) {
     return str.replace(/'/g, "&apos;").replace(/"/g, "&quot;")
