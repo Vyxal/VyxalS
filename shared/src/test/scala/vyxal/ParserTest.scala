@@ -17,11 +17,11 @@ class ParserTest extends AnyFlatSpec {
         For(Some("foo"), Cmds(Element("b"), Element("a"), Element("r"))),
         If(
           Cmds(Element("a"), Element("+")),
-          Cmds(Element("a"), Literal(VNum(324, 1)))
+          Cmds(Element("a"), Literal(324))
         ),
         While(
           None,
-          Literal(VNum(3, 1))
+          Literal(3)
         )
       )
   )

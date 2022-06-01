@@ -37,7 +37,10 @@ lazy val vyxal = crossProject(JSPlatform, JVMPlatform)
   .settings(
     name := "vyxal",
     version := "0.1-SNAPSHOT",
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.10" % Test,
+    libraryDependencies ++= Seq(
+      "org.scalatest" %%% "scalatest" % "3.2.10" % Test,
+      ("org.typelevel" %%% "spire" % "0.17.0").cross(CrossVersion.for3Use2_13)
+    ),
     scalacOptions ++= Seq(
       "-deprecation", // Emit warning and location for usages of deprecated APIs.
       "-encoding",
@@ -50,7 +53,7 @@ lazy val vyxal = crossProject(JSPlatform, JVMPlatform)
       // "-explain",
       "-print-lines",
       "-Ycheck-all-patmat"
-    ),
+    )
   )
   .jvmSettings(
     // Add JVM-specific settings here
@@ -61,7 +64,7 @@ lazy val vyxal = crossProject(JSPlatform, JVMPlatform)
     Compile / mainClass := Some("vyxal.JSMain"),
     scalaJSUseMainModuleInitializer := true,
     Compile / fastOptJS / artifactPath := baseDirectory.value / "lib" / "main.js",
-    Compile / fullOptJS / artifactPath := baseDirectory.value / "lib" / "main.js",
+    Compile / fullOptJS / artifactPath := baseDirectory.value / "lib" / "main.js"
   )
 
 val genElements = taskKey[Unit]("genElements")

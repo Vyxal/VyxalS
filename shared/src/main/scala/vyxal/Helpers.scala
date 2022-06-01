@@ -1,5 +1,7 @@
 package vyxal
 
+import spire.math.Number
+
 object Helpers {
   def vyPrint(elem: VAny)(using ctx: Context): Unit = {
     elem match {
@@ -8,10 +10,9 @@ object Helpers {
     }
   }
 
-  given boolToNum: Conversion[Boolean, VAny] = bool =>
-    VNum(if (bool) 1 else 0, 1)
-
-  given intToNum: Conversion[Int, VAny] = VNum(_, 1)
+  def range(fromInc: VNum, toExc: VNum): VList = {
+    ???
+  }
 
   extension (any: VAny) {
     def toBool: Boolean = any match {
@@ -23,9 +24,9 @@ object Helpers {
 
     def toList(using ctx: Context): VList = any match {
       case num: VNum => ctx.settings.numToList(num)
-      case str: String => VList(str.map(_.toString))
+      case str: String => VList(str.map(_.toString)*)
       case lst: VList => lst
-      case fun: VFun => VList.of(fun)
+      case fun: VFun => VList(fun)
     }
   }
 }

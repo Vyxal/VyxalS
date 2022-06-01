@@ -3,9 +3,12 @@ package vyxal
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.Typeable
 
+import spire.math.Number
+
 type VAny = VAtom | VList
 type VAtom = VVal | VFun
 type VVal = VNum | String
+type VNum = Number
 
 enum VFun(arity: Int) {
   case Lam(lam: Lambda, ctx: Context) extends VFun(1)
@@ -29,3 +32,7 @@ given Typeable[VAny] = (x: Any) =>
     case va: (x.type & VAtom) => Some(va)
     case _ => None
   }
+
+extension (i: Int) def vnum: VNum = Number(i)
+extension (b: BigInt) def vnum: VNum = Number(b)
+extension (d: Double) def vnum: VNum = Number(d)

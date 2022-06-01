@@ -38,7 +38,8 @@ object Builtins {
     def addDyad(name: String)(impl: Dyad): Dyad = {
       elements += name -> DirectFn(
         { () => ctx ?=>
-          ctx.push(impl(ctx.pop(), ctx.pop()))
+          val arg2, arg1 = ctx.pop()
+          ctx.push(impl(arg1, arg2))
         },
         2
       )
@@ -50,8 +51,9 @@ object Builtins {
     def addTriad(name: String)(impl: Triad): Triad = {
       elements += name -> DirectFn(
         { () => ctx ?=>
+          val arg3, arg2, arg1 = ctx.pop()
           ctx.push(
-            impl(ctx.pop(), ctx.pop(), ctx.pop())
+            impl(arg1, arg2, arg3)
           )
         },
         3
@@ -65,8 +67,9 @@ object Builtins {
     def addTetrad(name: String)(impl: Tetrad): Tetrad = {
       elements += name -> DirectFn(
         { () => ctx ?=>
+          val arg4, arg3, arg2, arg1 = ctx.pop()
           ctx.push(
-            impl(ctx.pop(), ctx.pop(), ctx.pop(), ctx.pop())
+            impl(arg1, arg2, arg3, arg4)
           )
         },
         4
@@ -95,16 +98,16 @@ object Builtins {
       case n: VNum => n / 2
       case s: String =>
         val half = (s.size + 1) / 2
-        VList.of(s.substring(0, half), s.substring(half + 1))
+        VList(s.substring(0, half), s.substring(half + 1))
       case f =>
         throw VyOverloadError("Sorry, you can't halve functions")
     })
 
-    val land = addDyad("∧")(_.toBool && _.toBool)
+    val land = addDyad("∧") { (a, b) => if (a.toBool && b.toBool) 1 else 0 }
 
-    val lnot = addMonad("¬")(!_.toBool)
+    val lnot = addMonad("¬"){ a => if (!a.toBool) 1 else 0 }
 
-    val lor = addDyad("∨")(_.toBool || _.toBool)
+    val lor = addDyad("∨"){ (a, b) => if (a.toBool || b.toBool) 1 else 0 }
 
     val mul = addDyad("*")(vect2 {
       case (n1: VNum, n2: VNum) => n1 * n2

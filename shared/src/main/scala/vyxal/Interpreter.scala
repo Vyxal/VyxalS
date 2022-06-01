@@ -12,6 +12,17 @@ object Interpreter {
     given ctx: Context = Context()
     execute(ast)
     if (!ctx.isStackEmpty) {
+      ctx.println(ctx.peek)
+    }
+    ctx
+  }
+
+  def executeLine(
+      line: String
+  )(using ctx: Context): Context = {
+    val VyFile(ast, _) = Parser.parse(line)
+    execute(ast)
+    if (!ctx.isStackEmpty) {
       ctx.println(ctx.pop())
     }
     ctx
@@ -72,7 +83,7 @@ object Interpreter {
                           case s: String =>
                             newCtx.push(ctx.pop())
                             execute(VarSet(s))(using newCtx)
-                          case n: Int => newCtx.push(VNum(n))
+                          case n: Int => newCtx.push(n.vnum)
                         }
                       }
                       execute(fn.body)(using newCtx)
