@@ -9,22 +9,22 @@ import org.scalajs.dom.{document, window}
 @JSExportTopLevel("Vyxal")
 object JSVyxal extends js.Object {
 
-  var codepage = "λƛ¬∧⟑∨⟇÷×«␤»°•ß†€"
-  codepage += "½∆ø↔¢⌐æʀʁɾɽÞƈ∞¨␠"
-  codepage += "!\"#$%&'()*+,-./01"
-  codepage += "23456789:;<=>?@A"
-  codepage += "BCDEFGHIJKLMNOPQ"
-  codepage += "RSTUVWXYZ[\\]`^_abc"
-  codepage += "defghijklmnopqrs"
-  codepage += "tuvwxyz{|}~↑↓∴∵›"
-  codepage += "‹∷¤ð→←βτȧḃċḋėḟġḣ"
-  codepage += "ḭŀṁṅȯṗṙṡṫẇẋẏż√⟨⟩"
-  codepage += "‛₀₁₂₃₄₅₆₇₈¶⁋§ε¡"
-  codepage += "∑¦≈µȦḂĊḊĖḞĠḢİĿṀṄ"
-  codepage += "ȮṖṘṠṪẆẊẎŻ₌₍⁰¹²∇⌈"
-  codepage += "⌊¯±₴…□↳↲⋏⋎꘍ꜝ℅≤≥"
-  codepage += "≠⁼ƒɖ∪∩⊍£¥⇧⇩ǍǎǏǐǑ"
-  codepage += "ǒǓǔ⁽‡≬⁺↵⅛¼¾Π„‟"
+  val codepage = """λƛ¬∧⟑∨⟇÷×«␤»°•ß†€
+                   |½∆ø↔¢⌐æʀʁɾɽÞƈ∞¨␠
+                   |!\"#$%&'()*+,-./01
+                   |23456789:;<=>?@A
+                   |BCDEFGHIJKLMNOPQ
+                   |RSTUVWXYZ[\\]`^_abc
+                   |defghijklmnopqrs
+                   |tuvwxyz{|}~↑↓∴∵›
+                   |‹∷¤ð→←βτȧḃċḋėḟġḣ
+                   |ḭŀṁṅȯṗṙṡṫẇẋẏż√⟨⟩
+                   |‛₀₁₂₃₄₅₆₇₈¶⁋§ε¡
+                   |∑¦≈µȦḂĊḊĖḞĠḢİĿṀṄ
+                   |ȮṖṘṠṪẆẊẎŻ₌₍⁰¹²∇⌈
+                   |⌊¯±₴…□↳↲⋏⋎꘍ꜝ℅≤≥
+                   |≠⁼ƒɖ∪∩⊍£¥⇧⇩ǍǎǏǐǑ
+                   |ǒǓǔ⁽‡≬⁺↵⅛¼¾Π„‟""".stripMargin("|")
 
   search = window
   glyphQuery = String.fromCharCode(114, 105, 99, 107)
@@ -163,7 +163,7 @@ object JSVyxal extends js.Object {
       else " (UTF-8)"}"
   }
 
-  def resizeCodeBox(id: String) = {
+  def resizeCodeBox(id: String): Unit = {
     // Resize the code box with the given id
     val element = document.getElementById(id);
     element.style.height = ""
