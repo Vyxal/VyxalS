@@ -24,23 +24,11 @@ object JSVyxal extends js.Object {
                    |ȮṖṘṠṪẆẊẎŻ₌₍⁰¹²∇⌈
                    |⌊¯±₴…□↳↲⋏⋎꘍ꜝ℅≤≥
                    |≠⁼ƒɖ∪∩⊍£¥⇧⇩ǍǎǏǐǑ
-                   |ǒǓǔ⁽‡≬⁺↵⅛¼¾Π„‟""".stripMargin("|")
+                   |ǒǓǔ⁽‡≬⁺↵⅛¼¾Π„‟""".stripMargin('|').replace("\n", "")
 
   search = window
   glyphQuery = String.fromCharCode(114, 105, 99, 107)
   this.prevQuery = ""
-  secret = "dQw4"
-  secret += secret[2]
-  temp = "9WgXc"
-  secret += temp + secret[1]
-  temp = "out"
-  temp += temp[1] + "."
-  temp += "be"
-  temp = "y" + temp
-  temp = codepage[47] + temp
-  temp = codepage[115] + codepage[58] + temp[0] + temp
-  secret = "tp" + temp + "/" + secret
-  secret = "h" + codepage[116] + secret
 
   var og_keyboard_html = ""
   var selectedBox = "code" // whether 'header', 'code', or 'footer' are selected
@@ -76,53 +64,6 @@ object JSVyxal extends js.Object {
         .head
         .asInstanceOf[dom.Element]
     }
-
-    def resize(elem: dom.Element): Unit = {
-      val dummy = document.querySelector("#dummy")
-      dummy.style.fontFamily = getComputedStyle(
-        document.querySelector(".CodeMirror.cm-s-default")
-      ).fontFamily
-      dummy.style.fontSize = "15px"
-      dummy.style.lineHeight = "24px"
-      dummy.value = elem.doc.getValue()
-      elem.setSize(
-        null,
-        (elem.lineCount() * 22) + 24
-      )
-      elem.refresh();
-      dummy.value = ""
-
-      // Make sure e_code is not null
-      if ("e_code" in globalThis) {
-        updateCount()
-      }
-    }
-
-    val mode = js.Dictionary(
-      "mode" -> "vyxal",
-      "lineWrapping" -> true,
-      "autofocus" -> true
-    )
-
-    for (boxId <- List("header", "code", "footer")) {
-      println(boxId)
-      globalThis(s"e_$boxId") =
-        CodeMirror.fromTextArea(document.querySelector("#" + boxId), mode)
-      globalThis(s"e_$boxId").on(
-        "change",
-        cm => {
-          resize(globalThis["e_" + boxId])
-          globalThis["e_" + boxId].value = cm.getValue()
-        }
-      )
-      resize(globalThis["e_" + boxId])
-
-      var box = getCodeMirrorTextArea(boxId)
-      if (box) {
-        val capturedId = boxId
-        box.addEventListener("focusin", event => selectedBox = capturedId)
-      }
-    }
   }
 
   def decodeUrl(): Unit = {
@@ -130,18 +71,15 @@ object JSVyxal extends js.Object {
       decodeURIComponent(escape(atob(window.location.hash.substring(1))))
     )
 
-    var flag_box = document.getElementById("flag")
-    var inputs_box = document.getElementById("inputs")
-
     var queryIsNonEmpty = code || flags || inputs || header || footer
-    var allBoxesAreEmpty = !(flag_box.value
+    var allBoxesAreEmpty = !(Body.flagBox.value
       || e_header.getValue() || e_code.getValue()
-      || e_footer.getValue() || inputs_box.value)
+      || e_footer.getValue() || Body.inputsBox.value)
 
     if (queryIsNonEmpty && allBoxesAreEmpty) {
-      flag_box.value = flags
+      Body.flagBox.value = flags
       e_code.doc.setValue(code)
-      inputs_box.value = inputs
+      Body.inputsBox.value = inputs
       e_header.doc.setValue(header)
       e_footer.doc.setValue(footer)
       e_header.refresh()
@@ -163,13 +101,6 @@ object JSVyxal extends js.Object {
       else " (UTF-8)"}"
   }
 
-  def resizeCodeBox(id: String): Unit = {
-    // Resize the code box with the given id
-    val element = document.getElementById(id);
-    element.style.height = ""
-    element.style.height = element.scrollHeight + 4 + "px"
-  }
-
   def expandBoxes() = {
     List("flag", "inputs", "output", "extra").forEach(function(n) {
       var boxToExpand = document.getElementById(n + "-detail")
@@ -181,9 +112,6 @@ object JSVyxal extends js.Object {
       } else {
         boxToExpand.open = false
       }
-
-      Vyxal.resizeCodeBox(n)
-
     })
 
     if (e_header.getValue()) {
@@ -199,10 +127,10 @@ object JSVyxal extends js.Object {
 
   def replaceHTMLChar(char: String) = {
     if (char == "␤") "\n"
-    else if (char === "␠") " "
-    else if (char === "&lt;") "<"
-    else if (char === "&gt;") ">"
-    else if (char === "&amp;") "&"
+    else if (char == "␠") " "
+    else if (char == "&lt;") "<"
+    else if (char == "&gt;") ">"
+    else if (char == "&amp;") "&"
     else char
   }
 
