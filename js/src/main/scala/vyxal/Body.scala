@@ -47,6 +47,11 @@ object Body {
     name := "inputs"
   )
 
+  val outputBox = textarea(
+    id := "output",
+    name := "output"
+  )
+
   val htmlFrag =
     body(
       onload := {
@@ -74,19 +79,14 @@ object Body {
         id := "post-template",
         title := "Generate Code Golf Submission",
         `type` := "button",
-        onclick := { event =>
-          JSVyxal.shareOptions("post-template")
-        },
+        onclick := { () => JSVyxal.shareOptions("post-template") },
         i(`class` := "fas fa-medal")
       ),
       button(
         id := "markdown",
         title := "Generate Inline Markdown",
         `type` := "button",
-        onclick := { event =>
-          JSVyxal.shareOptions("markdown")
-          JSVyxal.resizeCodeBox("output")
-        },
+        onclick := { () => JSVyxal.shareOptions("markdown") },
         i(`class` := "fas fa-markdown")
       ),
       button(
@@ -95,6 +95,7 @@ object Body {
         i(`class` := "fas fa-redo")
       ),
       details(
+        id := "keyboard-detail",
         summary("Keyboard"),
         div(
           `class` := "row",
@@ -105,13 +106,13 @@ object Body {
             "Search",
             a(
               href := "https://github.com/Vyxal/Vyxal/blob/main/documents/knowledge/elements.md",
-              "elements&nbsp;"
+              "elements"
             )
           ),
           input(
             style := "display:inline-block",
             id := "filterBox",
-            oninput := "glyphSearch()",
+            oninput := { () => /*glyphSearch(); */ ??? },
             label("Search for command:")
           )
         ),
