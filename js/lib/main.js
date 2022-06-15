@@ -10207,15 +10207,8 @@ function $h_Lvyxal_Main$() {
 }
 $h_Lvyxal_Main$.prototype = $c_Lvyxal_Main$.prototype;
 $c_Lvyxal_Main$.prototype.main__AT__V = (function(args) {
-  window.addEventListener("DOMContentLoaded", ((this$1) => ((event) => {
-    document.body.appendChild($m_Lvyxal_JSVyxal$().htmlFrag);
-    (0, $m_Lvyxal_JSVyxal$().runButton.onclick)(null);
-    $m_Lvyxal_JSVyxal$().runButton.addEventListener("click", ((this$2) => ((_$1) => {
-      $m_Lvyxal_JSVyxal$().run()
-    }))(this$1));
-    document.getElementById("run_button").onclick = $m_Lvyxal_JSVyxal$().runButton.onclick
-  }))(this));
-  document.addEventListener("keydown", ((this$2$1) => ((event$2) => (($uZ(event$2.metaKey) && ($as_T(event$2.key) === "Enter")) ? ($m_Lvyxal_JSVyxal$().runButton.click(), (void 0)) : (void 0))))(this))
+  window.addEventListener("DOMContentLoaded", ((this$1) => ((event) => document.querySelector("html").replaceChild($m_Lvyxal_JSVyxal$().htmlFrag, document.body)))(this));
+  document.addEventListener("keydown", ((this$2) => ((event$2) => (($uZ(event$2.metaKey) && ($as_T(event$2.key) === "Enter")) ? ($m_Lvyxal_JSVyxal$().runButton.click(), (void 0)) : (void 0))))(this))
 });
 var $d_Lvyxal_Main$ = new $TypeData().initClass({
   Lvyxal_Main$: 0
@@ -17089,7 +17082,8 @@ function $s_Lvyxal_JSVyxal$__run__Lvyxal_JSVyxal$__V(this$1) {
     $m_sci_List$();
     $$x4.execute__T__sci_List__sci_List__Lvyxal_Backend__Lvyxal_Context(allCode, $$x3, $m_sci_Nil$().prependedAll__sc_IterableOnce__sci_List(this$13), $m_Lvyxal_JSVyxal$given\uff3fBackend$());
     $m_Lvyxal_JSVyxal$().expandBoxes()
-  }
+  };
+  this$1.runButton.innerHTML = "<i class=\"fas fa-play-circle\"/>"
 }
 function $s_Lvyxal_JSVyxal$__clear__Lvyxal_JSVyxal$__V(this$1) {
   $as_Lvyxal_Collapsible(this$1.flagBox).Lvyxal_Collapsible__f_contents.value = "";

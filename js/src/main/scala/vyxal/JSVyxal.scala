@@ -72,6 +72,7 @@ object JSVyxal extends js.Object {
     } else {
       // todo kill if already running
     }
+    runButton.innerHTML = """<i class="fas fa-play-circle"/>""";
   }
 
   def clear(): Unit = {
