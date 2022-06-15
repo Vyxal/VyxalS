@@ -108,6 +108,10 @@ i {
     font-size: 24px;
 }
 
+#output-label {
+    display: inline-block;
+}
+
 #html-rendered-output {
     resize: both;
     overflow: hidden;

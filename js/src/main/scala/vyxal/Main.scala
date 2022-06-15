@@ -42,46 +42,10 @@ object Main {
       "keydown",
       event => {
         if (event.metaKey && event.key == "Enter") {
-          Body.runButton.click()
+          JSVyxal.runButton.click()
         }
       }
     )
 
-  }
-
-  def clear(e: dom.Event): Unit = {
-    Body.flagBox.value = ""
-    Body.headerBox.value = ""
-    Body.codeBox.value = ""
-    Body.footerBox.value = ""
-    Body.inputsBox.value = ""
-    Body.outputBox.value = ""
-    updateCount()
-    expandBoxes()
-  }
-
-  def run() = {
-    if (!run.innerHTML.includes("fa-spin")) {
-      run.innerHTML =
-        """<svg class="fa-spin" style="width:24px;height:24px" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z"/>
-                </svg>""";
-      output.value = "";
-      extra.value = "";
-
-      Vyxal.execute(
-        e_header.doc.getValue() + e_code.doc.getValue() + e_header.doc
-          .getValue(),
-        stdin.value.split("\n"),
-        flags.map(_.toString),
-        out => output.value += out,
-        warn => extra.value += warn,
-        err => extra.value += err
-      )
-
-      expandBoxes()
-    } else {
-      // todo kill if already running
-    }
   }
 }
