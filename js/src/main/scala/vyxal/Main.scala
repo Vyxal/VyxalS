@@ -11,8 +11,13 @@ object Main {
     window.addEventListener(
       "DOMContentLoaded",
       event => {
-        println("inner = " + JSVyxal.htmlFrag.innerHTML)
-        document.body.innerHTML = JSVyxal.htmlFrag.innerHTML
+        document.body.appendChild(
+          JSVyxal.htmlFrag
+        )
+
+        JSVyxal.runButton.onclick(null)
+        JSVyxal.runButton.addEventListener("click", _ => JSVyxal.run())
+        document.getElementById("run_button").asInstanceOf[dom.html.Button].onclick = JSVyxal.runButton.onclick
 
         // val kb = document.getElementById("keyboard")
         // for (i <- codepage.indices) {

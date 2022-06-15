@@ -8,7 +8,8 @@ import org.scalajs.dom.{document, window}
 import scalatags.JsDom.all.*
 import scalatags.JsDom.TypedTag
 
-object JSVyxal {
+@JSExportTopLevel("Vyxal")
+object JSVyxal extends js.Object {
   private val codepage = """λƛ¬∧⟑∨⟇÷×«␤»°•ß†€
                    |½∆ø↔¢⌐æʀʁɾɽÞƈ∞¨␠
                    |!\"#$%&'()*+,-./01
@@ -49,6 +50,7 @@ object JSVyxal {
 
   def run() = {
     runButton.blur()
+    println("Running!")
     if (!runButton.innerHTML.contains("fa-spin")) {
       runButton.innerHTML =
         """<svg class="fa-spin" style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -223,12 +225,6 @@ object JSVyxal {
   def inputs = inputsBox.contents.value
   def output = outputBox.contents.value
 
-  println("before dummy")
-
-  val dummy = textarea(id := "dummy").render
-
-  println("rendered dummy")
-
   val runButton: dom.html.Button = button(
     id := "run_button",
     title := "Run Program",
@@ -323,16 +319,13 @@ object JSVyxal {
     ).render
   )
 
-  println("here!")
-
   val htmlFrag =
     body(
-      onload := {
+      onload := { () =>
         JSVyxal.initCodeMirror()
         JSVyxal.decodeUrl()
         JSVyxal.updateCount()
       },
-      dummy,
       h2(
         style := "display: inline-block;",
         a(href := "https://github.com/Vyxal/Vyxal", target := "_blank", "Vyxal")
