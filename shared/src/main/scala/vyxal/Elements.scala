@@ -5,7 +5,7 @@ import Helpers.given
 
 import scala.collection.{mutable => mut}
 
-object Builtins {
+object Elements {
 
   /** Get an element by its name
     */

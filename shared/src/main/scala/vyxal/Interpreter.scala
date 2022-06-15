@@ -35,7 +35,7 @@ object Interpreter {
         case Literal(value) =>
           println("literal:" + value); ctx.push(value); println(ctx)
         case l: Lambda => ctx.push(VFun.Lam(l, ctx.createChild()))
-        case Element(name) => Builtins.getElement(name)()
+        case Element(name) => Elements.getElement(name)()
         case Cmds(cmds*) => cmds.foreach(execute)
         case Modified(onExec, _, _, arity) => onExec()
         case LambdaWithOp(lam, after) =>
@@ -91,7 +91,7 @@ object Interpreter {
                   }
                 case _ => ???
               }
-            case _ => Builtins.getElement("†")()
+            case _ => Elements.getElement("†")()
           }
       }
     } catch {
