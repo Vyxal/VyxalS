@@ -1,5 +1,7 @@
 # Vyxal in Scala
 
+[![Scala.js](https://www.scala-js.org/assets/badges/scalajs-1.8.0.svg)](https://www.scala-js.org)
+
 This repository is where we're going to experiment with rewriting the golfing language [Vyxal](https://github.com/Vyxal/Vyxal) in Scala.
 
 ## Setting everything up

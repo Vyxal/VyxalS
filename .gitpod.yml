@@ -5,5 +5,6 @@ tasks:
       chmod +x cs
       yes | ./cs setup
       export PATH="$PATH:~/.local/share/coursier/bin"
+      cd /workspace/VyxalS
   - command: |
       sbt

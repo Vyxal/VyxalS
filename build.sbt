@@ -61,8 +61,12 @@ lazy val vyxal = crossProject(JSPlatform, JVMPlatform)
   )
   .jsSettings(
     // Add JS-specific settings here
-    Compile / mainClass := Some("vyxal.JSMain"),
+    Compile / mainClass := Some("vyxal.Main"),
     scalaJSUseMainModuleInitializer := true,
+    libraryDependencies ++= Seq(
+      "org.scala-js" %%% "scalajs-dom" % "2.2.0",
+      "com.lihaoyi" %%% "scalatags" % "0.11.1",
+    ),
     Compile / fastOptJS / artifactPath := baseDirectory.value / "lib" / "main.js",
     Compile / fullOptJS / artifactPath := baseDirectory.value / "lib" / "main.js"
   )
