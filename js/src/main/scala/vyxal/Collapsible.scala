@@ -11,7 +11,7 @@ class Collapsible[+B <: dom.Element](
     val contents: B,
     extraContents: scalatags.JsDom.Modifier*
 ) {
-  val details = tag("details")(
+  lazy val details = tag("details")(
     (Seq[scalatags.JsDom.Modifier](
       id := contents.id + "-detail",
       tag("summary")(id := contents.id + "-label", label)

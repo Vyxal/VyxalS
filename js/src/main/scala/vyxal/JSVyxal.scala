@@ -8,9 +8,7 @@ import org.scalajs.dom.{document, window}
 import scalatags.JsDom.all.*
 import scalatags.JsDom.TypedTag
 
-@JSExportTopLevel("Vyxal")
-object JSVyxal extends js.Object {
-
+object JSVyxal {
   private val codepage = """λƛ¬∧⟑∨⟇÷×«␤»°•ß†€
                    |½∆ø↔¢⌐æʀʁɾɽÞƈ∞¨␠
                    |!\"#$%&'()*+,-./01
@@ -74,7 +72,7 @@ object JSVyxal extends js.Object {
     }
   }
 
-  def clear(e: dom.Event): Unit = {
+  def clear(): Unit = {
     flagBox.contents.value = ""
     headerBox.contents.value = ""
     codeBox.contents.value = ""
@@ -110,14 +108,14 @@ object JSVyxal extends js.Object {
   }
 
   def updateCount(): Unit = {
-    val byteBox = document.getElementById("code-count")
+    // val byteBox = document.getElementById("code-count")
 
-    val code = codeBox.contents.value
-    val sbcsOnly = code.forall(s"$codepage \n".contains)
-    val len = if (sbcsOnly) code.length else code.getBytes().length
-    byteBox.innerText =
-      s"Code: $len byte${if (len == 1) "" else "s"} ${if (sbcsOnly) ""
-      else " (UTF-8)"}"
+    // val code = codeBox.contents.value
+    // val sbcsOnly = code.forall(s"$codepage \n".contains)
+    // val len = if (sbcsOnly) code.length else code.getBytes().length
+    // byteBox.innerText =
+    //   s"Code: $len byte${if (len == 1) "" else "s"} ${if (sbcsOnly) ""
+    //   else " (UTF-8)"}"
   }
 
   def expandBoxes() = {
@@ -214,8 +212,8 @@ object JSVyxal extends js.Object {
     ???
   }
 
-  def initCodeMirror() = {
-    ???
+  def initCodeMirror(): Unit = {
+    // todo implement
   }
 
   def flags = flagBox.contents.value
@@ -225,21 +223,17 @@ object JSVyxal extends js.Object {
   def inputs = inputsBox.contents.value
   def output = outputBox.contents.value
 
-  // ScalaTags doesn"t define these for some reason
-  val details = tag("details")
-  val summary = tag("summary")
-  val open = attr("open").empty
+  println("before dummy")
 
   val dummy = textarea(id := "dummy").render
+
+  println("rendered dummy")
 
   val runButton: dom.html.Button = button(
     id := "run_button",
     title := "Run Program",
     `type` := "button",
-    onclick := { () =>
-      runButton.blur()
-      JSVyxal.run()
-    },
+    onclick := { () => JSVyxal.run() },
     i(`class` := "fas fa-play-circle")
   ).render
 
@@ -252,7 +246,7 @@ object JSVyxal extends js.Object {
       label(
         `for` := "filterBox",
         style := "display:inline-block; color: white; font-family: \"Montserrat\", sans-serif; padding-right: 1%;",
-        "Search",
+        "Search&nbsp;",
         a(
           href := "https://github.com/Vyxal/Vyxal/blob/main/documents/knowledge/elements.md",
           "elements"
@@ -329,6 +323,8 @@ object JSVyxal extends js.Object {
     ).render
   )
 
+  println("here!")
+
   val htmlFrag =
     body(
       onload := {
@@ -369,6 +365,7 @@ object JSVyxal extends js.Object {
       button(
         id := "clear",
         title := "Clear all fields",
+        onclick := { () => JSVyxal.clear() },
         i(`class` := "fas fa-redo")
       ),
       keyboardBox.details,
@@ -379,5 +376,5 @@ object JSVyxal extends js.Object {
       inputsBox.details,
       outputBox.details,
       errorBox.details
-    )
+    ).render
 }
