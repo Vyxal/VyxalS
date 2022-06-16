@@ -59,6 +59,7 @@ lazy val vyxal = crossProject(JSPlatform, JVMPlatform)
     // Add JVM-specific settings here
     Compile / mainClass := Some("vyxal.JVMMain")
   )
+  .jsConfigure { project => project.enablePlugins(ScalaJSBundlerPlugin) }
   .jsSettings(
     // Add JS-specific settings here
     Compile / mainClass := Some("vyxal.Main"),
@@ -66,6 +67,11 @@ lazy val vyxal = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % "2.2.0",
       "com.lihaoyi" %%% "scalatags" % "0.11.1",
+      "com.github.japgolly.scalajs-react" %%% "core" % "2.1.1"
+    ),
+    Compile / npmDependencies ++= Seq(
+      "react" -> "17.0.2",
+      "react-dom" -> "17.0.2"
     ),
     Compile / fastOptJS / artifactPath := baseDirectory.value / "lib" / "main.js",
     Compile / fullOptJS / artifactPath := baseDirectory.value / "lib" / "main.js"
