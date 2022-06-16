@@ -10,22 +10,23 @@ import scalatags.JsDom.TypedTag
 
 @JSExportTopLevel("Vyxal")
 object JSVyxal extends js.Object {
-  private val codepage = """λƛ¬∧⟑∨⟇÷×«␤»°•ß†€
-                   |½∆ø↔¢⌐æʀʁɾɽÞƈ∞¨␠
-                   |!\"#$%&'()*+,-./01
-                   |23456789:;<=>?@A
-                   |BCDEFGHIJKLMNOPQ
-                   |RSTUVWXYZ[\\]`^_abc
-                   |defghijklmnopqrs
-                   |tuvwxyz{|}~↑↓∴∵›
-                   |‹∷¤ð→←βτȧḃċḋėḟġḣ
-                   |ḭŀṁṅȯṗṙṡṫẇẋẏż√⟨⟩
-                   |‛₀₁₂₃₄₅₆₇₈¶⁋§ε¡
-                   |∑¦≈µȦḂĊḊĖḞĠḢİĿṀṄ
-                   |ȮṖṘṠṪẆẊẎŻ₌₍⁰¹²∇⌈
-                   |⌊¯±₴…□↳↲⋏⋎꘍ꜝ℅≤≥
-                   |≠⁼ƒɖ∪∩⊍£¥⇧⇩ǍǎǏǐǑ
-                   |ǒǓǔ⁽‡≬⁺↵⅛¼¾Π„‟""".stripMargin('|').replace("\n", "")
+  private val codepage: Seq[String] =
+    """λƛ¬∧⟑∨⟇÷×«␤»°•ß†€
+       |½∆ø↔¢⌐æʀʁɾɽÞƈ∞¨␠
+       |!\"#$%&'()*+,-./01
+       |23456789:;<=>?@A
+       |BCDEFGHIJKLMNOPQ
+       |RSTUVWXYZ[\\]`^_abc
+       |defghijklmnopqrs
+       |tuvwxyz{|}~↑↓∴∵›
+       |‹∷¤ð→←βτȧḃċḋėḟġḣ
+       |ḭŀṁṅȯṗṙṡṫẇẋẏż√⟨⟩
+       |‛₀₁₂₃₄₅₆₇₈¶⁋§ε¡
+       |∑¦≈µȦḂĊḊĖḞĠḢİĿṀṄ
+       |ȮṖṘṠṪẆẊẎŻ₌₍⁰¹²∇⌈
+       |⌊¯±₴…□↳↲⋏⋎꘍ꜝ℅≤≥
+       |≠⁼ƒɖ∪∩⊍£¥⇧⇩ǍǎǏǐǑ
+       |ǒǓǔ⁽‡≬⁺↵⅛¼¾Π„‟""".stripMargin('|').replace("\n", "").map(_.toString)
 
   private var prevQuery = ""
   private var selectedBox =
@@ -219,6 +220,37 @@ object JSVyxal extends js.Object {
     // todo implement
   }
 
+  def glyphSearch(): Unit = {
+    val query = filterBox.value.toLowerCase
+
+    // println("in glyphsearch, selectedBox=' + selectedBox)
+
+    if (query.nonEmpty) {
+      println("starting filter")
+
+      val pattern = query.map(char => s"[^$char]*$char").mkString.r
+
+      for ((element, docs) <- Docs.elements) {
+        if (
+          pattern.matches(
+            docs.name + docs.desc + docs.overloads.values.mkString
+          )
+        ) {}
+      }
+
+      for (element <- document.getElementsByClassName("key")) {
+        if (pattern.matches(element.title.toLowerCase)) {
+          element.style.display = "inline-block";
+        } else {
+          element.style.display = "none";
+        }
+      }
+    } else {
+      searchResultsBox.innerHTML = ""
+
+    }
+  }
+
   def flags = flagBox.contents.value
   def header = headerBox.contents.value
   def code = codeBox.contents.value
@@ -234,31 +266,45 @@ object JSVyxal extends js.Object {
     i(`class` := "fas fa-play-circle")
   ).render
 
+  val keys = codepage.map(c =>
+    span(`class` := "key", title := c.toString, c.toString).render
+  )
   val keyboardBox = Collapsible(
     "Keyboard",
-    div(`class` := "twelve columns", div(id := "keyboard")).render,
     div(
-      `class` := "row",
-      style := "width:100%; padding-bottom: 1em;",
-      label(
-        `for` := "filterBox",
-        style := "display:inline-block; color: white; font-family: \"Montserrat\", sans-serif; padding-right: 1%;",
-        "Search&nbsp;",
-        a(
-          href := "https://github.com/Vyxal/Vyxal/blob/main/documents/knowledge/elements.md",
-          "elements"
-        )
-      ),
-      input(
-        style := "display:inline-block",
-        id := "filterBox",
-        oninput := { () =>
-          /*glyphSearch(); */
-          ???
-        },
-        label("Search for command:")
-      )
+      `class` := "twelve columns",
+      div((id := "keyboard") +: keys.map(s => s : scalatags.JsDom.Modifier))
+    ).render
+  )
+  for (key <- keys) {
+    key.addEventListener(
+      "click",
+      event => {
+        // val char = replaceHTMLChar(event.target.innerHTML)
+        // val cm = globalThis[`e_${selectedBox}`]
+        // cm.replaceSelection(char)
+        // cm.save()
+        // cm.focus()
+        updateCount()
+      }
     )
+  }
+
+  val filterBox = input(
+    style := "display:inline-block",
+    id := "filterBox",
+    oninput := { () => glyphSearch() },
+    label("Search for command:")
+  ).render
+
+  val searchResultsBox = ul(
+    id := "searchResults"
+  ).render
+
+  val searchBox = Collapsible(
+    "Search elements",
+    searchResultsBox,
+    filterBox
   )
 
   val flagBox = Collapsible(
@@ -363,6 +409,7 @@ object JSVyxal extends js.Object {
         i(`class` := "fas fa-redo")
       ),
       keyboardBox.details,
+      searchBox.details,
       flagBox.details,
       headerBox.details,
       codeBox.details,

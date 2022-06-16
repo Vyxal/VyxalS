@@ -9199,285 +9199,6 @@ var $d_Lvyxal_AST = new $TypeData().initClass({
   O: 1
 });
 /** @constructor */
-function $c_Lvyxal_Builtins$Impls$() {
-  this.Lvyxal_Builtins$Impls$__f_elements = null;
-  this.Lvyxal_Builtins$Impls$__f_add = null;
-  this.Lvyxal_Builtins$Impls$__f_halve = null;
-  this.Lvyxal_Builtins$Impls$__f_land = null;
-  this.Lvyxal_Builtins$Impls$__f_lnot = null;
-  this.Lvyxal_Builtins$Impls$__f_lor = null;
-  this.Lvyxal_Builtins$Impls$__f_mul = null;
-  this.Lvyxal_Builtins$Impls$__f_subtract = null;
-  this.Lvyxal_Builtins$Impls$__f_sum = null;
-  this.Lvyxal_Builtins$Impls$__f_exec = null;
-  $n_Lvyxal_Builtins$Impls$ = this;
-  this.Lvyxal_Builtins$Impls$__f_elements = $as_scm_Map($m_scm_Map$().apply__sci_Seq__O($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([]))));
-  this.addDirect__T__F1__V(",", new $c_sjsr_AnonFunction1(((this$1) => ((ctx) => {
-    var ctx$1 = $as_Lvyxal_Context(ctx);
-    $m_Lvyxal_Helpers$().vyPrint__O__Lvyxal_Context__V(ctx$1.pop__O(), ctx$1);
-    $m_Lvyxal_Helpers$().vyPrint__O__Lvyxal_Context__V("\n", ctx$1)
-  }))(this)));
-  this.Lvyxal_Builtins$Impls$__f_add = this.addDyad__T__F2__F2("+", $m_Lvyxal_Functions$package$().vect2__F2__F2(new $c_sjsr_AnonFunction2(((this$2) => ((x$1, x$2) => {
-    var x$1$1 = $as_Ljava_io_Serializable(x$1);
-    var x$2$1 = $as_Ljava_io_Serializable(x$2);
-    return new $c_sjsr_AnonFunction1(((this$3, x$1$2, x$2$2) => ((evidence$2) => {
-      $as_Lvyxal_Context(evidence$2);
-      if ($is_Lspire_math_Number(x$1$2)) {
-        var n1 = $as_Lspire_math_Number(x$1$2);
-        if ($is_Lspire_math_Number(x$2$2)) {
-          var n2 = $as_Lspire_math_Number(x$2$2);
-          return n1.$plus__Lspire_math_Number__Lspire_math_Number(n2)
-        }
-      };
-      if (((typeof x$1$2) === "string")) {
-        var s = $as_T(x$1$2);
-        if ($is_Lspire_math_Number(x$2$2)) {
-          var n = $as_Lspire_math_Number(x$2$2);
-          return (("" + s) + n)
-        }
-      };
-      if ($is_Lspire_math_Number(x$1$2)) {
-        var n$2 = $as_Lspire_math_Number(x$1$2);
-        if (((typeof x$2$2) === "string")) {
-          var s$2 = $as_T(x$2$2);
-          return (("" + n$2.toString__T()) + s$2)
-        }
-      };
-      if (((typeof x$1$2) === "string")) {
-        var s1 = $as_T(x$1$2);
-        if (((typeof x$2$2) === "string")) {
-          var s2 = $as_T(x$2$2);
-          return (("" + s1) + s2)
-        }
-      };
-      throw new $c_Lvyxal_VyOverloadError("Functions can't be added")
-    }))(this$2, x$1$1, x$2$1))
-  }))(this))));
-  this.Lvyxal_Builtins$Impls$__f_halve = this.addMonad__T__F1__F1("\u00bd", $m_Lvyxal_Functions$package$().vect1__F1__F1(new $c_sjsr_AnonFunction1(((this$3$1) => ((x$1$2$1) => {
-    var x$1$3 = $as_Ljava_io_Serializable(x$1$2$1);
-    return new $c_sjsr_AnonFunction1(((this$5, x$1$2$2) => ((evidence$3) => {
-      $as_Lvyxal_Context(evidence$3);
-      if ($is_Lspire_math_Number(x$1$2$2)) {
-        var n$1 = $as_Lspire_math_Number(x$1$2$2);
-        return n$1.$div__Lspire_math_Number__Lspire_math_Number($m_Lspire_math_Number$().apply__I__Lspire_math_Number(2))
-      } else if (((typeof x$1$2$2) === "string")) {
-        var s$1 = $as_T(x$1$2$2);
-        var half = ((((1 + $uI(s$1.length)) | 0) / 2) | 0);
-        var this$9 = $m_Lvyxal_VList$();
-        var $$x2 = $m_sr_ScalaRunTime$();
-        var $$x1 = $as_T(s$1.substring(0, half));
-        var beginIndex = ((1 + half) | 0);
-        var xs = $$x2.wrapRefArray__AO__sci_ArraySeq(new $ac_O([$$x1, $as_T(s$1.substring(beginIndex))]));
-        return this$9.fromSpecific__sc_IterableOnce__Lvyxal_VList(xs)
-      } else {
-        throw new $c_Lvyxal_VyOverloadError("Sorry, you can't halve functions")
-      }
-    }))(this$3$1, x$1$3))
-  }))(this))));
-  this.Lvyxal_Builtins$Impls$__f_land = this.addDyad__T__F2__F2("\u2227", new $c_sjsr_AnonFunction2(((this$4$1) => ((a, b) => new $c_sjsr_AnonFunction1(((this$10, a$2, b$2) => ((evidence$4) => {
-    $as_Lvyxal_Context(evidence$4);
-    return (($m_Lvyxal_Helpers$().toBool__O__Z(a$2) && $m_Lvyxal_Helpers$().toBool__O__Z(b$2)) ? $m_Lspire_math_Number$().apply__I__Lspire_math_Number(1) : $m_Lspire_math_Number$().apply__I__Lspire_math_Number(0))
-  }))(this$4$1, a, b))))(this)));
-  this.Lvyxal_Builtins$Impls$__f_lnot = this.addMonad__T__F1__F1("\u00ac", new $c_sjsr_AnonFunction1(((this$5$1) => ((a$2$1) => new $c_sjsr_AnonFunction1(((this$11, a$2$2) => ((evidence$5) => {
-    $as_Lvyxal_Context(evidence$5);
-    return ((!$m_Lvyxal_Helpers$().toBool__O__Z(a$2$2)) ? $m_Lspire_math_Number$().apply__I__Lspire_math_Number(1) : $m_Lspire_math_Number$().apply__I__Lspire_math_Number(0))
-  }))(this$5$1, a$2$1))))(this)));
-  this.Lvyxal_Builtins$Impls$__f_lor = this.addDyad__T__F2__F2("\u2228", new $c_sjsr_AnonFunction2(((this$6$1) => ((a$3, b$2$1) => new $c_sjsr_AnonFunction1(((this$12, a$2$3, b$2$2) => ((evidence$6) => {
-    $as_Lvyxal_Context(evidence$6);
-    return (($m_Lvyxal_Helpers$().toBool__O__Z(a$2$3) || $m_Lvyxal_Helpers$().toBool__O__Z(b$2$2)) ? $m_Lspire_math_Number$().apply__I__Lspire_math_Number(1) : $m_Lspire_math_Number$().apply__I__Lspire_math_Number(0))
-  }))(this$6$1, a$3, b$2$1))))(this)));
-  this.Lvyxal_Builtins$Impls$__f_mul = this.addDyad__T__F2__F2("*", $m_Lvyxal_Functions$package$().vect2__F2__F2(new $c_sjsr_AnonFunction2(((this$7$1) => ((x$1$3$1, x$2$2$1) => {
-    var x$1$4 = $as_Ljava_io_Serializable(x$1$3$1);
-    var x$2$3 = $as_Ljava_io_Serializable(x$2$2$1);
-    return new $c_sjsr_AnonFunction1(((this$13, x$1$2$3, x$2$2$2) => ((evidence$7) => {
-      $as_Lvyxal_Context(evidence$7);
-      if ($is_Lspire_math_Number(x$1$2$3)) {
-        var x33 = $as_Lspire_math_Number(x$1$2$3);
-        if ($is_Lspire_math_Number(x$2$2$2)) {
-          var n2$1 = $as_Lspire_math_Number(x$2$2$2);
-          return x33.$times__Lspire_math_Number__Lspire_math_Number(n2$1)
-        };
-        if (((typeof x$2$2$2) === "string")) {
-          var s$3 = $as_T(x$2$2$2);
-          return $m_sc_StringOps$().$times$extension__T__I__T(s$3, x33.intValue__I())
-        }
-      };
-      if (((typeof x$1$2$3) === "string")) {
-        var s$2$1 = $as_T(x$1$2$3);
-        if ($is_Lspire_math_Number(x$2$2$2)) {
-          var n$2$1 = $as_Lspire_math_Number(x$2$2$2);
-          return $m_sc_StringOps$().$times$extension__T__I__T(s$2$1, n$2$1.intValue__I())
-        }
-      };
-      $m_s_Predef$().$qmark$qmark$qmark__E()
-    }))(this$7$1, x$1$4, x$2$3))
-  }))(this))));
-  this.Lvyxal_Builtins$Impls$__f_subtract = this.addDyad__T__F2__F2("-", $m_Lvyxal_Functions$package$().vect2__F2__F2(new $c_sjsr_AnonFunction2(((this$8$1) => ((x$1$4$1, x$2$3$1) => {
-    var x$1$5 = $as_Ljava_io_Serializable(x$1$4$1);
-    var x$2$4 = $as_Ljava_io_Serializable(x$2$3$1);
-    return new $c_sjsr_AnonFunction1(((this$17, x$1$2$4, x$2$2$3) => ((evidence$8) => {
-      $as_Lvyxal_Context(evidence$8);
-      if ($is_Lspire_math_Number(x$1$2$4)) {
-        var n1$1 = $as_Lspire_math_Number(x$1$2$4);
-        if ($is_Lspire_math_Number(x$2$2$3)) {
-          var n2$2 = $as_Lspire_math_Number(x$2$2$3);
-          return n1$1.$minus__Lspire_math_Number__Lspire_math_Number(n2$2)
-        }
-      };
-      if (((typeof x$1$2$4) === "string")) {
-        var s$4 = $as_T(x$1$2$4);
-        if ($is_Lspire_math_Number(x$2$2$3)) {
-          var n$3 = $as_Lspire_math_Number(x$2$2$3);
-          return (("" + s$4) + $m_sc_StringOps$().$times$extension__T__I__T("-", n$3.intValue__I()))
-        }
-      };
-      if ($is_Lspire_math_Number(x$1$2$4)) {
-        var n$2$2 = $as_Lspire_math_Number(x$1$2$4);
-        if (((typeof x$2$2$3) === "string")) {
-          var s$2$2 = $as_T(x$2$2$3);
-          return (("" + $m_sc_StringOps$().$times$extension__T__I__T("-", n$2$2.intValue__I())) + s$2$2)
-        }
-      };
-      if (((typeof x$1$2$4) === "string")) {
-        var s1$1 = $as_T(x$1$2$4);
-        if (((typeof x$2$2$3) === "string")) {
-          var s2$1 = $as_T(x$2$2$3);
-          return $as_T(s1$1.split(s2$1).join(""))
-        }
-      };
-      throw new $c_Lvyxal_VyOverloadError("Functions can't be subtracted")
-    }))(this$8$1, x$1$5, x$2$4))
-  }))(this))));
-  this.Lvyxal_Builtins$Impls$__f_sum = this.addMonad__T__F1__F1("\u2211", new $c_sjsr_AnonFunction1(((this$9$1) => ((x$1$5$1) => new $c_sjsr_AnonFunction1(((this$22, x$1$2$5) => ((evidence$9) => {
-    var evidence$9$1 = $as_Lvyxal_Context(evidence$9);
-    if ($is_Lspire_math_Number(x$1$2$5)) {
-      var n$4 = $as_Lspire_math_Number(x$1$2$5);
-      var $$x4 = $m_Lspire_math_Number$();
-      var x = n$4.intValue__I();
-      var this$27 = ((x < 0) ? ((-x) | 0) : x);
-      var x$3 = ("" + this$27);
-      var len = $uI(x$3.length);
-      var dst = new $ac_O(len);
-      var i = 0;
-      while ((i < len)) {
-        var $$x3 = i;
-        var index = i;
-        var arg1 = (65535 & $uI(x$3.charCodeAt(index)));
-        var this$33 = $m_jl_Character$();
-        var codePoint = arg1;
-        dst.set($$x3, this$33.digitWithValidRadix__I__I__I(codePoint, 36));
-        i = ((1 + i) | 0)
-      };
-      var this$34 = new $c_sci_ArraySeq$ofRef(dst);
-      var num = $m_s_math_Numeric$IntIsIntegral$();
-      return $$x4.apply__I__Lspire_math_Number($uI($f_sc_IterableOnceOps__sum__s_math_Numeric__O(this$34, num)))
-    } else if (((typeof x$1$2$5) === "string")) {
-      var s$5 = $as_T(x$1$2$5);
-      return s$5
-    } else if ((x$1$2$5 instanceof $c_Lvyxal_VList)) {
-      var l = $as_Lvyxal_VList(x$1$2$5);
-      var start = $m_Lspire_math_Number$().apply__I__Lspire_math_Number(0);
-      var result = start;
-      var it = l.Lvyxal_VList__f_lst.iterator__sc_Iterator();
-      while (it.hasNext__Z()) {
-        var arg1$1 = result;
-        var arg2 = it.next__O();
-        result = $m_Lvyxal_Functions$package$().norm__F2__Lvyxal_Context__F2(this$22.Lvyxal_Builtins$Impls$__f_add, evidence$9$1).apply__O__O__O(arg1$1, arg2)
-      };
-      return result
-    } else {
-      throw new $c_Lvyxal_VyOverloadError("What's the sum of a function even supposed to be?")
-    }
-  }))(this$9$1, x$1$5$1))))(this)));
-  this.Lvyxal_Builtins$Impls$__f_exec = this.addMonad__T__F1__F1("\u2020", new $c_sjsr_AnonFunction1(((this$10$1) => ((x$1$6) => new $c_sjsr_AnonFunction1(((this$35, x$1$2$6) => ((evidence$10) => {
-    $as_Lvyxal_Context(evidence$10);
-    throw $ct_s_NotImplementedError__T__(new $c_s_NotImplementedError(), (("\u2020 is still unimplemented (tried executing on " + x$1$2$6) + ")"))
-  }))(this$10$1, x$1$6))))(this)));
-  this.addNilad__T__F1__V("W", new $c_sjsr_AnonFunction1(((this$11$1) => ((ctx$2) => {
-    var ctx$3 = $as_Lvyxal_Context(ctx$2);
-    return ctx$3.popAll__Lvyxal_VList()
-  }))(this)));
-  this.addNilad__T__F1__V("n", new $c_sjsr_AnonFunction1(((this$12$1) => ((ctx$3$1) => {
-    var ctx$4 = $as_Lvyxal_Context(ctx$3$1);
-    return ctx$4.Lvyxal_Context__f_contextVar
-  }))(this)));
-  this.addNilad__T__F1__V("ka", new $c_sjsr_AnonFunction1(((this$13$1) => ((evidence$11) => {
-    $as_Lvyxal_Context(evidence$11);
-    return "abcdefghijklmnopqrstuvwxyz"
-  }))(this)))
-}
-$c_Lvyxal_Builtins$Impls$.prototype = new $h_O();
-$c_Lvyxal_Builtins$Impls$.prototype.constructor = $c_Lvyxal_Builtins$Impls$;
-/** @constructor */
-function $h_Lvyxal_Builtins$Impls$() {
-  /*<skip>*/
-}
-$h_Lvyxal_Builtins$Impls$.prototype = $c_Lvyxal_Builtins$Impls$.prototype;
-$c_Lvyxal_Builtins$Impls$.prototype.addNilad__T__F1__V = (function(name, impl) {
-  var this$7 = this.Lvyxal_Builtins$Impls$__f_elements;
-  var fn = new $c_sjsr_AnonFunction0(((this$2, impl$2) => (() => new $c_sjsr_AnonFunction1(((this$3, impl$1$2) => ((ctx) => {
-    var ctx$1 = $as_Lvyxal_Context(ctx);
-    var item = impl$1$2.apply__O__O(ctx$1);
-    var this$4 = ctx$1.Lvyxal_Context__f_stack;
-    this$4.addOne__O__scm_ArrayBuffer(item)
-  }))(this$2, impl$2))))(this, impl));
-  var y = new $c_Lvyxal_DirectFn(fn, 1);
-  var elem = new $c_T2(name, y);
-  this$7.addOne__O__scm_Growable(elem)
-});
-$c_Lvyxal_Builtins$Impls$.prototype.addMonad__T__F1__F1 = (function(name, impl) {
-  var this$7 = this.Lvyxal_Builtins$Impls$__f_elements;
-  var fn = new $c_sjsr_AnonFunction0(((this$2, impl$2) => (() => new $c_sjsr_AnonFunction1(((this$3, impl$3$2) => ((ctx) => {
-    var ctx$1 = $as_Lvyxal_Context(ctx);
-    var item = $as_F1(impl$3$2.apply__O__O(ctx$1.pop__O())).apply__O__O(ctx$1);
-    var this$4 = ctx$1.Lvyxal_Context__f_stack;
-    this$4.addOne__O__scm_ArrayBuffer(item)
-  }))(this$2, impl$2))))(this, impl));
-  var y = new $c_Lvyxal_DirectFn(fn, 1);
-  var elem = new $c_T2(name, y);
-  this$7.addOne__O__scm_Growable(elem);
-  return impl
-});
-$c_Lvyxal_Builtins$Impls$.prototype.addDyad__T__F2__F2 = (function(name, impl) {
-  var this$7 = this.Lvyxal_Builtins$Impls$__f_elements;
-  var fn = new $c_sjsr_AnonFunction0(((this$2, impl$2) => (() => new $c_sjsr_AnonFunction1(((this$3, impl$5$2) => ((ctx) => {
-    var ctx$1 = $as_Lvyxal_Context(ctx);
-    var arg2 = ctx$1.pop__O();
-    var arg1 = ctx$1.pop__O();
-    var item = $as_F1(impl$5$2.apply__O__O__O(arg1, arg2)).apply__O__O(ctx$1);
-    var this$4 = ctx$1.Lvyxal_Context__f_stack;
-    this$4.addOne__O__scm_ArrayBuffer(item)
-  }))(this$2, impl$2))))(this, impl));
-  var y = new $c_Lvyxal_DirectFn(fn, 2);
-  var elem = new $c_T2(name, y);
-  this$7.addOne__O__scm_Growable(elem);
-  return impl
-});
-$c_Lvyxal_Builtins$Impls$.prototype.addDirect__T__F1__V = (function(name, impl) {
-  var this$6 = this.Lvyxal_Builtins$Impls$__f_elements;
-  var fn = new $c_sjsr_AnonFunction0(((this$2, impl$2) => (() => new $c_sjsr_AnonFunction1(((this$3, impl$11$2) => ((evidence$1) => {
-    var evidence$1$1 = $as_Lvyxal_Context(evidence$1);
-    impl$11$2.apply__O__O(evidence$1$1)
-  }))(this$2, impl$2))))(this, impl));
-  var y = new $c_Lvyxal_DirectFn(fn, (-1));
-  var elem = new $c_T2(name, y);
-  this$6.addOne__O__scm_Growable(elem)
-});
-var $d_Lvyxal_Builtins$Impls$ = new $TypeData().initClass({
-  Lvyxal_Builtins$Impls$: 0
-}, false, "vyxal.Builtins$Impls$", {
-  Lvyxal_Builtins$Impls$: 1,
-  O: 1
-});
-$c_Lvyxal_Builtins$Impls$.prototype.$classData = $d_Lvyxal_Builtins$Impls$;
-var $n_Lvyxal_Builtins$Impls$;
-function $m_Lvyxal_Builtins$Impls$() {
-  if ((!$n_Lvyxal_Builtins$Impls$)) {
-    $n_Lvyxal_Builtins$Impls$ = new $c_Lvyxal_Builtins$Impls$()
-  };
-  return $n_Lvyxal_Builtins$Impls$
-}
-/** @constructor */
 function $c_Lvyxal_Collapsible(label, contents, extraContents) {
   this.Lvyxal_Collapsible__f_label = null;
   this.Lvyxal_Collapsible__f_contents = null;
@@ -9714,6 +9435,285 @@ function $m_Lvyxal_Context$() {
     $n_Lvyxal_Context$ = new $c_Lvyxal_Context$()
   };
   return $n_Lvyxal_Context$
+}
+/** @constructor */
+function $c_Lvyxal_Elements$Impls$() {
+  this.Lvyxal_Elements$Impls$__f_elements = null;
+  this.Lvyxal_Elements$Impls$__f_add = null;
+  this.Lvyxal_Elements$Impls$__f_halve = null;
+  this.Lvyxal_Elements$Impls$__f_land = null;
+  this.Lvyxal_Elements$Impls$__f_lnot = null;
+  this.Lvyxal_Elements$Impls$__f_lor = null;
+  this.Lvyxal_Elements$Impls$__f_mul = null;
+  this.Lvyxal_Elements$Impls$__f_subtract = null;
+  this.Lvyxal_Elements$Impls$__f_sum = null;
+  this.Lvyxal_Elements$Impls$__f_exec = null;
+  $n_Lvyxal_Elements$Impls$ = this;
+  this.Lvyxal_Elements$Impls$__f_elements = $as_scm_Map($m_scm_Map$().apply__sci_Seq__O($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([]))));
+  this.addDirect__T__F1__V(",", new $c_sjsr_AnonFunction1(((this$1) => ((ctx) => {
+    var ctx$1 = $as_Lvyxal_Context(ctx);
+    $m_Lvyxal_Helpers$().vyPrint__O__Lvyxal_Context__V(ctx$1.pop__O(), ctx$1);
+    $m_Lvyxal_Helpers$().vyPrint__O__Lvyxal_Context__V("\n", ctx$1)
+  }))(this)));
+  this.Lvyxal_Elements$Impls$__f_add = this.addDyad__T__F2__F2("+", $m_Lvyxal_Functions$package$().vect2__F2__F2(new $c_sjsr_AnonFunction2(((this$2) => ((x$1, x$2) => {
+    var x$1$1 = $as_Ljava_io_Serializable(x$1);
+    var x$2$1 = $as_Ljava_io_Serializable(x$2);
+    return new $c_sjsr_AnonFunction1(((this$3, x$1$2, x$2$2) => ((evidence$2) => {
+      $as_Lvyxal_Context(evidence$2);
+      if ($is_Lspire_math_Number(x$1$2)) {
+        var n1 = $as_Lspire_math_Number(x$1$2);
+        if ($is_Lspire_math_Number(x$2$2)) {
+          var n2 = $as_Lspire_math_Number(x$2$2);
+          return n1.$plus__Lspire_math_Number__Lspire_math_Number(n2)
+        }
+      };
+      if (((typeof x$1$2) === "string")) {
+        var s = $as_T(x$1$2);
+        if ($is_Lspire_math_Number(x$2$2)) {
+          var n = $as_Lspire_math_Number(x$2$2);
+          return (("" + s) + n)
+        }
+      };
+      if ($is_Lspire_math_Number(x$1$2)) {
+        var n$2 = $as_Lspire_math_Number(x$1$2);
+        if (((typeof x$2$2) === "string")) {
+          var s$2 = $as_T(x$2$2);
+          return (("" + n$2.toString__T()) + s$2)
+        }
+      };
+      if (((typeof x$1$2) === "string")) {
+        var s1 = $as_T(x$1$2);
+        if (((typeof x$2$2) === "string")) {
+          var s2 = $as_T(x$2$2);
+          return (("" + s1) + s2)
+        }
+      };
+      throw new $c_Lvyxal_VyOverloadError("Functions can't be added")
+    }))(this$2, x$1$1, x$2$1))
+  }))(this))));
+  this.Lvyxal_Elements$Impls$__f_halve = this.addMonad__T__F1__F1("\u00bd", $m_Lvyxal_Functions$package$().vect1__F1__F1(new $c_sjsr_AnonFunction1(((this$3$1) => ((x$1$2$1) => {
+    var x$1$3 = $as_Ljava_io_Serializable(x$1$2$1);
+    return new $c_sjsr_AnonFunction1(((this$5, x$1$2$2) => ((evidence$3) => {
+      $as_Lvyxal_Context(evidence$3);
+      if ($is_Lspire_math_Number(x$1$2$2)) {
+        var n$1 = $as_Lspire_math_Number(x$1$2$2);
+        return n$1.$div__Lspire_math_Number__Lspire_math_Number($m_Lspire_math_Number$().apply__I__Lspire_math_Number(2))
+      } else if (((typeof x$1$2$2) === "string")) {
+        var s$1 = $as_T(x$1$2$2);
+        var half = ((((1 + $uI(s$1.length)) | 0) / 2) | 0);
+        var this$9 = $m_Lvyxal_VList$();
+        var $$x2 = $m_sr_ScalaRunTime$();
+        var $$x1 = $as_T(s$1.substring(0, half));
+        var beginIndex = ((1 + half) | 0);
+        var xs = $$x2.wrapRefArray__AO__sci_ArraySeq(new $ac_O([$$x1, $as_T(s$1.substring(beginIndex))]));
+        return this$9.fromSpecific__sc_IterableOnce__Lvyxal_VList(xs)
+      } else {
+        throw new $c_Lvyxal_VyOverloadError("Sorry, you can't halve functions")
+      }
+    }))(this$3$1, x$1$3))
+  }))(this))));
+  this.Lvyxal_Elements$Impls$__f_land = this.addDyad__T__F2__F2("\u2227", new $c_sjsr_AnonFunction2(((this$4$1) => ((a, b) => new $c_sjsr_AnonFunction1(((this$10, a$2, b$2) => ((evidence$4) => {
+    $as_Lvyxal_Context(evidence$4);
+    return (($m_Lvyxal_Helpers$().toBool__O__Z(a$2) && $m_Lvyxal_Helpers$().toBool__O__Z(b$2)) ? $m_Lspire_math_Number$().apply__I__Lspire_math_Number(1) : $m_Lspire_math_Number$().apply__I__Lspire_math_Number(0))
+  }))(this$4$1, a, b))))(this)));
+  this.Lvyxal_Elements$Impls$__f_lnot = this.addMonad__T__F1__F1("\u00ac", new $c_sjsr_AnonFunction1(((this$5$1) => ((a$2$1) => new $c_sjsr_AnonFunction1(((this$11, a$2$2) => ((evidence$5) => {
+    $as_Lvyxal_Context(evidence$5);
+    return ((!$m_Lvyxal_Helpers$().toBool__O__Z(a$2$2)) ? $m_Lspire_math_Number$().apply__I__Lspire_math_Number(1) : $m_Lspire_math_Number$().apply__I__Lspire_math_Number(0))
+  }))(this$5$1, a$2$1))))(this)));
+  this.Lvyxal_Elements$Impls$__f_lor = this.addDyad__T__F2__F2("\u2228", new $c_sjsr_AnonFunction2(((this$6$1) => ((a$3, b$2$1) => new $c_sjsr_AnonFunction1(((this$12, a$2$3, b$2$2) => ((evidence$6) => {
+    $as_Lvyxal_Context(evidence$6);
+    return (($m_Lvyxal_Helpers$().toBool__O__Z(a$2$3) || $m_Lvyxal_Helpers$().toBool__O__Z(b$2$2)) ? $m_Lspire_math_Number$().apply__I__Lspire_math_Number(1) : $m_Lspire_math_Number$().apply__I__Lspire_math_Number(0))
+  }))(this$6$1, a$3, b$2$1))))(this)));
+  this.Lvyxal_Elements$Impls$__f_mul = this.addDyad__T__F2__F2("*", $m_Lvyxal_Functions$package$().vect2__F2__F2(new $c_sjsr_AnonFunction2(((this$7$1) => ((x$1$3$1, x$2$2$1) => {
+    var x$1$4 = $as_Ljava_io_Serializable(x$1$3$1);
+    var x$2$3 = $as_Ljava_io_Serializable(x$2$2$1);
+    return new $c_sjsr_AnonFunction1(((this$13, x$1$2$3, x$2$2$2) => ((evidence$7) => {
+      $as_Lvyxal_Context(evidence$7);
+      if ($is_Lspire_math_Number(x$1$2$3)) {
+        var x33 = $as_Lspire_math_Number(x$1$2$3);
+        if ($is_Lspire_math_Number(x$2$2$2)) {
+          var n2$1 = $as_Lspire_math_Number(x$2$2$2);
+          return x33.$times__Lspire_math_Number__Lspire_math_Number(n2$1)
+        };
+        if (((typeof x$2$2$2) === "string")) {
+          var s$3 = $as_T(x$2$2$2);
+          return $m_sc_StringOps$().$times$extension__T__I__T(s$3, x33.intValue__I())
+        }
+      };
+      if (((typeof x$1$2$3) === "string")) {
+        var s$2$1 = $as_T(x$1$2$3);
+        if ($is_Lspire_math_Number(x$2$2$2)) {
+          var n$2$1 = $as_Lspire_math_Number(x$2$2$2);
+          return $m_sc_StringOps$().$times$extension__T__I__T(s$2$1, n$2$1.intValue__I())
+        }
+      };
+      $m_s_Predef$().$qmark$qmark$qmark__E()
+    }))(this$7$1, x$1$4, x$2$3))
+  }))(this))));
+  this.Lvyxal_Elements$Impls$__f_subtract = this.addDyad__T__F2__F2("-", $m_Lvyxal_Functions$package$().vect2__F2__F2(new $c_sjsr_AnonFunction2(((this$8$1) => ((x$1$4$1, x$2$3$1) => {
+    var x$1$5 = $as_Ljava_io_Serializable(x$1$4$1);
+    var x$2$4 = $as_Ljava_io_Serializable(x$2$3$1);
+    return new $c_sjsr_AnonFunction1(((this$17, x$1$2$4, x$2$2$3) => ((evidence$8) => {
+      $as_Lvyxal_Context(evidence$8);
+      if ($is_Lspire_math_Number(x$1$2$4)) {
+        var n1$1 = $as_Lspire_math_Number(x$1$2$4);
+        if ($is_Lspire_math_Number(x$2$2$3)) {
+          var n2$2 = $as_Lspire_math_Number(x$2$2$3);
+          return n1$1.$minus__Lspire_math_Number__Lspire_math_Number(n2$2)
+        }
+      };
+      if (((typeof x$1$2$4) === "string")) {
+        var s$4 = $as_T(x$1$2$4);
+        if ($is_Lspire_math_Number(x$2$2$3)) {
+          var n$3 = $as_Lspire_math_Number(x$2$2$3);
+          return (("" + s$4) + $m_sc_StringOps$().$times$extension__T__I__T("-", n$3.intValue__I()))
+        }
+      };
+      if ($is_Lspire_math_Number(x$1$2$4)) {
+        var n$2$2 = $as_Lspire_math_Number(x$1$2$4);
+        if (((typeof x$2$2$3) === "string")) {
+          var s$2$2 = $as_T(x$2$2$3);
+          return (("" + $m_sc_StringOps$().$times$extension__T__I__T("-", n$2$2.intValue__I())) + s$2$2)
+        }
+      };
+      if (((typeof x$1$2$4) === "string")) {
+        var s1$1 = $as_T(x$1$2$4);
+        if (((typeof x$2$2$3) === "string")) {
+          var s2$1 = $as_T(x$2$2$3);
+          return $as_T(s1$1.split(s2$1).join(""))
+        }
+      };
+      throw new $c_Lvyxal_VyOverloadError("Functions can't be subtracted")
+    }))(this$8$1, x$1$5, x$2$4))
+  }))(this))));
+  this.Lvyxal_Elements$Impls$__f_sum = this.addMonad__T__F1__F1("\u2211", new $c_sjsr_AnonFunction1(((this$9$1) => ((x$1$5$1) => new $c_sjsr_AnonFunction1(((this$22, x$1$2$5) => ((evidence$9) => {
+    var evidence$9$1 = $as_Lvyxal_Context(evidence$9);
+    if ($is_Lspire_math_Number(x$1$2$5)) {
+      var n$4 = $as_Lspire_math_Number(x$1$2$5);
+      var $$x4 = $m_Lspire_math_Number$();
+      var x = n$4.intValue__I();
+      var this$27 = ((x < 0) ? ((-x) | 0) : x);
+      var x$3 = ("" + this$27);
+      var len = $uI(x$3.length);
+      var dst = new $ac_O(len);
+      var i = 0;
+      while ((i < len)) {
+        var $$x3 = i;
+        var index = i;
+        var arg1 = (65535 & $uI(x$3.charCodeAt(index)));
+        var this$33 = $m_jl_Character$();
+        var codePoint = arg1;
+        dst.set($$x3, this$33.digitWithValidRadix__I__I__I(codePoint, 36));
+        i = ((1 + i) | 0)
+      };
+      var this$34 = new $c_sci_ArraySeq$ofRef(dst);
+      var num = $m_s_math_Numeric$IntIsIntegral$();
+      return $$x4.apply__I__Lspire_math_Number($uI($f_sc_IterableOnceOps__sum__s_math_Numeric__O(this$34, num)))
+    } else if (((typeof x$1$2$5) === "string")) {
+      var s$5 = $as_T(x$1$2$5);
+      return s$5
+    } else if ((x$1$2$5 instanceof $c_Lvyxal_VList)) {
+      var l = $as_Lvyxal_VList(x$1$2$5);
+      var start = $m_Lspire_math_Number$().apply__I__Lspire_math_Number(0);
+      var result = start;
+      var it = l.Lvyxal_VList__f_lst.iterator__sc_Iterator();
+      while (it.hasNext__Z()) {
+        var arg1$1 = result;
+        var arg2 = it.next__O();
+        result = $m_Lvyxal_Functions$package$().norm__F2__Lvyxal_Context__F2(this$22.Lvyxal_Elements$Impls$__f_add, evidence$9$1).apply__O__O__O(arg1$1, arg2)
+      };
+      return result
+    } else {
+      throw new $c_Lvyxal_VyOverloadError("What's the sum of a function even supposed to be?")
+    }
+  }))(this$9$1, x$1$5$1))))(this)));
+  this.Lvyxal_Elements$Impls$__f_exec = this.addMonad__T__F1__F1("\u2020", new $c_sjsr_AnonFunction1(((this$10$1) => ((x$1$6) => new $c_sjsr_AnonFunction1(((this$35, x$1$2$6) => ((evidence$10) => {
+    $as_Lvyxal_Context(evidence$10);
+    throw $ct_s_NotImplementedError__T__(new $c_s_NotImplementedError(), (("\u2020 is still unimplemented (tried executing on " + x$1$2$6) + ")"))
+  }))(this$10$1, x$1$6))))(this)));
+  this.addNilad__T__F1__V("W", new $c_sjsr_AnonFunction1(((this$11$1) => ((ctx$2) => {
+    var ctx$3 = $as_Lvyxal_Context(ctx$2);
+    return ctx$3.popAll__Lvyxal_VList()
+  }))(this)));
+  this.addNilad__T__F1__V("n", new $c_sjsr_AnonFunction1(((this$12$1) => ((ctx$3$1) => {
+    var ctx$4 = $as_Lvyxal_Context(ctx$3$1);
+    return ctx$4.Lvyxal_Context__f_contextVar
+  }))(this)));
+  this.addNilad__T__F1__V("ka", new $c_sjsr_AnonFunction1(((this$13$1) => ((evidence$11) => {
+    $as_Lvyxal_Context(evidence$11);
+    return "abcdefghijklmnopqrstuvwxyz"
+  }))(this)))
+}
+$c_Lvyxal_Elements$Impls$.prototype = new $h_O();
+$c_Lvyxal_Elements$Impls$.prototype.constructor = $c_Lvyxal_Elements$Impls$;
+/** @constructor */
+function $h_Lvyxal_Elements$Impls$() {
+  /*<skip>*/
+}
+$h_Lvyxal_Elements$Impls$.prototype = $c_Lvyxal_Elements$Impls$.prototype;
+$c_Lvyxal_Elements$Impls$.prototype.addNilad__T__F1__V = (function(name, impl) {
+  var this$7 = this.Lvyxal_Elements$Impls$__f_elements;
+  var fn = new $c_sjsr_AnonFunction0(((this$2, impl$2) => (() => new $c_sjsr_AnonFunction1(((this$3, impl$1$2) => ((ctx) => {
+    var ctx$1 = $as_Lvyxal_Context(ctx);
+    var item = impl$1$2.apply__O__O(ctx$1);
+    var this$4 = ctx$1.Lvyxal_Context__f_stack;
+    this$4.addOne__O__scm_ArrayBuffer(item)
+  }))(this$2, impl$2))))(this, impl));
+  var y = new $c_Lvyxal_DirectFn(fn, 1);
+  var elem = new $c_T2(name, y);
+  this$7.addOne__O__scm_Growable(elem)
+});
+$c_Lvyxal_Elements$Impls$.prototype.addMonad__T__F1__F1 = (function(name, impl) {
+  var this$7 = this.Lvyxal_Elements$Impls$__f_elements;
+  var fn = new $c_sjsr_AnonFunction0(((this$2, impl$2) => (() => new $c_sjsr_AnonFunction1(((this$3, impl$3$2) => ((ctx) => {
+    var ctx$1 = $as_Lvyxal_Context(ctx);
+    var item = $as_F1(impl$3$2.apply__O__O(ctx$1.pop__O())).apply__O__O(ctx$1);
+    var this$4 = ctx$1.Lvyxal_Context__f_stack;
+    this$4.addOne__O__scm_ArrayBuffer(item)
+  }))(this$2, impl$2))))(this, impl));
+  var y = new $c_Lvyxal_DirectFn(fn, 1);
+  var elem = new $c_T2(name, y);
+  this$7.addOne__O__scm_Growable(elem);
+  return impl
+});
+$c_Lvyxal_Elements$Impls$.prototype.addDyad__T__F2__F2 = (function(name, impl) {
+  var this$7 = this.Lvyxal_Elements$Impls$__f_elements;
+  var fn = new $c_sjsr_AnonFunction0(((this$2, impl$2) => (() => new $c_sjsr_AnonFunction1(((this$3, impl$5$2) => ((ctx) => {
+    var ctx$1 = $as_Lvyxal_Context(ctx);
+    var arg2 = ctx$1.pop__O();
+    var arg1 = ctx$1.pop__O();
+    var item = $as_F1(impl$5$2.apply__O__O__O(arg1, arg2)).apply__O__O(ctx$1);
+    var this$4 = ctx$1.Lvyxal_Context__f_stack;
+    this$4.addOne__O__scm_ArrayBuffer(item)
+  }))(this$2, impl$2))))(this, impl));
+  var y = new $c_Lvyxal_DirectFn(fn, 2);
+  var elem = new $c_T2(name, y);
+  this$7.addOne__O__scm_Growable(elem);
+  return impl
+});
+$c_Lvyxal_Elements$Impls$.prototype.addDirect__T__F1__V = (function(name, impl) {
+  var this$6 = this.Lvyxal_Elements$Impls$__f_elements;
+  var fn = new $c_sjsr_AnonFunction0(((this$2, impl$2) => (() => new $c_sjsr_AnonFunction1(((this$3, impl$11$2) => ((evidence$1) => {
+    var evidence$1$1 = $as_Lvyxal_Context(evidence$1);
+    impl$11$2.apply__O__O(evidence$1$1)
+  }))(this$2, impl$2))))(this, impl));
+  var y = new $c_Lvyxal_DirectFn(fn, (-1));
+  var elem = new $c_T2(name, y);
+  this$6.addOne__O__scm_Growable(elem)
+});
+var $d_Lvyxal_Elements$Impls$ = new $TypeData().initClass({
+  Lvyxal_Elements$Impls$: 0
+}, false, "vyxal.Elements$Impls$", {
+  Lvyxal_Elements$Impls$: 1,
+  O: 1
+});
+$c_Lvyxal_Elements$Impls$.prototype.$classData = $d_Lvyxal_Elements$Impls$;
+var $n_Lvyxal_Elements$Impls$;
+function $m_Lvyxal_Elements$Impls$() {
+  if ((!$n_Lvyxal_Elements$Impls$)) {
+    $n_Lvyxal_Elements$Impls$ = new $c_Lvyxal_Elements$Impls$()
+  };
+  return $n_Lvyxal_Elements$Impls$
 }
 function $p_Lvyxal_Functions$package$__res$lzyINIT2$1__F1__sr_LazyRef__F1($thiz, f$8, res$lzy2$1) {
   if ((res$lzy2$1 === null)) {
@@ -9997,7 +9997,7 @@ $c_Lvyxal_Interpreter$.prototype.execute__Lvyxal_AST__Lvyxal_Context__V = (funct
       if ((ast instanceof $c_Lvyxal_Element)) {
         var x$1$1 = $as_Lvyxal_Element(ast);
         var x63 = x$1$1.Lvyxal_Element__f_symbol;
-        $as_Lvyxal_DirectFn($m_Lvyxal_Builtins$Impls$().Lvyxal_Builtins$Impls$__f_elements.apply__O__O(x63)).apply__Lvyxal_Context__V(ctx);
+        $as_Lvyxal_DirectFn($m_Lvyxal_Elements$Impls$().Lvyxal_Elements$Impls$__f_elements.apply__O__O(x63)).apply__Lvyxal_Context__V(ctx);
         break matchResult8
       };
       if ((ast instanceof $c_Lvyxal_Cmds)) {
@@ -10156,7 +10156,7 @@ $c_Lvyxal_Interpreter$.prototype.execute__Lvyxal_AST__Lvyxal_Context__V = (funct
             };
             break matchResult7
           };
-          $as_Lvyxal_DirectFn($m_Lvyxal_Builtins$Impls$().Lvyxal_Builtins$Impls$__f_elements.apply__O__O("\u2020")).apply__Lvyxal_Context__V(ctx)
+          $as_Lvyxal_DirectFn($m_Lvyxal_Elements$Impls$().Lvyxal_Elements$Impls$__f_elements.apply__O__O("\u2020")).apply__Lvyxal_Context__V(ctx)
         };
         break matchResult8
       };
@@ -17363,7 +17363,7 @@ function $a_Lvyxal_JSVyxal$() {
         var prevQuery = "";
         var selectedBox = "code";
         this.runButton = $as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().button__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().id__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("run_button", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().title__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("Run Program", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().type__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("button", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().onclick__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair(new $c_sjsr_AnonFunction0(((this\u00f8) => (() => $ps_Lvyxal_JSVyxal$__$init$$$anonfun$adapted$1__Lvyxal_JSVyxal$__O(this\u00f8)))(this)), $m_Lscalatags_JsDom$all$().bindJsAnyLike__F1__Lscalatags_generic_AttrValue(new $c_sjsr_AnonFunction1(((this$2) => ((f) => $ps_Lvyxal_JSVyxal$__$init$$$anonfun$2__Lvyxal_JSVyxal$__F0__sjs_js_Any(this$2, $as_F0(f))))(this)))), $as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().i__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().class__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("fas fa-play-circle", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue())])))]))).render__Lorg_scalajs_dom_Element();
-        this.keyboardBox = new $c_Lvyxal_Collapsible("Keyboard", $as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().div__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().class__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("twelve columns", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().div__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().id__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("keyboard", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue())])))]))).render__Lorg_scalajs_dom_Element(), $m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().div__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().class__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("row", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().style__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("width:100%; padding-bottom: 1em;", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().label__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().for__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("filterBox", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().style__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("display:inline-block; color: white; font-family: \"Montserrat\", sans-serif; padding-right: 1%;", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().stringFrag__T__Lscalatags_JsDom$StringFrag("Search&nbsp;"), $as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().a__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().href__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("https://github.com/Vyxal/Vyxal/blob/main/documents/knowledge/elements.md", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().stringFrag__T__Lscalatags_JsDom$StringFrag("elements")])))]))), $as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().input__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().style__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("display:inline-block", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().id__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("filterBox", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().oninput__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair(new $c_sjsr_AnonFunction0(((this$3) => (() => {
+        this.keyboardBox = new $c_Lvyxal_Collapsible("Keyboard", $as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().div__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().class__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("twelve columns", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().div__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().id__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("keyboard", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue())])))]))).render__Lorg_scalajs_dom_Element(), $m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().div__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().class__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("row", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().style__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("width:100%; padding-bottom: 1em;", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().label__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().for__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("filterBox", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().style__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("display:inline-block; color: white; font-family: \"Montserrat\", sans-serif; padding-right: 1%;", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().stringFrag__T__Lscalatags_JsDom$StringFrag("Search "), $as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().a__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().href__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("https://github.com/Vyxal/Vyxal/blob/main/documents/knowledge/elements.md", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().stringFrag__T__Lscalatags_JsDom$StringFrag("elements")])))]))), $as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().input__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().style__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("display:inline-block", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().id__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("filterBox", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().oninput__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair(new $c_sjsr_AnonFunction0(((this$3) => (() => {
           $ps_Lvyxal_JSVyxal$__$init$$$anonfun$3__Lvyxal_JSVyxal$__E(this$3)
         }))(this)), $m_Lscalatags_JsDom$all$().bindJsAnyLike__F1__Lscalatags_generic_AttrValue(new $c_sjsr_AnonFunction1(((this$4) => ((f$2) => $ps_Lvyxal_JSVyxal$__$init$$$anonfun$4__Lvyxal_JSVyxal$__F0__sjs_js_Any(this$4, $as_F0(f$2))))(this)))), $as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().label__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().stringFrag__T__Lscalatags_JsDom$StringFrag("Search for command:")])))])))])))])));
         this.flagBox = new $c_Lvyxal_Collapsible("Flags", $as_Lscalatags_JsDom$TypedTag($m_Lscalatags_JsDom$all$().textarea__Lscalatags_generic_TypedTag()).apply__sci_Seq__Lscalatags_JsDom$TypedTag($m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([$m_Lscalatags_JsDom$all$().name__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("flags", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().id__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("flag", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue()), $m_Lscalatags_JsDom$all$().style__Lscalatags_generic_Attr().$colon$eq__O__Lscalatags_generic_AttrValue__Lscalatags_generic_AttrPair("min-height: 2em;", $m_Lscalatags_JsDom$all$().stringAttr__Lscalatags_generic_AttrValue())]))).render__Lorg_scalajs_dom_Element(), $m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lscalatags_generic_Modifier.getArrayOf().constr)([])));
