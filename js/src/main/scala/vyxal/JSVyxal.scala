@@ -144,6 +144,8 @@ object JSVyxal extends js.Object {
       // e_header.refresh()
     }
 
+    codeBox.expand()
+
     if (footer.nonEmpty) {
       footerBox.expand()
       // e_footer.refresh()
@@ -159,10 +161,8 @@ object JSVyxal extends js.Object {
     else char
   }
 
-  def copyToClipboard(arg: String) = {
-    val el = document.getElementById(arg)
-    // el.select()
-    document.execCommand("copy")
+  def copyToClipboard() = {
+    window.navigator.clipboard.writeText(outputBox.contents.value)
   }
 
   def generateURL(): String = {
@@ -204,7 +204,7 @@ object JSVyxal extends js.Object {
     }
 
     outputBox.contents.value = output
-    copyToClipboard("output")
+    copyToClipboard()
     JSVyxal.resizeCodeBox(outputBox.contents)
     expandBoxes()
   }
@@ -235,19 +235,16 @@ object JSVyxal extends js.Object {
           pattern.matches(
             docs.name + docs.desc + docs.overloads.values.mkString
           )
-        ) {}
-      }
-
-      for (element <- document.getElementsByClassName("key")) {
-        if (pattern.matches(element.title.toLowerCase)) {
-          element.style.display = "inline-block";
-        } else {
-          element.style.display = "none";
+        ) {
+          searchResultsBox.appendChild(
+            li(
+              element
+            ).render
+          )
         }
       }
     } else {
       searchResultsBox.innerHTML = ""
-
     }
   }
 
@@ -346,11 +343,11 @@ object JSVyxal extends js.Object {
     ).render
   )
 
-  val outputBox = Collapsible(
+  val outputBox: Collapsible[dom.html.TextArea] = Collapsible(
     "Output",
     textarea(id := "output", value := "", readonly).render,
     button(
-      onclick := { () => JSVyxal.copyToClipboard("output") },
+      onclick := { () => JSVyxal.copyToClipboard() },
       style := "height:auto; display: inline-block;",
       `type` := "button",
       "Click to copy"
