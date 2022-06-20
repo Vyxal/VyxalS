@@ -198,44 +198,41 @@ window.addEventListener("DOMContentLoaded", e => {
                 `<svg class="fa-spin" style="width:24px;height:24px" viewBox="0 0 24 24">
                     <path fill="currentColor" d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z"/>
                 </svg>`;
-            $.post("/execute", {
-                code: e_code.doc.getValue(),
-                inputs: stdin.value,
-                flags: flags.value,
-                session: session,
-                footer: e_footer.doc.getValue(),
-                header: e_header.doc.getValue()
-            }, res => {
-                if (flags.value.includes('E') && !flags.value.includes("h")) {
-                    alert('Please read and ensure you 100% trust the JavaScript code which is about to be evaluated. The code is (see next alert):')
-                    alert(res.stdout)
-                    if (confirm('Do you want to execute it? If you are remotely unsure, click Cancel!')) {
-                        try {
-                            res.stdout = new Function(res.stdout)()
-                        } catch (e) {
-                            res.stdout = e
-                        }
-                    }
-                }
-                output.value = res.stdout
-                extra.value = res.stderr
-                run.innerHTML =
-                    `<i class="fas fa-play-circle"></i>
-                    `;
-                if (e_code.doc.getValue() == 'lyxal') {
-                    location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-                }
-                if (flags.value.includes('Ḣ') && !flags.value.includes("h")) {
-                    const container = document.getElementById("html-rendered-output")
-                    const iframe = document.createElement("iframe")
-                    iframe.srcdoc = res.stdout
-                    container.innerHTML = iframe.outerHTML
-                    container.hidden = false
-                } else {
-                    document.getElementById("html-rendered-output").hidden = true
-                }
-                expandBoxes()
-            })
+            if (flags.value.includes('E') && !flags.value.includes("h")) {
+              alert('Please read and ensure you 100% trust the JavaScript code which is about to be evaluated. The code is (see next alert):')
+              alert(res.stdout)
+              if (confirm('Do you want to execute it? If you are remotely unsure, click Cancel!')) {
+                  try {
+                    Vyxal.execute(
+                      code=e_header.doc.getValue() + e_code.doc.getValue() + e_footer.doc.getValue(),
+                      flags=flags.value,
+                      inputs=stdin.value,
+                      outFn=out => output.value += out,
+                      warnFn=warning => extra.value += warning,
+                      errFn=error => extra.value += warning
+                    )
+                  } catch (e) {
+                      res.stdout = e
+                  }
+              }
+            }
+            
+            run.innerHTML =
+                `<i class="fas fa-play-circle"></i>
+                `;
+            if (e_code.doc.getValue() == 'lyxal') {
+                location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+            }
+            if (flags.value.includes('Ḣ') && !flags.value.includes("h")) {
+                const container = document.getElementById("html-rendered-output")
+                const iframe = document.createElement("iframe")
+                iframe.srcdoc = res.stdout
+                container.innerHTML = iframe.outerHTML
+                container.hidden = false
+            } else {
+                document.getElementById("html-rendered-output").hidden = true
+            }
+            expandBoxes()
         } else {
             $.post("/kill", { session: session }, res => 0)
         }
