@@ -7868,6 +7868,43 @@ function $m_Lvyxal_Context$() {
   return $n_Lvyxal_Context$
 }
 /** @constructor */
+function $c_Lvyxal_Docs$() {
+  this.Lvyxal_Docs$__f_elements = null;
+  $n_Lvyxal_Docs$ = this;
+  var this$10 = $m_s_Predef$().s_Predef$__f_Map;
+  var $$x2 = $m_sr_ScalaRunTime$();
+  var this$4 = $m_s_Predef$().s_Predef$__f_Map;
+  var elems = $m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([new $c_T2("num-num", "Add two integers")]));
+  var overloads = this$4.from__sc_IterableOnce__sci_Map(elems);
+  var y = new $c_Lvyxal_ElementDocs("Addition", "Adds the top two items on the stack", 2, overloads, true, false);
+  var $$x1 = new $c_T2("+", y);
+  var overloads$1 = $m_Lvyxal_ElementDocs$().$lessinit$greater$default$4__sci_Map();
+  var y$1 = new $c_Lvyxal_ElementDocs("[1, -1]", "Push [1, -1]", 0, overloads$1, false, false);
+  var elems$1 = $$x2.wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([$$x1, new $c_T2("k+", y$1)]));
+  this.Lvyxal_Docs$__f_elements = this$10.from__sc_IterableOnce__sci_Map(elems$1)
+}
+$c_Lvyxal_Docs$.prototype = new $h_O();
+$c_Lvyxal_Docs$.prototype.constructor = $c_Lvyxal_Docs$;
+/** @constructor */
+function $h_Lvyxal_Docs$() {
+  /*<skip>*/
+}
+$h_Lvyxal_Docs$.prototype = $c_Lvyxal_Docs$.prototype;
+var $d_Lvyxal_Docs$ = new $TypeData().initClass({
+  Lvyxal_Docs$: 0
+}, false, "vyxal.Docs$", {
+  Lvyxal_Docs$: 1,
+  O: 1
+});
+$c_Lvyxal_Docs$.prototype.$classData = $d_Lvyxal_Docs$;
+var $n_Lvyxal_Docs$;
+function $m_Lvyxal_Docs$() {
+  if ((!$n_Lvyxal_Docs$)) {
+    $n_Lvyxal_Docs$ = new $c_Lvyxal_Docs$()
+  };
+  return $n_Lvyxal_Docs$
+}
+/** @constructor */
 function $c_Lvyxal_Elements$Impls$() {
   this.Lvyxal_Elements$Impls$__f_elements = null;
   this.Lvyxal_Elements$Impls$__f_add = null;
@@ -8631,7 +8668,49 @@ function $p_Lvyxal_JSVyxal$__given_Backend$1__sjs_js_Function1__sjs_js_Function1
 }
 /** @constructor */
 function $c_Lvyxal_JSVyxal$() {
-  /*<skip>*/
+  this.Lvyxal_JSVyxal$__f_elements = null;
+  $n_Lvyxal_JSVyxal$ = this;
+  var this$1 = $m_Lvyxal_Docs$().Lvyxal_Docs$__f_elements;
+  var this$9 = new $c_sc_MapView$Id(this$1);
+  var f = new $c_sjsr_AnonFunction1(((x$1) => {
+    var x$1$1 = $as_Lvyxal_ElementDocs(x$1);
+    if ((x$1$1 !== null)) {
+      var x3 = x$1$1.Lvyxal_ElementDocs__f_name;
+      var x4 = x$1$1.Lvyxal_ElementDocs__f_desc;
+      var x5 = x$1$1.Lvyxal_ElementDocs__f_arity;
+      var x6 = x$1$1.Lvyxal_ElementDocs__f_overloads;
+      var x7 = x$1$1.Lvyxal_ElementDocs__f_vectorises;
+      var x8 = x$1$1.Lvyxal_ElementDocs__f_modifiesStack;
+      var result = {};
+      x6.foreach__F1__V(new $c_sjsr_AnonFunction1(((result$1) => ((x0$1$2) => {
+        var x0$1 = $as_T2(x0$1$2);
+        if ((x0$1 !== null)) {
+          var key = $as_T(x0$1._1__O());
+          var value = x0$1._2__O();
+          result$1[key] = value
+        } else {
+          throw new $c_s_MatchError(x0$1)
+        }
+      }))(result)));
+      return new ($a_Lvyxal_JSVyxal$JSElementDocs())(x3, x4, x5, result, x7, x8)
+    };
+    throw new $c_s_MatchError(x$1$1)
+  }));
+  var this$11 = new $c_sc_MapView$MapValues(this$9, f);
+  $m_s_$less$colon$less$();
+  var map = $m_sci_Map$().from__sc_IterableOnce__sci_Map(this$11);
+  var result$2 = {};
+  map.foreach__F1__V(new $c_sjsr_AnonFunction1(((result$3) => ((x0$1$2$1) => {
+    var x0$1$1 = $as_T2(x0$1$2$1);
+    if ((x0$1$1 !== null)) {
+      var key$1 = $as_T(x0$1$1._1__O());
+      var value$1 = x0$1$1._2__O();
+      result$3[key$1] = value$1
+    } else {
+      throw new $c_s_MatchError(x0$1$1)
+    }
+  }))(result$2)));
+  this.Lvyxal_JSVyxal$__f_elements = result$2
 }
 $c_Lvyxal_JSVyxal$.prototype = new $h_O();
 $c_Lvyxal_JSVyxal$.prototype.constructor = $c_Lvyxal_JSVyxal$;
@@ -8660,8 +8739,17 @@ $c_Lvyxal_JSVyxal$.prototype.execute__T__T__T__sjs_js_Function1__sjs_js_Function
   $m_sci_List$();
   $$x3.execute__T__sci_List__sci_List__Lvyxal_Backend__Lvyxal_Context(code, $$x2, $m_sci_Nil$().prependedAll__sc_IterableOnce__sci_List(this$6), $p_Lvyxal_JSVyxal$__given_Backend$1__sjs_js_Function1__sjs_js_Function1__sjs_js_Function1__sr_LazyRef__Lvyxal_JSVyxal$given\uff3fBackend$2$(this, outFn, warnFn, errFn, given_Backend$lzy1))
 });
+$c_Lvyxal_JSVyxal$.prototype.$js$exported$prop$elements__O = (function() {
+  return this.Lvyxal_JSVyxal$__f_elements
+});
 $c_Lvyxal_JSVyxal$.prototype.$js$exported$meth$execute__T__T__T__sjs_js_Function1__sjs_js_Function1__sjs_js_Function1__O = (function(code, flags, inputs, outFn, warnFn, errFn) {
   this.execute__T__T__T__sjs_js_Function1__sjs_js_Function1__sjs_js_Function1__V(code, flags, inputs, outFn, warnFn, errFn)
+});
+Object.defineProperty($c_Lvyxal_JSVyxal$.prototype, "elements", {
+  "get": (function() {
+    return this.$js$exported$prop$elements__O()
+  }),
+  "configurable": true
 });
 $c_Lvyxal_JSVyxal$.prototype.execute = (function(arg, arg$2, arg$3, arg$4, arg$5, arg$6) {
   var prep0 = $as_T(arg);
@@ -8685,6 +8773,37 @@ function $m_Lvyxal_JSVyxal$() {
     $n_Lvyxal_JSVyxal$ = new $c_Lvyxal_JSVyxal$()
   };
   return $n_Lvyxal_JSVyxal$
+}
+/** @constructor */
+function $c_Lvyxal_JSVyxal$JSElementDocs$() {
+  /*<skip>*/
+}
+$c_Lvyxal_JSVyxal$JSElementDocs$.prototype = new $h_O();
+$c_Lvyxal_JSVyxal$JSElementDocs$.prototype.constructor = $c_Lvyxal_JSVyxal$JSElementDocs$;
+/** @constructor */
+function $h_Lvyxal_JSVyxal$JSElementDocs$() {
+  /*<skip>*/
+}
+$h_Lvyxal_JSVyxal$JSElementDocs$.prototype = $c_Lvyxal_JSVyxal$JSElementDocs$.prototype;
+$c_Lvyxal_JSVyxal$JSElementDocs$.prototype.$lessinit$greater$default$5__Z = (function() {
+  return false
+});
+$c_Lvyxal_JSVyxal$JSElementDocs$.prototype.$lessinit$greater$default$6__Z = (function() {
+  return false
+});
+var $d_Lvyxal_JSVyxal$JSElementDocs$ = new $TypeData().initClass({
+  Lvyxal_JSVyxal$JSElementDocs$: 0
+}, false, "vyxal.JSVyxal$JSElementDocs$", {
+  Lvyxal_JSVyxal$JSElementDocs$: 1,
+  O: 1
+});
+$c_Lvyxal_JSVyxal$JSElementDocs$.prototype.$classData = $d_Lvyxal_JSVyxal$JSElementDocs$;
+var $n_Lvyxal_JSVyxal$JSElementDocs$;
+function $m_Lvyxal_JSVyxal$JSElementDocs$() {
+  if ((!$n_Lvyxal_JSVyxal$JSElementDocs$)) {
+    $n_Lvyxal_JSVyxal$JSElementDocs$ = new $c_Lvyxal_JSVyxal$JSElementDocs$()
+  };
+  return $n_Lvyxal_JSVyxal$JSElementDocs$
 }
 /** @constructor */
 function $c_Lvyxal_ModifierFunctions$() {
@@ -12817,6 +12936,22 @@ $c_sci_BitmapIndexedMapNode.prototype.copyAndMigrateFromInlineToNode__I__I__sci_
   var dstHashes = this.removeElement__AI__I__AI(this.sci_BitmapIndexedMapNode__f_originalHashes, dataIx);
   return new $c_sci_BitmapIndexedMapNode((this.sci_BitmapIndexedMapNode__f_dataMap ^ bitpos), (this.sci_BitmapIndexedMapNode__f_nodeMap | bitpos), dst, dstHashes, (((((-1) + this.sci_BitmapIndexedMapNode__f_size) | 0) + node.size__I()) | 0), ((((this.sci_BitmapIndexedMapNode__f_cachedJavaKeySetHashCode - keyHash) | 0) + node.cachedJavaKeySetHashCode__I()) | 0))
 });
+$c_sci_BitmapIndexedMapNode.prototype.foreach__F1__V = (function(f) {
+  var i = this.sci_BitmapIndexedMapNode__f_dataMap;
+  var iN = $m_jl_Integer$().bitCount__I__I(i);
+  var i$1 = 0;
+  while ((i$1 < iN)) {
+    f.apply__O__O(this.getPayload__I__T2(i$1));
+    i$1 = ((1 + i$1) | 0)
+  };
+  var i$2 = this.sci_BitmapIndexedMapNode__f_nodeMap;
+  var jN = $m_jl_Integer$().bitCount__I__I(i$2);
+  var j = 0;
+  while ((j < jN)) {
+    this.getNode__I__sci_MapNode(j).foreach__F1__V(f);
+    j = ((1 + j) | 0)
+  }
+});
 $c_sci_BitmapIndexedMapNode.prototype.foreachEntry__F2__V = (function(f) {
   var i = this.sci_BitmapIndexedMapNode__f_dataMap;
   var iN = $m_jl_Integer$().bitCount__I__I(i);
@@ -13276,6 +13411,9 @@ $c_sci_HashCollisionMapNode.prototype.getPayload__I__T2 = (function(index) {
 });
 $c_sci_HashCollisionMapNode.prototype.getHash__I__I = (function(index) {
   return this.sci_HashCollisionMapNode__f_originalHash
+});
+$c_sci_HashCollisionMapNode.prototype.foreach__F1__V = (function(f) {
+  this.sci_HashCollisionMapNode__f_content.foreach__F1__V(f)
 });
 $c_sci_HashCollisionMapNode.prototype.foreachEntry__F2__V = (function(f) {
   this.sci_HashCollisionMapNode__f_content.foreach__F1__V(new $c_sjsr_AnonFunction1(((f$1) => ((x0$1$2) => {
@@ -14184,6 +14322,107 @@ function $m_Lvyxal_Cmds$() {
     $n_Lvyxal_Cmds$ = new $c_Lvyxal_Cmds$()
   };
   return $n_Lvyxal_Cmds$
+}
+/** @constructor */
+function $c_Lvyxal_ElementDocs$() {
+  /*<skip>*/
+}
+$c_Lvyxal_ElementDocs$.prototype = new $h_O();
+$c_Lvyxal_ElementDocs$.prototype.constructor = $c_Lvyxal_ElementDocs$;
+/** @constructor */
+function $h_Lvyxal_ElementDocs$() {
+  /*<skip>*/
+}
+$h_Lvyxal_ElementDocs$.prototype = $c_Lvyxal_ElementDocs$.prototype;
+$c_Lvyxal_ElementDocs$.prototype.toString__T = (function() {
+  return "ElementDocs"
+});
+$c_Lvyxal_ElementDocs$.prototype.$lessinit$greater$default$4__sci_Map = (function() {
+  var this$1 = $m_s_Predef$().s_Predef$__f_Map;
+  var elems = $m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([]));
+  return this$1.from__sc_IterableOnce__sci_Map(elems)
+});
+var $d_Lvyxal_ElementDocs$ = new $TypeData().initClass({
+  Lvyxal_ElementDocs$: 0
+}, false, "vyxal.ElementDocs$", {
+  Lvyxal_ElementDocs$: 1,
+  O: 1,
+  s_deriving_Mirror: 1,
+  s_deriving_Mirror$Product: 1
+});
+$c_Lvyxal_ElementDocs$.prototype.$classData = $d_Lvyxal_ElementDocs$;
+var $n_Lvyxal_ElementDocs$;
+function $m_Lvyxal_ElementDocs$() {
+  if ((!$n_Lvyxal_ElementDocs$)) {
+    $n_Lvyxal_ElementDocs$ = new $c_Lvyxal_ElementDocs$()
+  };
+  return $n_Lvyxal_ElementDocs$
+}
+var $b_Lvyxal_JSVyxal$JSElementDocs;
+function $a_Lvyxal_JSVyxal$JSElementDocs() {
+  if ((!$b_Lvyxal_JSVyxal$JSElementDocs)) {
+    $b_Lvyxal_JSVyxal$JSElementDocs = class $b_Lvyxal_JSVyxal$JSElementDocs extends Object {
+      constructor(arg, arg$2, arg$3, arg$4, ...rest) {
+        var name = null;
+        var desc = null;
+        var arity = 0;
+        var overloads = null;
+        var vectorises = false;
+        var modifiesStack = false;
+        name = $as_T(arg);
+        desc = $as_T(arg$2);
+        arity = $uI(arg$3);
+        overloads = arg$4;
+        vectorises = ((rest[0] === (void 0)) ? $m_Lvyxal_JSVyxal$JSElementDocs$().$lessinit$greater$default$5__Z() : $uZ(rest[0]));
+        modifiesStack = ((rest[1] === (void 0)) ? $m_Lvyxal_JSVyxal$JSElementDocs$().$lessinit$greater$default$6__Z() : $uZ(rest[1]));
+        var overload = 0;
+        super();
+        Object.defineProperty(this, "name", {
+          "configurable": true,
+          "enumerable": true,
+          "writable": true,
+          "value": null
+        });
+        Object.defineProperty(this, "desc", {
+          "configurable": true,
+          "enumerable": true,
+          "writable": true,
+          "value": null
+        });
+        Object.defineProperty(this, "arity", {
+          "configurable": true,
+          "enumerable": true,
+          "writable": true,
+          "value": 0
+        });
+        Object.defineProperty(this, "overloads", {
+          "configurable": true,
+          "enumerable": true,
+          "writable": true,
+          "value": null
+        });
+        Object.defineProperty(this, "vectorises", {
+          "configurable": true,
+          "enumerable": true,
+          "writable": true,
+          "value": false
+        });
+        Object.defineProperty(this, "modifiesStack", {
+          "configurable": true,
+          "enumerable": true,
+          "writable": true,
+          "value": false
+        });
+        this.name = name;
+        this.desc = desc;
+        this.arity = arity;
+        this.overloads = overloads;
+        this.vectorises = vectorises;
+        this.modifiesStack = modifiesStack
+      };
+    }
+  };
+  return $b_Lvyxal_JSVyxal$JSElementDocs
 }
 function $s_Lvyxal_LambdaKind$__Normal__Lvyxal_LambdaKind() {
   $m_Lvyxal_LambdaKind$();
@@ -17606,6 +17845,135 @@ var $d_Lvyxal_DirectFn = new $TypeData().initClass({
   Ljava_io_Serializable: 1
 });
 $c_Lvyxal_DirectFn.prototype.$classData = $d_Lvyxal_DirectFn;
+/** @constructor */
+function $c_Lvyxal_ElementDocs(name, desc, arity, overloads, vectorises, modifiesStack) {
+  this.Lvyxal_ElementDocs__f_name = null;
+  this.Lvyxal_ElementDocs__f_desc = null;
+  this.Lvyxal_ElementDocs__f_arity = 0;
+  this.Lvyxal_ElementDocs__f_overloads = null;
+  this.Lvyxal_ElementDocs__f_vectorises = false;
+  this.Lvyxal_ElementDocs__f_modifiesStack = false;
+  this.Lvyxal_ElementDocs__f_name = name;
+  this.Lvyxal_ElementDocs__f_desc = desc;
+  this.Lvyxal_ElementDocs__f_arity = arity;
+  this.Lvyxal_ElementDocs__f_overloads = overloads;
+  this.Lvyxal_ElementDocs__f_vectorises = vectorises;
+  this.Lvyxal_ElementDocs__f_modifiesStack = modifiesStack
+}
+$c_Lvyxal_ElementDocs.prototype = new $h_O();
+$c_Lvyxal_ElementDocs.prototype.constructor = $c_Lvyxal_ElementDocs;
+/** @constructor */
+function $h_Lvyxal_ElementDocs() {
+  /*<skip>*/
+}
+$h_Lvyxal_ElementDocs.prototype = $c_Lvyxal_ElementDocs.prototype;
+$c_Lvyxal_ElementDocs.prototype.productIterator__sc_Iterator = (function() {
+  return new $c_s_Product$$anon$1(this)
+});
+$c_Lvyxal_ElementDocs.prototype.hashCode__I = (function() {
+  var acc = (-889275714);
+  var hash = acc;
+  var data = $f_T__hashCode__I("ElementDocs");
+  acc = $m_sr_Statics$().mix__I__I__I(hash, data);
+  var hash$1 = acc;
+  var x = this.Lvyxal_ElementDocs__f_name;
+  var data$1 = $m_sr_Statics$().anyHash__O__I(x);
+  acc = $m_sr_Statics$().mix__I__I__I(hash$1, data$1);
+  var hash$2 = acc;
+  var x$1 = this.Lvyxal_ElementDocs__f_desc;
+  var data$2 = $m_sr_Statics$().anyHash__O__I(x$1);
+  acc = $m_sr_Statics$().mix__I__I__I(hash$2, data$2);
+  var hash$3 = acc;
+  var data$3 = this.Lvyxal_ElementDocs__f_arity;
+  acc = $m_sr_Statics$().mix__I__I__I(hash$3, data$3);
+  var hash$4 = acc;
+  var x$2 = this.Lvyxal_ElementDocs__f_overloads;
+  var data$4 = $m_sr_Statics$().anyHash__O__I(x$2);
+  acc = $m_sr_Statics$().mix__I__I__I(hash$4, data$4);
+  var hash$5 = acc;
+  var data$5 = (this.Lvyxal_ElementDocs__f_vectorises ? 1231 : 1237);
+  acc = $m_sr_Statics$().mix__I__I__I(hash$5, data$5);
+  var hash$6 = acc;
+  var data$6 = (this.Lvyxal_ElementDocs__f_modifiesStack ? 1231 : 1237);
+  acc = $m_sr_Statics$().mix__I__I__I(hash$6, data$6);
+  var hash$7 = acc;
+  return $m_sr_Statics$().finalizeHash__I__I__I(hash$7, 6)
+});
+$c_Lvyxal_ElementDocs.prototype.equals__O__Z = (function(x$0) {
+  if ((this === x$0)) {
+    return true
+  } else if ((x$0 instanceof $c_Lvyxal_ElementDocs)) {
+    var x$0$2 = $as_Lvyxal_ElementDocs(x$0);
+    if ((((((this.Lvyxal_ElementDocs__f_arity === x$0$2.Lvyxal_ElementDocs__f_arity) && (this.Lvyxal_ElementDocs__f_vectorises === x$0$2.Lvyxal_ElementDocs__f_vectorises)) && (this.Lvyxal_ElementDocs__f_modifiesStack === x$0$2.Lvyxal_ElementDocs__f_modifiesStack)) && (this.Lvyxal_ElementDocs__f_name === x$0$2.Lvyxal_ElementDocs__f_name)) && (this.Lvyxal_ElementDocs__f_desc === x$0$2.Lvyxal_ElementDocs__f_desc))) {
+      var x = this.Lvyxal_ElementDocs__f_overloads;
+      var x$2 = x$0$2.Lvyxal_ElementDocs__f_overloads;
+      return ((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))
+    } else {
+      return false
+    }
+  } else {
+    return false
+  }
+});
+$c_Lvyxal_ElementDocs.prototype.toString__T = (function() {
+  return $m_sr_ScalaRunTime$()._toString__s_Product__T(this)
+});
+$c_Lvyxal_ElementDocs.prototype.productArity__I = (function() {
+  return 6
+});
+$c_Lvyxal_ElementDocs.prototype.productPrefix__T = (function() {
+  return "ElementDocs"
+});
+$c_Lvyxal_ElementDocs.prototype.productElement__I__O = (function(n) {
+  switch (n) {
+    case 0: {
+      return this.Lvyxal_ElementDocs__f_name;
+      break
+    }
+    case 1: {
+      return this.Lvyxal_ElementDocs__f_desc;
+      break
+    }
+    case 2: {
+      return this.Lvyxal_ElementDocs__f_arity;
+      break
+    }
+    case 3: {
+      return this.Lvyxal_ElementDocs__f_overloads;
+      break
+    }
+    case 4: {
+      return this.Lvyxal_ElementDocs__f_vectorises;
+      break
+    }
+    case 5: {
+      return this.Lvyxal_ElementDocs__f_modifiesStack;
+      break
+    }
+    default: {
+      throw $ct_jl_IndexOutOfBoundsException__T__(new $c_jl_IndexOutOfBoundsException(), ("" + n))
+    }
+  }
+});
+function $as_Lvyxal_ElementDocs(obj) {
+  return (((obj instanceof $c_Lvyxal_ElementDocs) || (obj === null)) ? obj : $throwClassCastException(obj, "vyxal.ElementDocs"))
+}
+function $isArrayOf_Lvyxal_ElementDocs(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.Lvyxal_ElementDocs)))
+}
+function $asArrayOf_Lvyxal_ElementDocs(obj, depth) {
+  return (($isArrayOf_Lvyxal_ElementDocs(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lvyxal.ElementDocs;", depth))
+}
+var $d_Lvyxal_ElementDocs = new $TypeData().initClass({
+  Lvyxal_ElementDocs: 0
+}, false, "vyxal.ElementDocs", {
+  Lvyxal_ElementDocs: 1,
+  O: 1,
+  s_Equals: 1,
+  s_Product: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lvyxal_ElementDocs.prototype.$classData = $d_Lvyxal_ElementDocs;
 /** @constructor */
 function $c_Lvyxal_Pos(row, col) {
   this.Lvyxal_Pos__f_row = 0;
@@ -23359,6 +23727,19 @@ function $f_sc_MapOps__getOrElse__O__F0__O($thiz, key, default$1) {
     }
   }
 }
+function $f_sc_MapOps__apply__O__O($thiz, key) {
+  var x1 = $thiz.get__O__s_Option(key);
+  var x = $m_s_None$();
+  if ((x === x1)) {
+    return $f_sc_MapOps__default__O__O($thiz, key)
+  } else if ((x1 instanceof $c_s_Some)) {
+    var x3 = $as_s_Some(x1);
+    var value = x3.s_Some__f_value;
+    return value
+  } else {
+    throw new $c_s_MatchError(x1)
+  }
+}
 function $f_sc_MapOps__applyOrElse__O__F1__O($thiz, x, default$1) {
   return $thiz.getOrElse__O__F0__O(x, new $c_sjsr_AnonFunction0(((default$2, x$1) => (() => default$2.apply__O__O(x$1)))(default$1, x)))
 }
@@ -23371,6 +23752,10 @@ function $f_sc_MapOps__foreachEntry__F2__V($thiz, f) {
 }
 function $f_sc_MapOps__default__O__O($thiz, key) {
   throw $ct_ju_NoSuchElementException__T__(new $c_ju_NoSuchElementException(), ("key not found: " + key))
+}
+function $f_sc_MapOps__contains__O__Z($thiz, key) {
+  var this$1 = $thiz.get__O__s_Option(key);
+  return (!this$1.isEmpty__Z())
 }
 function $f_sc_MapOps__addString__scm_StringBuilder__T__T__T__scm_StringBuilder($thiz, sb, start, sep, end) {
   var this$2 = $thiz.iterator__sc_Iterator();
@@ -28162,6 +28547,41 @@ function $isArrayOf_sci_Seq(obj, depth) {
 function $asArrayOf_sci_Seq(obj, depth) {
   return (($isArrayOf_sci_Seq(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lscala.collection.immutable.Seq;", depth))
 }
+/** @constructor */
+function $c_sc_AbstractMapView() {
+  /*<skip>*/
+}
+$c_sc_AbstractMapView.prototype = new $h_sc_AbstractView();
+$c_sc_AbstractMapView.prototype.constructor = $c_sc_AbstractMapView;
+/** @constructor */
+function $h_sc_AbstractMapView() {
+  /*<skip>*/
+}
+$h_sc_AbstractMapView.prototype = $c_sc_AbstractMapView.prototype;
+$c_sc_AbstractMapView.prototype.toString__T = (function() {
+  return $f_sc_View__toString__T(this)
+});
+$c_sc_AbstractMapView.prototype.stringPrefix__T = (function() {
+  return "MapView"
+});
+$c_sc_AbstractMapView.prototype.getOrElse__O__F0__O = (function(key, default$1) {
+  return $f_sc_MapOps__getOrElse__O__F0__O(this, key, default$1)
+});
+$c_sc_AbstractMapView.prototype.apply__O__O = (function(key) {
+  return $f_sc_MapOps__apply__O__O(this, key)
+});
+$c_sc_AbstractMapView.prototype.applyOrElse__O__F1__O = (function(x, default$1) {
+  return $f_sc_MapOps__applyOrElse__O__F1__O(this, x, default$1)
+});
+$c_sc_AbstractMapView.prototype.isDefinedAt__O__Z = (function(key) {
+  return $f_sc_MapOps__contains__O__Z(this, key)
+});
+$c_sc_AbstractMapView.prototype.addString__scm_StringBuilder__T__T__T__scm_StringBuilder = (function(sb, start, sep, end) {
+  return $f_sc_MapOps__addString__scm_StringBuilder__T__T__T__scm_StringBuilder(this, sb, start, sep, end)
+});
+$c_sc_AbstractMapView.prototype.runWith__F1__F1 = (function(action) {
+  return $f_s_PartialFunction__runWith__F1__F1(this, action)
+});
 function $is_sci_Map(obj) {
   return (!(!((obj && obj.$classData) && obj.$classData.ancestors.sci_Map)))
 }
@@ -28347,6 +28767,105 @@ $c_sc_AbstractIndexedSeqView.prototype.lengthCompare__I__I = (function(len) {
 $c_sc_AbstractIndexedSeqView.prototype.knownSize__I = (function() {
   return this.length__I()
 });
+/** @constructor */
+function $c_sc_MapView$Id(underlying) {
+  this.sc_MapView$Id__f_underlying = null;
+  this.sc_MapView$Id__f_underlying = underlying
+}
+$c_sc_MapView$Id.prototype = new $h_sc_AbstractMapView();
+$c_sc_MapView$Id.prototype.constructor = $c_sc_MapView$Id;
+/** @constructor */
+function $h_sc_MapView$Id() {
+  /*<skip>*/
+}
+$h_sc_MapView$Id.prototype = $c_sc_MapView$Id.prototype;
+$c_sc_MapView$Id.prototype.get__O__s_Option = (function(key) {
+  return this.sc_MapView$Id__f_underlying.get__O__s_Option(key)
+});
+$c_sc_MapView$Id.prototype.iterator__sc_Iterator = (function() {
+  return this.sc_MapView$Id__f_underlying.iterator__sc_Iterator()
+});
+$c_sc_MapView$Id.prototype.knownSize__I = (function() {
+  return this.sc_MapView$Id__f_underlying.knownSize__I()
+});
+$c_sc_MapView$Id.prototype.isEmpty__Z = (function() {
+  return this.sc_MapView$Id__f_underlying.isEmpty__Z()
+});
+var $d_sc_MapView$Id = new $TypeData().initClass({
+  sc_MapView$Id: 0
+}, false, "scala.collection.MapView$Id", {
+  sc_MapView$Id: 1,
+  sc_AbstractMapView: 1,
+  sc_AbstractView: 1,
+  sc_AbstractIterable: 1,
+  O: 1,
+  sc_Iterable: 1,
+  sc_IterableOnce: 1,
+  sc_IterableOps: 1,
+  sc_IterableOnceOps: 1,
+  sc_IterableFactoryDefaults: 1,
+  sc_View: 1,
+  Ljava_io_Serializable: 1,
+  sc_MapView: 1,
+  sc_MapOps: 1,
+  s_PartialFunction: 1,
+  F1: 1
+});
+$c_sc_MapView$Id.prototype.$classData = $d_sc_MapView$Id;
+/** @constructor */
+function $c_sc_MapView$MapValues(underlying, f) {
+  this.sc_MapView$MapValues__f_underlying = null;
+  this.sc_MapView$MapValues__f_f = null;
+  this.sc_MapView$MapValues__f_underlying = underlying;
+  this.sc_MapView$MapValues__f_f = f
+}
+$c_sc_MapView$MapValues.prototype = new $h_sc_AbstractMapView();
+$c_sc_MapView$MapValues.prototype.constructor = $c_sc_MapView$MapValues;
+/** @constructor */
+function $h_sc_MapView$MapValues() {
+  /*<skip>*/
+}
+$h_sc_MapView$MapValues.prototype = $c_sc_MapView$MapValues.prototype;
+$c_sc_MapView$MapValues.prototype.iterator__sc_Iterator = (function() {
+  var this$2 = this.sc_MapView$MapValues__f_underlying.iterator__sc_Iterator();
+  var f = new $c_sjsr_AnonFunction1(((this$1) => ((kv$2) => {
+    var kv = $as_T2(kv$2);
+    return new $c_T2(kv._1__O(), this$1.sc_MapView$MapValues__f_f.apply__O__O(kv._2__O()))
+  }))(this));
+  return new $c_sc_Iterator$$anon$9(this$2, f)
+});
+$c_sc_MapView$MapValues.prototype.get__O__s_Option = (function(key) {
+  var this$1 = this.sc_MapView$MapValues__f_underlying.get__O__s_Option(key);
+  var f = this.sc_MapView$MapValues__f_f;
+  return (this$1.isEmpty__Z() ? $m_s_None$() : new $c_s_Some(f.apply__O__O(this$1.get__O())))
+});
+$c_sc_MapView$MapValues.prototype.knownSize__I = (function() {
+  return this.sc_MapView$MapValues__f_underlying.knownSize__I()
+});
+$c_sc_MapView$MapValues.prototype.isEmpty__Z = (function() {
+  return this.sc_MapView$MapValues__f_underlying.isEmpty__Z()
+});
+var $d_sc_MapView$MapValues = new $TypeData().initClass({
+  sc_MapView$MapValues: 0
+}, false, "scala.collection.MapView$MapValues", {
+  sc_MapView$MapValues: 1,
+  sc_AbstractMapView: 1,
+  sc_AbstractView: 1,
+  sc_AbstractIterable: 1,
+  O: 1,
+  sc_Iterable: 1,
+  sc_IterableOnce: 1,
+  sc_IterableOps: 1,
+  sc_IterableOnceOps: 1,
+  sc_IterableFactoryDefaults: 1,
+  sc_View: 1,
+  Ljava_io_Serializable: 1,
+  sc_MapView: 1,
+  sc_MapOps: 1,
+  s_PartialFunction: 1,
+  F1: 1
+});
+$c_sc_MapView$MapValues.prototype.$classData = $d_sc_MapView$MapValues;
 /** @constructor */
 function $c_sci_AbstractSet() {
   /*<skip>*/
@@ -29229,6 +29748,9 @@ $c_sci_Map$Map1.prototype.iterator__sc_Iterator = (function() {
 $c_sci_Map$Map1.prototype.updated__O__O__sci_Map = (function(key, value) {
   return ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map1__f_key1) ? new $c_sci_Map$Map1(this.sci_Map$Map1__f_key1, value) : new $c_sci_Map$Map2(this.sci_Map$Map1__f_key1, this.sci_Map$Map1__f_value1, key, value))
 });
+$c_sci_Map$Map1.prototype.foreach__F1__V = (function(f) {
+  f.apply__O__O(new $c_T2(this.sci_Map$Map1__f_key1, this.sci_Map$Map1__f_value1))
+});
 $c_sci_Map$Map1.prototype.forall__F1__Z = (function(p) {
   return $uZ(p.apply__O__O(new $c_T2(this.sci_Map$Map1__f_key1, this.sci_Map$Map1__f_value1)))
 });
@@ -29325,6 +29847,10 @@ $c_sci_Map$Map2.prototype.iterator__sc_Iterator = (function() {
 });
 $c_sci_Map$Map2.prototype.updated__O__O__sci_Map = (function(key, value) {
   return ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key1) ? new $c_sci_Map$Map2(this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key1, value, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key2, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$value2) : ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key2) ? new $c_sci_Map$Map2(this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key1, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$value1, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key2, value) : new $c_sci_Map$Map3(this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key1, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$value1, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key2, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$value2, key, value)))
+});
+$c_sci_Map$Map2.prototype.foreach__F1__V = (function(f) {
+  f.apply__O__O(new $c_T2(this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key1, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$value1));
+  f.apply__O__O(new $c_T2(this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key2, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$value2))
 });
 $c_sci_Map$Map2.prototype.forall__F1__Z = (function(p) {
   return ($uZ(p.apply__O__O(new $c_T2(this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key1, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$value1))) && $uZ(p.apply__O__O(new $c_T2(this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key2, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$value2))))
@@ -29432,6 +29958,11 @@ $c_sci_Map$Map3.prototype.iterator__sc_Iterator = (function() {
 });
 $c_sci_Map$Map3.prototype.updated__O__O__sci_Map = (function(key, value) {
   return ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key1) ? new $c_sci_Map$Map3(this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key1, value, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key2, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value2, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key3, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value3) : ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key2) ? new $c_sci_Map$Map3(this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key1, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value1, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key2, value, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key3, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value3) : ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key3) ? new $c_sci_Map$Map3(this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key1, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value1, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key2, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value2, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key3, value) : new $c_sci_Map$Map4(this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key1, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value1, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key2, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value2, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key3, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value3, key, value))))
+});
+$c_sci_Map$Map3.prototype.foreach__F1__V = (function(f) {
+  f.apply__O__O(new $c_T2(this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key1, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value1));
+  f.apply__O__O(new $c_T2(this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key2, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value2));
+  f.apply__O__O(new $c_T2(this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key3, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value3))
 });
 $c_sci_Map$Map3.prototype.forall__F1__Z = (function(p) {
   return (($uZ(p.apply__O__O(new $c_T2(this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key1, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value1))) && $uZ(p.apply__O__O(new $c_T2(this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key2, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value2)))) && $uZ(p.apply__O__O(new $c_T2(this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key3, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value3))))
@@ -29560,6 +30091,12 @@ $c_sci_Map$Map4.prototype.updated__O__O__sci_Map = (function(key, value) {
     var this$1 = $m_sci_HashMap$();
     return this$1.sci_HashMap$__f_EmptyMap.updated__O__O__sci_HashMap(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key1, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value1).updated__O__O__sci_HashMap(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key2, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value2).updated__O__O__sci_HashMap(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key3, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value3).updated__O__O__sci_HashMap(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key4, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value4).updated__O__O__sci_HashMap(key, value)
   }
+});
+$c_sci_Map$Map4.prototype.foreach__F1__V = (function(f) {
+  f.apply__O__O(new $c_T2(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key1, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value1));
+  f.apply__O__O(new $c_T2(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key2, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value2));
+  f.apply__O__O(new $c_T2(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key3, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value3));
+  f.apply__O__O(new $c_T2(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key4, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value4))
 });
 $c_sci_Map$Map4.prototype.forall__F1__Z = (function(p) {
   return ((($uZ(p.apply__O__O(new $c_T2(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key1, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value1))) && $uZ(p.apply__O__O(new $c_T2(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key2, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value2)))) && $uZ(p.apply__O__O(new $c_T2(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key3, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value3)))) && $uZ(p.apply__O__O(new $c_T2(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key4, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value4))))
@@ -30587,6 +31124,9 @@ $c_sci_HashMap.prototype.updated__O__O__sci_HashMap = (function(key, value) {
   var keyUnimprovedHash = $m_sr_Statics$().anyHash__O__I(key);
   var newRootNode = this.sci_HashMap__f_rootNode.updated__O__O__I__I__I__Z__sci_BitmapIndexedMapNode(key, value, keyUnimprovedHash, $m_sc_Hashing$().improve__I__I(keyUnimprovedHash), 0, true);
   return ((newRootNode === this.sci_HashMap__f_rootNode) ? this : new $c_sci_HashMap(newRootNode))
+});
+$c_sci_HashMap.prototype.foreach__F1__V = (function(f) {
+  this.sci_HashMap__f_rootNode.foreach__F1__V(f)
 });
 $c_sci_HashMap.prototype.foreachEntry__F2__V = (function(f) {
   this.sci_HashMap__f_rootNode.foreachEntry__F2__V(f)

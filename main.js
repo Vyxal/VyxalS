@@ -203,7 +203,7 @@ window.addEventListener("DOMContentLoaded", e => {
         )
     }
 
-    run.onclick = function do_run() {
+    function do_run() {
         run.blur()
         if (!run.innerHTML.includes("fa-spin")) {
             run.innerHTML =

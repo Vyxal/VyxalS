@@ -30,14 +30,20 @@
 
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <script>
+        const digraphChars = "∆øÞ¨k";
         window.addEventListener('DOMContentLoaded', (event) => {
 
             var kb = document.getElementById("keyboard");
-            // for (var i = 0; i < codepage.length; i++) {
-            //     kb.innerHTML += (`<span class=\"key\" style="text-align:center;" title='`
-            //         + repr(codepage_descriptions[i])
-            //         + `'>${codepage[i]}</span>`);
-            // }
+            for (const char of codepage) {
+                var desc = char in Vyxal.elements ? `${char}: ${Vyxal.elements[char].desc}` : ""
+                for (const digraphChar of digraphChars) {
+                    const digraph = digraphChar + char;
+                    if (digraph in Vyxal.elements) {
+                        desc += `\n${digraph}: ${Vyxal.elements[digraph].desc}`
+                    }
+                }
+                kb.innerHTML += (`<span class=\"key\" style="text-align:center;" title='${repr(desc)}'>${char}</span>`);
+            }
             document.querySelectorAll('.key').forEach(item => {
                 item.addEventListener('click', event => {
                     var char = replaceHTMLChar(event.target.innerHTML)

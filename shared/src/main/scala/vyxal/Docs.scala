@@ -4,7 +4,7 @@ case class ElementDocs(
     name: String,
     desc: String,
     arity: Int,
-    overloads: Map[String, String],
+    overloads: Map[String, String] = Map(),
     vectorises: Boolean = false,
     modifiesStack: Boolean = false
 )
@@ -20,6 +20,11 @@ object Docs {
         "num-num" -> "Add two integers",
       ),
       vectorises = true
+    ),
+    "k+" -> ElementDocs(
+      name = "[1, -1]",
+      desc = "Push [1, -1]",
+      arity = 0
     )
   )
 }
