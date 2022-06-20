@@ -25,6 +25,11 @@ object Docs {
       name = "[1, -1]",
       desc = "Push [1, -1]",
       arity = 0
+    ),
+    "ka" -> ElementDocs(
+      name = "Lowercase alphabet",
+      desc = "Push 'abcdefghijklmnopqrstuvwxyz'",
+      arity = 0
     )
   )
 }
