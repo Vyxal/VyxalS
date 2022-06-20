@@ -132,7 +132,7 @@ i {
 /* Taken from https://www.w3schools.com/howto/howto_css_fixed_sidebar.asp */
 #sidebar {
     height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 27vw; /* Set the width of the sidebar */
+    width: 30vw; /* Set the width of the sidebar */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
@@ -142,5 +142,15 @@ i {
 }
 
 #main-content {
-    margin-right: 27vw;
+    margin-right: 30vw;
+}
+
+.search-option {
+    font-size: medium;
+    display: block;
+}
+
+input[type=checkbox] {
+    vertical-align: middle;
+    position: relative;
 }

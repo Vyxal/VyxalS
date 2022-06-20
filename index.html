@@ -182,6 +182,40 @@
         </details>
     </div>
     <div id="sidebar">
-        Yo
+        <details open style="width=100%;">
+            <summary>Search</summary>
+
+            <div>
+                <input type="text" name="search-text" id="search-text">
+                <label class="search-option" for="search-with-regex">
+                    <input type="checkbox" name="search-with-regex" id="search-with-regex" value="Use regex">
+                    Use regex
+                </label>
+            </div>
+
+            <div>
+                <label class="search-option" for="search-arity">
+                    Arity:
+                    <select name="search-arity" id="search-arity">
+                        <option value="monad">Monad</option>
+                        <option value="dyad">Dyad</option>
+                        <option value="triad">Triad</option>
+                        <option value="constant">Constant</option>
+                        <option value="modifies-stack">Modifies stack</option>
+                        <option value="any" selected>Any</option>
+                    </select>
+                </label>
+            </div>
+
+            <div>
+                Vectorises:
+                <label class="search-option" for="search-with-regex">
+                    <input type="checkbox" name="search-with-regex" id="search-with-regex" value="Use regex" checked>
+                    Yes
+                    <input type="checkbox" name="search-with-regex" id="search-with-regex" value="Use regex" checked>
+                    No
+                </label>
+            </div>
+        </details>
     </div>
 </body>
