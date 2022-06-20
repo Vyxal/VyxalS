@@ -192,31 +192,38 @@ window.addEventListener("DOMContentLoaded", e => {
     const extra = document.getElementById("extra")
     const filter = document.getElementById("filterBox")
 
-    function do_run() {
+    function execute() {
+        return Vyxal.execute(
+            e_header.doc.getValue() + e_code.doc.getValue() + e_footer.doc.getValue(),
+            flags.value,
+            stdin.value,
+            out => output.value += out,
+            warning => extra.value += warning,
+            error => extra.value += error
+        )
+    }
+
+    run.onclick = function do_run() {
+        run.blur()
         if (!run.innerHTML.includes("fa-spin")) {
             run.innerHTML =
                 `<svg class="fa-spin" style="width:24px;height:24px" viewBox="0 0 24 24">
                     <path fill="currentColor" d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z"/>
                 </svg>`;
             if (flags.value.includes('E') && !flags.value.includes("h")) {
-              alert('Please read and ensure you 100% trust the JavaScript code which is about to be evaluated. The code is (see next alert):')
-              alert(res.stdout)
-              if (confirm('Do you want to execute it? If you are remotely unsure, click Cancel!')) {
-                  try {
-                    Vyxal.execute(
-                      code=e_header.doc.getValue() + e_code.doc.getValue() + e_footer.doc.getValue(),
-                      flags=flags.value,
-                      inputs=stdin.value,
-                      outFn=out => output.value += out,
-                      warnFn=warning => extra.value += warning,
-                      errFn=error => extra.value += warning
-                    )
-                  } catch (e) {
-                      res.stdout = e
-                  }
-              }
+                alert('Please read and ensure you 100% trust the JavaScript code which is about to be evaluated. The code is (see next alert):')
+                alert(res.stdout)
+                if (confirm('Do you want to execute it? If you are remotely unsure, click Cancel!')) {
+                    try {
+                        execute()
+                    } catch (e) {
+                        res.stdout = e
+                    }
+                }
+            } else {
+                execute()
             }
-            
+
             run.innerHTML =
                 `<i class="fas fa-play-circle"></i>
                 `;
@@ -258,7 +265,7 @@ window.addEventListener("DOMContentLoaded", e => {
 
 document.addEventListener('keydown', (event) => {
     if ((event.ctrlKey || event.metaKey) && event.key == 'Enter') {
-        $("#run_button").click()
+        document.getElementById("run_button").onclick()
     }
 })
 

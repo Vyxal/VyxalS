@@ -62,8 +62,8 @@ lazy val vyxal = crossProject(JSPlatform, JVMPlatform)
   // .jsConfigure { project => project.enablePlugins(ScalaJSBundlerPlugin) }
   .jsSettings(
     // Add JS-specific settings here
-    Compile / mainClass := Some("vyxal.Main"),
-    scalaJSUseMainModuleInitializer := true,
+    // Compile / mainClass := Some("vyxal.Main"),
+    // scalaJSUseMainModuleInitializer := true,
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % "2.2.0"
     ),
