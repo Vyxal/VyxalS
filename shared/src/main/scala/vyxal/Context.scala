@@ -13,6 +13,8 @@ import scala.collection.{mutable => mut}
   * @param parent
   *   The context inside which this context is (to inherit variables). `None`
   *   for toplevel contexts
+  * @param debug
+  *   Whether the debugger is being used
   */
 class Context private (
     private var stack: mut.ArrayBuffer[VAny],
@@ -20,7 +22,8 @@ class Context private (
     private val vars: mut.Map[String, VAny | Null] = mut.Map(),
     val inputs: List[List[VAny]] = List(),
     private val parent: Option[Context] = None,
-    val settings: Settings = Settings()
+    val settings: Settings = Settings(),
+    val debug: Boolean = false
 )(using private val backend: Backend) {
   private var printed = false
 
@@ -94,7 +97,8 @@ class Context private (
     mut.Map(vars.toSeq*),
     inputs,
     Some(this),
-    settings
+    settings,
+    debug
   )
 
   /** Create a Context with the same attributes (useful for functions) */
@@ -108,7 +112,8 @@ class Context private (
     vars = mut.Map(this.vars.toSeq*),
     inputs = inputs,
     parent = this.parent,
-    settings = this.settings
+    settings = this.settings,
+    debug = this.debug
   )
 
   override def toString = s"Context(stack=${stack.mkString("[", ", ", "]")})"

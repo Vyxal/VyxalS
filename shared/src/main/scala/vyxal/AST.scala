@@ -55,7 +55,7 @@ case class FnDef(
   }
 }
 
-case class Lambda(body: AST, kind: LambdaKind) extends AST
+case class Lambda(body: AST, kind: LambdaKind = LambdaKind.Normal) extends AST
 
 enum LambdaKind {
   case Normal, OneElement, TwoElement, ThreeElement, FourElement
@@ -69,10 +69,3 @@ enum Modifier(symbol: String) extends AST {
   case ConditionalExecute(body: AST) extends Modifier("¿")
   case ApplyToEachStackItem(body: AST) extends Modifier("æ")
 }
-
-case class Modified(
-    onExec: () => Context ?=> Unit,
-    modName: String,
-    elems: Seq[AST],
-    arity: Int
-) extends AST

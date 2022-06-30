@@ -29,16 +29,13 @@ object Interpreter {
   }
 
   def execute(ast: AST)(using ctx: Context): Unit = {
-    println(s"executing ast $ast, ctx=$ctx")
     try {
       ast match {
-        case Literal(value) =>
-          println("literal:" + value); ctx.push(value); println(ctx)
-        case l: Lambda     => ctx.push(VFun.Lam(l, ctx.createChild()))
-        case Element(name) => Elements.getElement(name)()
-        case m: Modifier => executeModified(m)
-        case Cmds(cmds*)   => cmds.foreach(execute)
-        case Modified(onExec, _, _, arity) => onExec()
+        case Literal(value) => ctx.push(value)
+        case l: Lambda      => ctx.push(VFun.Lam(l, 1, ctx.createChild()))
+        case Element(name)  => Elements.getElement(name)()
+        case m: Modifier    => executeModified(m)
+        case Cmds(cmds*)    => cmds.foreach(execute)
         case LambdaWithOp(lam, after) =>
           execute(lam)
           execute(after)
@@ -126,8 +123,9 @@ object Interpreter {
             }
             execute(fn.body)(using newCtx)
         }
-      case VFun.Lam(lam, _)    => execute(lam.body)(using newCtx)
-      case VFun.ModRes(mod, _) => mod.onExec()(using newCtx)
+      case VFun.Lam(lam, arity, _) =>
+        for (_ <- 1.to(arity)) newCtx.push(ctx.pop())
+        execute(lam.body)(using newCtx)
     }
 
     if (!newCtx.isStackEmpty) {

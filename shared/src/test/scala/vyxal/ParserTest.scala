@@ -11,19 +11,20 @@ class ParserTest extends AnyFlatSpec {
       assertResult(expected)(parsed)
     }
   }
+
   test(
     "(foo | bar} [a+ | a324} { 3",
     Cmds(
-        For(Some("foo"), Cmds(Element("b"), Element("a"), Element("r"))),
-        If(
-          Cmds(Element("a"), Element("+")),
-          Cmds(Element("a"), Literal(324))
-        ),
-        While(
-          None,
-          Literal(3)
-        )
+      For(Some("foo"), Cmds(Element("b"), Element("a"), Element("r"))),
+      If(
+        Cmds(Element("a"), Element("+")),
+        Cmds(Element("a"), Literal(324))
+      ),
+      While(
+        None,
+        Literal(3)
       )
+    )
   )
 
   test(
@@ -44,4 +45,8 @@ class ParserTest extends AnyFlatSpec {
     )
   )
 
+  test(
+    "λ1 2 +}",
+    Lambda(Cmds(Literal(1), Literal(2), Element("+")))
+  )
 }
