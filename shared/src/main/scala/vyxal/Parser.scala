@@ -117,9 +117,9 @@ class Parser(private val prog: Iterator[Char]) {
         parseCtrlStruct('}') {
           case (varName, Some(body)) =>
             val nameStr = varName match {
-              case Element(name, _) => name
+              case Element(name) => name
               case Cmds(cmds*) =>
-                cmds.collect { case Element(name, _) => name }.mkString("")
+                cmds.collect { case Element(name) => name }.mkString("")
               case _ => ""
             }
             val alphaName = nameStr.filter(c => isAlpha(c) || c == '_')
