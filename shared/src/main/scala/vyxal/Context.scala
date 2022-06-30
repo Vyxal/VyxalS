@@ -151,7 +151,7 @@ object Context {
     */
   def fnCallCtx(fnCtx: Context, currCtx: Context): Context =
     new Context(
-      stack = currCtx.stack,
+      stack = mut.ArrayBuffer(),
       contextVar = fnCtx.contextVar,
       vars = mut.Map(fnCtx.vars.toSeq*),
       inputs = fnCtx.inputs,

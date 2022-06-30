@@ -42,5 +42,11 @@ class InterpreterTest extends AnyFunSpec {
     // TODO: currently modifiers that take a lambda don't work
   }
 
+  describe("lambda") {
+    runTest("2 λ1 + 3} †", 3)
+    // Ensure only one value gets returned from the lambda
+    runTest("2 λ1 + 4} † W", VList(4))
+  }
+
   // TODO: auto-generate some of these tests from the YAML
 }
