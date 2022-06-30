@@ -57,13 +57,18 @@ class Parser(private val prog: Iterator[Char]) {
     }
   }
 
-  private def pop()(using pp: Popper) = {
-    val ast = pp.pop()
-    if (ast.isInstanceOf[Lambda]) {
-      ast.asInstanceOf[Lambda].body
-    } else {
-      ast
+  /** Pop the last `num` ASTs and reverse them */
+  private def pop(num: Int = 1)(using pp: Popper): AST = {
+    val asts = Seq.fill(num) {
+      val ast = pp.pop()
+      if (ast.isInstanceOf[Lambda]) {
+        ast.asInstanceOf[Lambda].body
+      } else {
+        ast
+      }
     }
+    if (num == 1) asts.head
+    else Cmds(asts.reverse*)
   }
 
   /** Whether or not this character closes a structure
@@ -107,7 +112,7 @@ class Parser(private val prog: Iterator[Char]) {
       case '{' =>
         parseCtrlStruct('}') {
           case (cond, Some(body)) => While(Some(cond), body)
-          case (body, None) => While(None, body)
+          case (body, None)       => While(None, body)
         }
       case '(' =>
         parseCtrlStruct('}') {
@@ -242,39 +247,18 @@ class Parser(private val prog: Iterator[Char]) {
   }
 
   private def parseModifierOrElem(sym: String)(using pp: Popper): AST = {
-    if (Modifiers.monadicModifiers.contains(sym)) {
-      Modifiers.monadicModifiers(sym)(
-        pop()
-      )
-    } else if (Modifiers.dyadicModifiers.contains(sym)) {
-      val second = pop()
-      val first = pop()
-      Modifiers.dyadicModifiers(sym)(
-        first,
-        second
-      )
-    } else if (Modifiers.triadicModifiers.contains(sym)) {
-      val third = pop()
-      val second = pop()
-      val first = pop()
-      Modifiers.triadicModifiers(sym)(
-        first,
-        second,
-        third
-      )
-    } else if (Modifiers.tetradicModifiers.contains(sym)) {
-      val fourth = pop()
-      val third = pop()
-      val second = pop()
-      val first = pop()
-      Modifiers.tetradicModifiers(sym)(
-        first,
-        second,
-        third,
-        fourth
-      )
-    } else {
-      Element(sym)
+    sym match {
+      case "¤" => Lambda(pop(1), LambdaKind.OneElement)
+      case "¢" => Lambda(pop(2), LambdaKind.TwoElement)
+      case "€" => Lambda(pop(3), LambdaKind.ThreeElement)
+      case "§" => Lambda(pop(4), LambdaKind.ThreeElement)
+      case "¿" => Modifier.ConditionalExecute(pop())
+      case "æ" => Modifier.ApplyToEachStackItem(pop())
+      case "]" =>
+        val falsey = pop()
+        val truthy = pop()
+        If(truthy, falsey)
+      case _ => Element(sym)
     }
   }
 
@@ -308,7 +292,7 @@ class Parser(private val prog: Iterator[Char]) {
     */
   private def parseElemGroup(): AST = parseElems() match {
     case List(elem) => elem
-    case elems => Cmds(elems*)
+    case elems      => Cmds(elems*)
   }
 }
 

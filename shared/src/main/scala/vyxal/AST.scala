@@ -66,7 +66,8 @@ enum LambdaKind {
 case class LambdaWithOp(lam: Lambda, after: AST) extends AST
 
 enum Modifier(symbol: String) extends AST {
-  case ConditionalExecute extends Modifier("¿")
+  case ConditionalExecute(body: AST) extends Modifier("¿")
+  case ApplyToEachStackItem(body: AST) extends Modifier("æ")
 }
 
 case class Modified(

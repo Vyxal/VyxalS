@@ -36,6 +36,7 @@ object Interpreter {
           println("literal:" + value); ctx.push(value); println(ctx)
         case l: Lambda     => ctx.push(VFun.Lam(l, ctx.createChild()))
         case Element(name) => Elements.getElement(name)()
+        case m: Modifier => executeModified(m)
         case Cmds(cmds*)   => cmds.foreach(execute)
         case Modified(onExec, _, _, arity) => onExec()
         case LambdaWithOp(lam, after) =>
@@ -91,6 +92,19 @@ object Interpreter {
           e
         )
     }
+  }
+
+  private def executeModified(mod: Modifier)(using ctx: Context) = mod match {
+    case Modifier.ConditionalExecute(body) =>
+      if (ctx.pop.toBool) {
+        execute(body)
+      }
+    case Modifier.ApplyToEachStackItem(body) =>
+      val stack = ctx.popAll()
+      stack.foreach { elem =>
+        ctx.push(elem)
+        execute(body)
+      }
   }
 
   private def executeFn(vf: VFun)(using ctx: Context) = {
