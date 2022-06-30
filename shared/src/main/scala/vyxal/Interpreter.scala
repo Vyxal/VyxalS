@@ -34,9 +34,9 @@ object Interpreter {
       ast match {
         case Literal(value) =>
           println("literal:" + value); ctx.push(value); println(ctx)
-        case l: Lambda => ctx.push(VFun.Lam(l, ctx.createChild()))
+        case l: Lambda     => ctx.push(VFun.Lam(l, ctx.createChild()))
         case Element(name) => Elements.getElement(name)()
-        case Cmds(cmds*) => cmds.foreach(execute)
+        case Cmds(cmds*)   => cmds.foreach(execute)
         case Modified(onExec, _, _, arity) => onExec()
         case LambdaWithOp(lam, after) =>
           execute(lam)
@@ -70,28 +70,8 @@ object Interpreter {
           }
         case ExecFn() =>
           ctx.pop() match {
-            case vf: VFun =>
-              vf match {
-                case VFun.FnRef(fn, fnCtx) =>
-                  val newCtx = Context.fnCallCtx(fnCtx, ctx)
-                  fn.arityOrParams match {
-                    case List(arity: Int) =>
-                      execute(fn.body)(using newCtx)
-                    case _ =>
-                      for (param <- fn.arityOrParams) {
-                        param match {
-                          case s: String =>
-                            newCtx.push(ctx.pop())
-                            execute(VarSet(s))(using newCtx)
-                          case n: Int => newCtx.push(n.vnum)
-                        }
-                      }
-                      execute(fn.body)(using newCtx)
-                      if (!newCtx.isStackEmpty) ctx.push(newCtx.pop())
-                  }
-                case _ => ???
-              }
-            case _ => Elements.getElement("†")()
+            case vf: VFun => executeFn(vf)
+            case _        => Elements.getElement("†")()
           }
       }
     } catch {
@@ -110,11 +90,34 @@ object Interpreter {
           s"Errored while executing element $ast, ctx=$ctx, e=${e.getMessage}",
           e
         )
-      case e =>
-        throw Error(
-          s"Magic Errored while executing element $ast, ctx=$ctx, e=${e.getMessage}",
-          e
-        )
+    }
+  }
+
+  private def executeFn(vf: VFun)(using ctx: Context) = {
+    val newCtx = Context.fnCallCtx(vf.ctx, ctx)
+
+    vf match {
+      case VFun.FnRef(fn, _) =>
+        fn.arityOrParams match {
+          case List(arity: Int) =>
+            execute(fn.body)(using newCtx)
+          case _ =>
+            for (param <- fn.arityOrParams) {
+              param match {
+                case s: String =>
+                  newCtx.push(ctx.pop())
+                  execute(VarSet(s))(using newCtx)
+                case n: Int => newCtx.push(n.vnum)
+              }
+            }
+            execute(fn.body)(using newCtx)
+        }
+      case VFun.Lam(lam, _)    => execute(lam.body)(using newCtx)
+      case VFun.ModRes(mod, _) => mod.onExec()(using newCtx)
+    }
+
+    if (!newCtx.isStackEmpty) {
+      ctx.push(newCtx.pop())
     }
   }
 }
