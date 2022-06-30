@@ -7,9 +7,6 @@ import spire.math.Number
 class SyntaxError(msg: String, row: Int, col: Int)
     extends RuntimeException(s"Syntax error: $msg at $row:$col")
 
-/** A position in a file */
-case class Pos(row: Int, col: Int)
-
 trait Popper {
   def pop(): AST
 }
@@ -120,9 +117,9 @@ class Parser(private val prog: Iterator[Char]) {
         parseCtrlStruct('}') {
           case (varName, Some(body)) =>
             val nameStr = varName match {
-              case Element(name) => name
+              case Element(name, _) => name
               case Cmds(cmds*) =>
-                cmds.collect { case Element(name) => name }.mkString("")
+                cmds.collect { case Element(name, _) => name }.mkString("")
               case _ => ""
             }
             val alphaName = nameStr.filter(c => isAlpha(c) || c == '_')
@@ -302,7 +299,10 @@ object Parser {
   def parse(prog: Iterator[Char]): VyFile = {
     val parser = Parser(prog)
     val ast = parser.parseElemGroup()
-    assert(parser.isEmpty, s"Parsed ${ast}, but not empty: buf=${parser.buf.toList}, prog=${prog.toList}")
+    assert(
+      parser.isEmpty,
+      s"Parsed ${ast}, but not empty: buf=${parser.buf.toList}, prog=${prog.toList}"
+    )
     VyFile(ast, parser.astPositions.toMap)
   }
 
