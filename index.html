@@ -25,7 +25,208 @@
     <script src="https://vyxal.github.io/Vylight/mode-vyxal.js"></script>
     <link rel="stylesheet" href="https://vyxal.github.io/Vylight/mode-vyxal.css">
 
-    <script type="text/javascript" src="./js/lib/main.js"></script>
+    <script src="main.js"></script>
 
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script>
+        const digraphChars = "∆øÞ¨k";
+        window.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('.key').forEach(item => {
+                item.addEventListener('click', event => {
+                    var char = replaceHTMLChar(event.target.innerHTML)
+                    var cm = globalThis[`e_${selectedBox}`]
+                    cm.replaceSelection(char)
+                    cm.save()
+                    cm.focus()
+                    updateCount()
+                })
+            })
+            og_keyboard_html = document.getElementById("keyboard").innerHTML;
+        });
+
+        
+        // For loading the ScalaJS stuff
+        const latestVersion = "0.1.0";
+        const urlParams = new URLSearchParams(window.location.search);
+        const version = urlParams.has("v") ? urlParams.get("v") : latestVersion;
+        console.log("version = " + version)
+        const scalajs = document.createElement("script");
+        scalajs.src = `js/lib/scalajs-${version}.js`;
+        scalajs.type = "text/javascript";
+        scalajs.onload =  () => {
+            var kb = document.getElementById("keyboard");
+            for (const char of codepage) {
+                var desc = char in Vyxal.elements ? `${char}: ${Vyxal.elements[char].desc}` : ""
+                for (const digraphChar of digraphChars) {
+                    const digraph = digraphChar + char;
+                    if (digraph in Vyxal.elements) {
+                        desc += `\n${digraph}: ${Vyxal.elements[digraph].desc}`
+                    }
+                }
+                kb.innerHTML += (`<span class=\"key\" style="text-align:center;" title='${repr(desc)}'>${char}</span>`);
+            }
+        };
+        document.head.prepend(scalajs);
+
+        function glyphSearch() {
+            var query = document.getElementById("filterBox").value.toLowerCase();
+
+            console.log('in glyphsearch, selectedBox=' + selectedBox)
+
+            if (query) {
+                if (query == glyphQuery) {
+                    document.getElementById("filterBox").value = "";
+                    search.open(secret, "_blank");
+                }
+
+                console.log("starting filter")
+
+                var raw = query.split().map(char => `[^${char}]*${char}`).join("");
+                var pattern = new RegExp(raw);
+
+                for (var element of document.getElementsByClassName("key")) {
+                    if (element.title.toLowerCase().match(pattern)) {
+                        element.style.display = "inline-block";
+                    } else {
+                        element.style.display = "none";
+                    }
+                }
+            } else {
+                document.getElementById("keyboard").innerHTML = og_keyboard_html;
+                document.querySelectorAll('.key').forEach(item => {
+                    item.addEventListener('click', event => {
+                        var char = replaceHTMLChar(event.target.innerHTML)
+                        var cm = globalThis[`e_${selectedBox}`]
+                        cm.replaceSelection(char)
+                        cm.save()
+                        cm.focus()
+                        updateCount()
+                    })
+                })
+            }
+        }
+
+    </script>
 </head>
+
+<body onload="initCodeMirror(); decodeURL();  updateCount();">
+    <div id="main-content">
+        <textarea id=dummy style="visibility: hidden;position:absolute; height: 0px; font: size 20px;"></textarea>
+        <session-code>{{session}}</session-code>
+        <h2 style="display: inline-block;"><a href="https://github.com/Vyxal/Vyxal" target="_blank">Vyxal</a></h2>
+        <button id="run_button" title="Run Program" type="button">
+            <i class="fas fa-play-circle"></i>
+        </button>
+
+        <button id="permalink" title="Generate Permalink" type="button"
+            onclick="shareOptions('permalink'); resizeCodeBox('output')">
+            <i class="fas fa-link"></i>
+        </button>
+
+        <button id="post-template" title="Generate Code Golf Submission" type="button"
+            onclick="shareOptions('post-template'); resizeCodeBox('output')">
+            <i class="fas fa-medal"></i>
+        </button>
+
+        <button id="markdown" title="Generate Inline Markdown" type="button"
+            onclick="shareOptions('markdown'); resizeCodeBox('output')">
+            <i class="fab fa-markdown"></i>
+        </button>
+
+        <button id="clear" title="Clear all fields">
+            <i class="fas fa-redo"></i>
+        </button>
+
+        <details>
+            <summary>Keyboard</summary>
+            <div class="row" style="width:100%; padding-bottom: 1em;">
+                <label for="filterBox"
+                    style="display:inline-block; color: white; font-family: 'Montserrat', sans-serif; padding-right: 1%;">Search
+                    <a
+                        href="https://github.com/Vyxal/Vyxal/blob/main/documents/knowledge/elements.md">elements</a>:&nbsp;</label><input
+                    style="display:inline-block" id="filterBox" oninput="glyphSearch()" label="Search for command:"></input>
+                <div class="twelve columns">
+                    <div id="keyboard">
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <details id="flag-detail">
+            <summary>Flags</summary>
+            <input type="text" name="flags" id="flag" style="min-height: 2em;">
+        </details>
+
+        <details id="header-detail">
+            <summary>Header</summary>
+            <textarea id="header" name="header" oninput="resizeCodeBox('header')"></textarea>
+        </details>
+
+        <details open id="code-detail">
+            <summary id="code-count">Code: 0 bytes</summary>
+            <textarea id="code" name="code" oninput="resizeCodeBox('code'); updateCount()"
+                onkeyup="updateCount()"></textarea>
+        </details>
+
+        <details id="footer-detail">
+            <summary>Footer</summary>
+            <textarea id="footer" name="footer"></textarea>
+        </details>
+
+        <details open id="inputs-detail">
+            <summary>Inputs</summary>
+            <textarea id="inputs" name="inputs" oninput="resizeCodeBox('inputs')"></textarea>
+        </details>
+
+        <details id="output-detail">
+            <summary style="display: inline-block;">Output</summary>
+            <button onclick="copyToClipboard('output')" style="height:auto; display: inline-block;" type="button">Click to
+                copy</button>
+            <div id="html-rendered-output" hidden>
+            </div>
+            <textarea id="output" value="" readonly></textarea>
+        </details>
+
+        <details id="extra-detail">
+            <summary>Debug</summary>
+            <textarea value="" id="extra" readonly></textarea>
+        </details>
+    </div>
+    <div id="sidebar">
+        <details open style="width:100%;">
+            <summary>Search</summary>
+
+            <div>
+                <input type="text" name="search-text" id="search-text">
+                <label class="search-option" for="search-with-regex">
+                    <input type="checkbox" name="search-with-regex" id="search-with-regex" value="Use regex">
+                    Use regex
+                </label>
+            </div>
+
+            <div>
+                <label class="search-option" for="search-arity">
+                    Arity:
+                    <select name="search-arity" id="search-arity">
+                        <option value="monad">Monad</option>
+                        <option value="dyad">Dyad</option>
+                        <option value="triad">Triad</option>
+                        <option value="constant">Constant</option>
+                        <option value="modifies-stack">Modifies stack</option>
+                        <option value="any" selected>Any</option>
+                    </select>
+                </label>
+            </div>
+
+            <div>
+                Vectorises:
+                <label class="search-option" for="search-with-regex">
+                    <input type="checkbox" name="search-with-regex" id="search-with-regex" value="Use regex" checked>
+                    Yes
+                    <input type="checkbox" name="search-with-regex" id="search-with-regex" value="Use regex" checked>
+                    No
+                </label>
+            </div>
+        </details>
+    </div>
+</body>

@@ -1,6 +1,9 @@
 //TODO (user/cgccuser): clean this file up
 // enablePlugins(ScalaJSPlugin)
 
+// The VyxalS version
+val vyxalVersion = "0.1.0"
+
 //The version of Scala we use
 val scalaversion = "3.1.1"
 
@@ -20,6 +23,8 @@ Use vyxalJVM/run to actually run the JVMMain class
 
 Use fastOptJS to quickly link JS, and fullOptJS when releasing
 Use vyxalJS/run to run the JSMain class (you will need Node.JS for this)
+
+Both fastOptJS and fullOptJS output lib/scalajs-<version>.js
  */
 
 import org.scalajs.linker.interface.OutputPatterns
@@ -36,7 +41,7 @@ lazy val vyxal = crossProject(JSPlatform, JVMPlatform)
   .in(file("."))
   .settings(
     name := "vyxal",
-    version := "0.1-SNAPSHOT",
+    version := vyxalVersion,
     libraryDependencies ++= Seq(
       "org.scalatest" %%% "scalatest" % "3.2.10" % Test,
       ("org.typelevel" %%% "spire" % "0.17.0").cross(CrossVersion.for3Use2_13)
@@ -59,16 +64,16 @@ lazy val vyxal = crossProject(JSPlatform, JVMPlatform)
     // Add JVM-specific settings here
     Compile / mainClass := Some("vyxal.JVMMain")
   )
+  // .jsConfigure { project => project.enablePlugins(ScalaJSBundlerPlugin) }
   .jsSettings(
     // Add JS-specific settings here
-    Compile / mainClass := Some("vyxal.Main"),
-    scalaJSUseMainModuleInitializer := true,
+    // Compile / mainClass := Some("vyxal.Main"),
+    // scalaJSUseMainModuleInitializer := true,
     libraryDependencies ++= Seq(
-      "org.scala-js" %%% "scalajs-dom" % "2.2.0",
-      "com.lihaoyi" %%% "scalatags" % "0.11.1",
+      "org.scala-js" %%% "scalajs-dom" % "2.2.0"
     ),
-    Compile / fastOptJS / artifactPath := baseDirectory.value / "lib" / "main.js",
-    Compile / fullOptJS / artifactPath := baseDirectory.value / "lib" / "main.js"
+    Compile / fastOptJS / artifactPath := baseDirectory.value / "lib" / s"scalajs-$vyxalVersion.js",
+    Compile / fullOptJS / artifactPath := baseDirectory.value / "lib" / s"scalajs-$vyxalVersion.js"
   )
 
 val genElements = taskKey[Unit]("genElements")
