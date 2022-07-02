@@ -7,7 +7,7 @@ class InterpreterTest extends AnyFunSpec {
 
   inline def runTest(code: String, expected: VAny) =
     it("should return the right result for " + code) {
-      val ctx = Interpreter.execute(code)
+      val ctx = Interpreter.execute(code, flags=List("O"))
       assert(ctx.pop() == expected)
     }
   

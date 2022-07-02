@@ -8,22 +8,23 @@ object Interpreter {
       inputs: List[VAny] = List.empty,
       flags: List[String] = List.empty
   )(using Backend): Context = {
-    val VyFile(ast, _) = Parser.parse(code)
+    val ast = Parser.parse(code)
     given ctx: Context = Context()
     execute(ast)
-    if (!ctx.isStackEmpty) {
+    if (ctx.settings.implicitOutput && !ctx.isStackEmpty) {
       ctx.println(ctx.peek)
     }
     ctx
   }
 
+  /** Execute a single line of code in a REPL */
   def executeLine(
       line: String
   )(using ctx: Context): Context = {
-    val VyFile(ast, _) = Parser.parse(line)
+    val ast = Parser.parse(line)
     execute(ast)
-    if (!ctx.isStackEmpty) {
-      ctx.println(ctx.pop())
+    if (ctx.settings.implicitOutput && !ctx.isStackEmpty) {
+      ctx.println(ctx.peek)
     }
     ctx
   }
@@ -31,25 +32,23 @@ object Interpreter {
   def execute(ast: AST)(using ctx: Context): Unit = {
     try {
       ast match {
-        case Literal(value) => ctx.push(value)
+        case Literal(value, _) => ctx.push(value)
         case l: Lambda         => ctx.push(VFun.Lam(l, 1, ctx.createChild()))
-        case Element(name)  => Elements.getElement(name)()
+        case Element(name, _)  => Elements.getElement(name)()
         case m: Modifier       => executeModified(m)
         case Cmds(cmds*)       => cmds.foreach(execute)
         case LambdaWithOp(lam, after) =>
           execute(lam)
           execute(after)
-        case VarGet(varName) =>
+        case VarGet(varName, _) =>
           ctx.push(ctx.getVar(varName))
-        case VarSet(varName) => ctx.setVar(varName, ctx.pop())
+        case VarSet(varName, _) => ctx.setVar(varName, ctx.pop())
         case fn: FnDef =>
           ctx.setVar(fn.name, VFun.FnRef(fn, ctx.createChild()))
-        case If(truthy, falsey) =>
-          execute(
-            if (ctx.pop().toBool) truthy
-            else falsey
-          )
-        case While(cond, body) =>
+        case If(truthy, falsey, _) =>
+          if (ctx.pop().toBool) execute(truthy)
+          else falsey.map(execute)
+        case While(cond, body, _) =>
           cond match {
             case Some(condAst) =>
               while {
@@ -59,14 +58,14 @@ object Interpreter {
             case None =>
               while (true) execute(body)
           }
-        case For(loopVar, body) =>
+        case For(loopVar, body, _) =>
           val elems = ctx.pop().toList
           for (elem <- elems) {
             given newCtx: Context = ctx.createChild(contextVar = elem)
             loopVar.map { varName => newCtx.setVar(varName, elem) }
             execute(body)
           }
-        case ExecFn() =>
+        case ExecFn(_) =>
           ctx.pop() match {
             case vf: VFun => executeFn(vf)
             case _        => Elements.getElement("†")()
@@ -92,11 +91,11 @@ object Interpreter {
   }
 
   private def executeModified(mod: Modifier)(using ctx: Context) = mod match {
-    case Modifier.ConditionalExecute(body) =>
+    case Modifier.ConditionalExecute(body, _) =>
       if (ctx.pop.toBool) {
         execute(body)
       }
-    case Modifier.ApplyToEachStackItem(body) =>
+    case Modifier.ApplyToEachStackItem(body, _) =>
       val stack = ctx.popAll()
       stack.foreach { elem =>
         ctx.push(elem)
@@ -121,7 +120,7 @@ object Interpreter {
               param match {
                 case s: String =>
                   newCtx.push(ctx.pop())
-                  execute(VarSet(s))(using newCtx)
+                  execute(VarSet(s, TextRange.synthetic))(using newCtx)
                 case n: Int => newCtx.push(n.vnum)
               }
             }

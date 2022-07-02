@@ -15,9 +15,6 @@ class Parser(private val prog: Iterator[Char]) {
   private var row, col = 0
   private val buf = mut.ListBuffer.empty[Char]
 
-  /** Record AST positions for debugging later */
-  private val astPositions = mut.Map.empty[AST, Pos]
-
   /** Do we have any more characters to consume?
     */
   private def nonEmpty = buf.nonEmpty || prog.nonEmpty
@@ -68,6 +65,12 @@ class Parser(private val prog: Iterator[Char]) {
     else Cmds(asts.reverse*)
   }
 
+  /** Current position */
+  private def currPos = Pos(this.row, this.col)
+
+  /** Creates a TextRange starting from `start` to the current position */
+  private def rangeFrom(start: Pos) = TextRange(start, currPos)
+
   /** Whether or not this character closes a structure
     */
   private def isStructureCloser(char: Char) =
@@ -81,17 +84,19 @@ class Parser(private val prog: Iterator[Char]) {
   private def parseAST()(using pp: Popper): AST = {
     assert(this.nonEmpty)
 
+    val startPos = currPos
+
     val char = next()
     assert(!isStructureCloser(char))
     assert(!char.isWhitespace)
     assert(char != '#')
 
-    val ast = char match {
+    char match {
       case 'λ' | 'ƛ' | 'Ω' | 'Λ' | 'µ' =>
         val body = parseElemGroup()
         // Get rid of the closing }
         if (buf.nonEmpty) this.next()
-        val lam = Lambda(body, LambdaKind.Normal)
+        val lam = Lambda(body, LambdaKind.Normal, rangeFrom(startPos))
         if (char == 'λ') {
           lam
         } else {
@@ -101,38 +106,38 @@ class Parser(private val prog: Iterator[Char]) {
             case 'Λ' => "R"
             case 'µ' => "ṡ"
           }
-          LambdaWithOp(lam, Element(elem))
+          LambdaWithOp(lam, Element(elem, TextRange.synthetic))
         }
-      case '†' => ExecFn()
+      case '†' => ExecFn(rangeFrom(startPos))
       case '[' =>
         parseCtrlStruct('}') { (truthy, falsey) =>
-          If(truthy, falsey.getOrElse(Cmds.empty))
+          If(truthy, falsey, TextRange(startPos, currPos))
         }
       case '{' =>
         parseCtrlStruct('}') {
-          case (cond, Some(body)) => While(Some(cond), body)
-          case (body, None)       => While(None, body)
+          case (cond, Some(body)) => While(Some(cond), body, rangeFrom(startPos))
+          case (body, None)       => While(None, body, rangeFrom(startPos))
         }
       case '(' =>
         parseCtrlStruct('}') {
           case (varName, Some(body)) =>
             val nameStr = varName match {
-              case Element(name) => name
+              case Element(name, _) => name
               case Cmds(cmds*) =>
-                cmds.collect { case Element(name) => name }.mkString("")
+                cmds.collect { case Element(name, _) => name }.mkString("")
               case _ => ""
             }
             val alphaName = nameStr.filter(c => isAlpha(c) || c == '_')
-            For(Some(alphaName), body)
+            For(Some(alphaName), body, rangeFrom(startPos))
           case (body, None) =>
-            For(None, body)
+            For(None, body, rangeFrom(startPos))
         }
-      case '←' => VarGet(parseIdent())
-      case '→' => VarSet(parseIdent())
+      case '←' => VarGet(parseIdent(), rangeFrom(startPos))
+      case '→' => VarSet(parseIdent(), rangeFrom(startPos))
       case '@' =>
-        parseFn()
+        parseFn(startPos)
       case '.' =>
-        Literal(if (this.isEmpty) (0.5).vnum else afterDecimal(0))
+        Literal(if (this.isEmpty) (0.5).vnum else afterDecimal(0), rangeFrom(startPos))
       case d if d.isDigit =>
         var num = BigInt(d - '0')
         while (nonEmpty && this.peek.isDigit) {
@@ -144,15 +149,13 @@ class Parser(private val prog: Iterator[Char]) {
             afterDecimal(num)
           } else {
             num.vnum
-          }
+          },
+          rangeFrom(startPos)
         )
       case c @ ('∆' | 'ø' | 'Þ' | '¨' | 'k') =>
         parseModifierOrElem(s"$c${this.next()}")
       case c => parseModifierOrElem(s"$c")
     }
-    // Record the position of this AST
-    astPositions(ast) = Pos(this.row, this.col)
-    ast
   }
 
   /** Get the part of a number after the decimal as a `VNum`
@@ -204,26 +207,25 @@ class Parser(private val prog: Iterator[Char]) {
     }
   }
 
-  private def parseFn(): AST = {
+  private def parseFn(startPos: Pos): AST = {
     this.trim()
     val name = StringBuilder()
     while (this.nonEmpty && this.peek != ':' && this.peek != '|') {
       name += this.next()
     }
     if (this.isEmpty) {
-      FnDef(name.toString, List.empty, Cmds.empty)
+      FnDef(name.toString, List.empty, Cmds(), rangeFrom(startPos))
     } else {
       val arityOrParams = if (this.next() == '|') {
         List.empty
       } else {
-        var params = mut.ListBuffer[Int | String]()
+        val params = mut.ListBuffer[Int | String]()
         while (this.nonEmpty && this.peek != '|') {
           val param = StringBuilder()
           var allDigits = true
           while (this.nonEmpty && this.peek != ':' && this.peek != '|') {
             val c = this.next()
             param += c
-            println(s"param=$param")
             if (!c.isDigit) {
               allDigits = false
             }
@@ -234,37 +236,49 @@ class Parser(private val prog: Iterator[Char]) {
           } else {
             params += param.toString
           }
-          println(s"params=$params")
         }
         if (this.nonEmpty) this.next()
         params.toList
       }
       val body = parseElemGroup()
       if (this.nonEmpty && this.peek == '}') this.next()
-      FnDef(name.toString, arityOrParams, body)
+      FnDef(name.toString, arityOrParams, body, rangeFrom(startPos))
     }
   }
 
   private def parseModifierOrElem(sym: String)(using pp: Popper): AST = {
     sym match {
-      case "¤" => Lambda(pop(1), LambdaKind.OneElement)
-      case "¢" => Lambda(pop(2), LambdaKind.TwoElement)
-      case "€" => Lambda(pop(3), LambdaKind.ThreeElement)
-      case "§" => Lambda(pop(4), LambdaKind.ThreeElement)
-      case "¿" => Modifier.ConditionalExecute(pop())
-      case "æ" => Modifier.ApplyToEachStackItem(pop())
+      case "¤" =>
+        val body = pop(1)
+        Lambda(body, LambdaKind.OneElement, rangeFrom(body.textRange.start))
+      case "¢" =>
+        val body = pop(2)
+        Lambda(body, LambdaKind.TwoElement, rangeFrom(body.textRange.start))
+      case "€" =>
+        val body = pop(3)
+        Lambda(body, LambdaKind.ThreeElement, rangeFrom(body.textRange.start))
+      case "§" =>
+        val body = pop(4)
+        Lambda(body, LambdaKind.FourElement, rangeFrom(body.textRange.start))
+      case "¿" =>
+        val body = pop()
+        Modifier.ConditionalExecute(body, rangeFrom(body.textRange.start))
+      case "æ" =>
+        val body = pop()
+        Modifier.ApplyToEachStackItem(body, rangeFrom(body.textRange.start))
       case "]" =>
+        // todo determine if ternary if should be its own thing
         val falsey = pop()
         val truthy = pop()
-        If(truthy, falsey)
-      case _ => Element(sym)
+        If(truthy, Some(falsey), rangeFrom(falsey.textRange.start))
+      case _ => Element(sym, rangeFrom(Pos(this.row, this.col - sym.length)))
     }
   }
 
   private def parseASTOrEmpty()(using pp: Popper): AST = {
     this.trim()
     if (this.nonEmpty) parseAST()
-    else Cmds.empty
+    else Cmds()
   }
 
   /** Parse a bunch of elements up to a structure closer and return those
@@ -296,15 +310,15 @@ class Parser(private val prog: Iterator[Char]) {
 }
 
 object Parser {
-  def parse(prog: Iterator[Char]): VyFile = {
+  def parse(prog: Iterator[Char]): AST = {
     val parser = Parser(prog)
     val ast = parser.parseElemGroup()
     assert(
       parser.isEmpty,
       s"Parsed ${ast}, but not empty: buf=${parser.buf.toList}, prog=${prog.toList}"
     )
-    VyFile(ast, parser.astPositions.toMap)
+    ast
   }
 
-  def parse(str: String): VyFile = Parser.parse(str.iterator)
+  def parse(str: String): AST = Parser.parse(str.iterator)
 }
