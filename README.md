@@ -1,3 +1,6 @@
+# This repo is archived, see the [version-3](https://github.com/Vyxal/Vyxal/tree/version-3) branch on the main repository.
+---
+
 # Vyxal in Scala
 
 [![Scala.js](https://www.scala-js.org/assets/badges/scalajs-1.8.0.svg)](https://www.scala-js.org)
